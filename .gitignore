@@ -1,0 +1,10 @@
+**/target/**
+*.iml
+*.idea
+target/
+.idea
+
+**/.DS_Store
+
+**/rebel.xml
+**/.rebel.xml.bak
