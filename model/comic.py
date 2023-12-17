@@ -1,5 +1,7 @@
 class Comic:
-    def __init__(self, comic_id, title, cover, description, first_letter, flag, category_ids, categories, author_ids, authors, chapter_num, start_time, end_time, subscribe_num, hit_num, status, created_at, updated_at):
+    def __init__(self, comic_id, title, cover, description, first_letter, flag, category_ids, categories, author_ids,
+                 authors, region_id, region, chapter_num, start_time, end_time, subscribe_num, hit_num, status,
+                 created_at, updated_at):
         self.comic_id = comic_id
         self.title = title
         self.cover = cover
@@ -10,6 +12,8 @@ class Comic:
         self.categories = categories
         self.author_ids = author_ids
         self.authors = authors
+        self.region_id = region_id
+        self.region = region
         self.chapter_num = chapter_num
         self.start_time = start_time
         self.end_time = end_time

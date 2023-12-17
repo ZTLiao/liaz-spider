@@ -1,7 +1,9 @@
+import system.global_vars
 from config.mysql_config import MySqlConfig
 from config.nacos_config import NacosConfig
 from config.redis_config import RedisConfig
 import re
+import pymysql
 
 
 class SystemConfig:
@@ -22,6 +24,14 @@ class SystemConfig:
                     port = result.group('port')
                     db = result.group('database')
                     self.__mysql = MySqlConfig(host, port, database['username'], database['password'], db)
+                    self.conn = pymysql.connect(
+                        host=self.__mysql.host,
+                        port=int(self.__mysql.port),
+                        user=self.__mysql.username,
+                        password=self.__mysql.password,
+                        db=self.__mysql.db,
+                        charset='utf8')
+                    system.global_vars.application.set_mysql(self.conn)
                 else:
                     print("No match found.")
 
