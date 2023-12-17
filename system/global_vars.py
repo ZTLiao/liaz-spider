@@ -1,0 +1,2 @@
+global application
+global systemConfig
