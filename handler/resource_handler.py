@@ -1,4 +1,5 @@
 import json
+import os
 import uuid
 
 import requests
@@ -33,6 +34,7 @@ class ResourceHandler:
                 if response.status_code == 200:
                     json_obj = json.loads(response.content)
                     path = json_obj['data']['path']
+                    os.remove(filename)
                 else:
                     print('upload failed, ', filename)
         except Exception as e:
@@ -51,5 +53,6 @@ def download(url):
             filename = None
             print('download failed, ', url)
     except Exception as e:
+        filename = None
         print(e)
     return filename

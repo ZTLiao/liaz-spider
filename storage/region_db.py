@@ -12,3 +12,19 @@ class RegionDb:
         self.conn.commit()
         cursor.close()
         return result
+
+    def save(self, region_name):
+        count = self.count(region_name)
+        if count == 0:
+            cursor = self.conn.cursor()
+            cursor.execute(
+                'insert into region(region_name, seq_no, status, created_at, updated_at) values(\'' + region_name + '\', 0, 1, now(3), now(3))')
+            self.conn.commit()
+
+    def get_region_id(self, region_name):
+        cursor = self.conn.cursor()
+        cursor.execute('select region_id from region where region_name = \'' + region_name + '\' limit 1')
+        result = cursor.fetchone()[0]
+        self.conn.commit()
+        cursor.close()
+        return result
