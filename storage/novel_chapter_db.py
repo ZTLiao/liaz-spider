@@ -25,7 +25,9 @@ class NovelChapterDb:
     def get_novel_chapter_id(self, novel_id, chapter_name):
         cursor = self.conn.cursor()
         cursor.execute('select novel_chapter_id from novel_chapter where novel_id = \'' + str(novel_id) + '\' and chapter_name = \'' + chapter_name + '\' limit 1')
-        result = cursor.fetchone()[0]
+        result = cursor.fetchone()
+        if result is not None:
+            result = result[0]
         self.conn.commit()
         cursor.close()
         return result

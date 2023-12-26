@@ -25,7 +25,9 @@ class ComicDb:
     def get_comic_id(self, title):
         cursor = self.conn.cursor()
         cursor.execute('select comic_id from comic where title = \'' + title + '\' limit 1')
-        result = cursor.fetchone()[0]
+        result = cursor.fetchone()
+        if result is not None:
+            result = result[0]
         self.conn.commit()
         cursor.close()
         return result

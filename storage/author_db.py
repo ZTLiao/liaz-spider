@@ -24,7 +24,9 @@ class AuthorDb:
     def get_author_id(self, author_name):
         cursor = self.conn.cursor()
         cursor.execute('select author_id from author where author_name = \'' + author_name + '\' limit 1')
-        result = cursor.fetchone()[0]
+        result = cursor.fetchone()
+        if result is not None:
+            result = result[0]
         self.conn.commit()
         cursor.close()
         return result

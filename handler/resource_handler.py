@@ -56,3 +56,15 @@ def download(url):
         filename = None
         print(e)
     return filename
+
+
+def write_note(content):
+    content = content.encode(encoding='utf-8')
+    filename = str(uuid.uuid4())
+    try:
+        with open(filename, 'wb') as f:
+            f.write(content)
+    except Exception as e:
+        filename = None
+        print(e)
+    return filename

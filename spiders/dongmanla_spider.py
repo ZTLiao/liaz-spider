@@ -16,6 +16,13 @@ class DongManLaSpider:
         self.resource_url = 'http://8.134.215.58'
         self.username = 'liaozetao'
         self.password = 'e10adc3949ba59abbe56e057f20f883e'
+        self.category_db = CategoryDb()
+        self.author_db = AuthorDb()
+        self.region_db = RegionDb()
+        self.comic_db = ComicDb()
+        self.comic_chapter_db = ComicChapterDb()
+        self.comic_chapter_item_db = ComicChapterItemDb()
+        self.resource_handler = ResourceHandler(self.resource_url, self.username, self.password)
 
     def parse(self):
         i = 0
@@ -30,13 +37,6 @@ class DongManLaSpider:
             serial_response = requests.get(serial_url)
             serial_response_text = serial_response.text
             serial_soup = bs4.BeautifulSoup(serial_response_text, 'lxml')
-            category_db = CategoryDb()
-            author_db = AuthorDb()
-            region_db = RegionDb()
-            comic_db = ComicDb()
-            comic_chapter_db = ComicChapterDb()
-            comic_chapter_item_db = ComicChapterItemDb()
-            resource_handler = ResourceHandler(self.resource_url, self.username, self.password)
             for man_han_item in serial_soup.select('div.cy_list_mh'):
                 if len(man_han_item.text.strip()) == 0:
                     is_end = True
@@ -50,16 +50,18 @@ class DongManLaSpider:
                     for man_hua_info_item in detail_soup.select('div.cy_main .cy_info .cy_intro_l'):
                         title = man_hua_info_item.select('.cy_title .detail-info-title')[0].text
                         region = man_hua_info_item.select('.cy_xinxi span')[0].text.split('：')[1]
-                        region_db.save(region)
-                        region_id = region_db.get_region_id(region)
+                        self.region_db.save(region)
+                        region_id = self.region_db.get_region_id(region)
                         cover_img_item = man_hua_info_item.select('.cy_info_cover img')[0]
                         cover = cover_img_item.get('src')
-                        file_name = download(cover)
-                        if file_name is not None:
-                            cover = resource_handler.upload('cover', file_name)
-                        print(cover)
-                        if cover is None:
-                            cover = ''
+                        comic_id = self.comic_db.get_comic_id(title)
+                        if comic_id is None:
+                            file_name = download(cover)
+                            if file_name is not None:
+                                cover = self.resource_handler.upload('cover', file_name)
+                            print(cover)
+                            if cover is None:
+                                cover = ''
                         author_item = man_hua_info_item.select('.cy_xinxixi .detail-info-author')
                         author_ids = []
                         authors = []
@@ -78,8 +80,8 @@ class DongManLaSpider:
                         author_index = 0
                         for author in authors:
                             author = author.replace('\'', '\\\'')
-                            author_db.save(author)
-                            author_id = author_db.get_author_id(author)
+                            self.author_db.save(author)
+                            author_id = self.author_db.get_author_id(author)
                             author_ids.append(str(author_id))
                             author_str += author
                             if author_index != len(authors) - 1:
@@ -104,8 +106,8 @@ class DongManLaSpider:
                         category_index = 0
                         for category in categories:
                             category = category.replace('\'', '\\\'')
-                            category_db.save(category)
-                            category_id = category_db.get_category_id(category)
+                            self.category_db.save(category)
+                            category_id = self.category_db.get_category_id(category)
                             category_ids.append(str(category_id))
                             category_str += category
                             if category_index != len(categories) - 1:
@@ -118,31 +120,32 @@ class DongManLaSpider:
                         if len(li_items) == 0:
                             print('zhang jie is empty.')
                         else:
-                            comic_db.save(title, cover, description, category_id_str, category_str, author_id_str,
-                                          author_str, region_id, region)
-                            comic_id = comic_db.get_comic_id(title)
+                            self.comic_db.save(title, cover, description, category_id_str, category_str, author_id_str,
+                                               author_str, region_id, region)
+                            comic_id = self.comic_db.get_comic_id(title)
                             chapter_index = 0
                             for li_item in reversed(li_items):
                                 page_url = li_item.find('a').get('href')
                                 print(page_url)
                                 chapter_name = li_item.find('p').text
-                                count = comic_chapter_db.count(comic_id, chapter_name)
+                                count = self.comic_chapter_db.count(comic_id, chapter_name)
                                 if count == 0:
                                     chapter_index += 1
-                                    comic_chapter_db.save(comic_id, chapter_name, chapter_index)
-                                comic_chapter_id = comic_chapter_db.get_comic_chapter_id(comic_id, chapter_name)
+                                    self.comic_chapter_db.save(comic_id, chapter_name, chapter_index)
+                                comic_chapter_id = self.comic_chapter_db.get_comic_chapter_id(comic_id, chapter_name)
                                 page_response = requests.get(page_url + 'all.html')
                                 page_response_text = page_response.text
                                 page_soup = bs4.BeautifulSoup(page_response_text, 'lxml')
                                 page_index = 0
                                 for lazy_box_item in page_soup.select('div.chapter-images .imgListBox .lazyBox'):
                                     page_index += 1
-                                    page_count = comic_chapter_item_db.count(comic_chapter_id, comic_id, page_index)
+                                    page_count = self.comic_chapter_item_db.count(comic_chapter_id, comic_id,
+                                                                                  page_index)
                                     if page_count == 0:
                                         path = lazy_box_item.find('img').get('data-src')
                                         print(path)
                                         file_name = download(path)
                                         if file_name is not None:
-                                            path = resource_handler.upload('comic', file_name)
+                                            path = self.resource_handler.upload('comic', file_name)
                                         print(path)
-                                        comic_chapter_item_db.save(comic_chapter_id, comic_id, path, page_index)
+                                        self.comic_chapter_item_db.save(comic_chapter_id, comic_id, path, page_index)

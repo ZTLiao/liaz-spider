@@ -25,7 +25,9 @@ class NovelDb:
     def get_novel_id(self, title):
         cursor = self.conn.cursor()
         cursor.execute('select novel_id from novel where title = \'' + title + '\' limit 1')
-        result = cursor.fetchone()[0]
+        result = cursor.fetchone()
+        if result is not None:
+            result = result[0]
         self.conn.commit()
         cursor.close()
         return result

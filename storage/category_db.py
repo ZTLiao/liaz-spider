@@ -24,7 +24,9 @@ class CategoryDb:
     def get_category_id(self, category_name):
         cursor = self.conn.cursor()
         cursor.execute('select category_id from category where category_name = \'' + category_name + '\' limit 1')
-        result = cursor.fetchone()[0]
+        result = cursor.fetchone()
+        if result is not None:
+            result = result[0]
         self.conn.commit()
         cursor.close()
         return result
