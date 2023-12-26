@@ -2,8 +2,6 @@ import bs4
 import requests
 
 from handler.resource_handler import download, ResourceHandler
-from model.comic_chapter_item import ComicChapterItem
-from model.region import Region
 from storage.author_db import AuthorDb
 from storage.category_db import CategoryDb
 from storage.comic_chapter_db import ComicChapterDb
@@ -94,12 +92,14 @@ class DongManLaSpider:
                         if len(category_item) == 1:
                             category = category_item.text.replace('类别：', '').replace('，', '').strip()
                             if len(category) > 0:
-                                categories.append(category)
+                                for item in category.split(','):
+                                    categories.append(item)
                         else:
                             for a_item in category_item.select('a'):
                                 category = a_item.text.replace('类别：', '').replace('，', '').strip()
                                 if len(category) > 0:
-                                    categories.append(category)
+                                    for item in category.split(','):
+                                        categories.append(item)
                         category_str = ''
                         category_index = 0
                         for category in categories:
