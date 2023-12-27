@@ -7,7 +7,6 @@ from storage.category_db import CategoryDb
 from storage.novel_chapter_db import NovelChapterDb
 from storage.novel_chapter_item_db import NovelChapterItemDb
 from storage.novel_db import NovelDb
-from storage.region_db import RegionDb
 
 
 class ShuHuangWangSpider:
