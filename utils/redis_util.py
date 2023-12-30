@@ -66,21 +66,16 @@ class RedisUtil:
         finally:
             res.close()
 
+    def zrange(self, name: str, start: int, end: int, withscores: bool):
+        data = None
+        res = redis.StrictRedis(host=self.host, port=self.port, db=self.db, password=self.password)
+        try:
+            data = res.zrange(name, start=start, end=end, withscores=withscores)
+        except Exception as e:
+            print('hdel ', name, ' is error.', e)
+        finally:
+            res.close()
+        return data
 
-# if __name__ == '__main__':
-#     util = RedisUtil(host='172.22.0.8', port=6379, db=0, password='pc8DphhaXwTe2jyv')
-#     room = util.hgetall('peko_room_mic_up')
-#     if len(room) == 0:
-#         print('room is empty')
-#     else:
-#         print(room)
-#         for keyByte, valueByte in room.items():
-#             key = keyByte.decode('utf-8')
-#             value = valueByte.decode('utf-8')
-#             print(key)
-#             util.hdel('peko_uid_ticket', key)
-#             data = json.loads(value)
-#             micUsers = data['micUsers']
-#             for user in micUsers:
-#                 print(user['uid'])
-#                 util.hdel('peko_uid_ticket', user['uid'])
+
+

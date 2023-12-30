@@ -60,7 +60,7 @@ def download(url):
 
 def write_note(content):
     content = content.encode(encoding='utf-8')
-    filename = str(uuid.uuid4())
+    filename = str(uuid.uuid4()) + '.txt'
     try:
         with open(filename, 'wb') as f:
             f.write(content)
