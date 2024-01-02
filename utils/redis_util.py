@@ -1,3 +1,5 @@
+import json
+
 import redis
 
 
@@ -66,6 +68,17 @@ class RedisUtil:
         finally:
             res.close()
 
+    def hget(self, name: str, field):
+        data = None
+        res = redis.StrictRedis(host=self.host, port=self.port, db=self.db, password=self.password)
+        try:
+            data = res.hget(name, field)
+        except Exception as e:
+            print('hdel ', name, ' is error.', e)
+        finally:
+            res.close()
+        return data
+
     def zrange(self, name: str, start: int, end: int, withscores: bool):
         data = None
         res = redis.StrictRedis(host=self.host, port=self.port, db=self.db, password=self.password)
@@ -76,6 +89,4 @@ class RedisUtil:
         finally:
             res.close()
         return data
-
-
 
