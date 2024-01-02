@@ -5,7 +5,12 @@ router = APIRouter()
 
 
 @router.get('/')
-def index():
+def get_index():
+    return response.ok()
+
+
+@router.head('/')
+def head_index():
     return response.ok()
 
 

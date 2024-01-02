@@ -11,11 +11,12 @@ from storage.region_db import RegionDb
 
 
 class DongManLaSpider:
-    def __init__(self):
+    def __init__(self, resource_url, username, password, page_type):
         self.domain = 'https://www.dongman.la'
-        self.resource_url = 'http://8.134.215.58'
-        self.username = 'liaozetao'
-        self.password = 'e10adc3949ba59abbe56e057f20f883e'
+        self.resource_url = resource_url
+        self.username = username
+        self.password = password
+        self.page_type = page_type
         self.category_db = CategoryDb()
         self.author_db = AuthorDb()
         self.region_db = RegionDb()
@@ -25,19 +26,24 @@ class DongManLaSpider:
         self.resource_handler = ResourceHandler(self.resource_url, self.username, self.password)
 
     def parse(self):
+        page_type = ''
+        if self.page_type == 0:
+            page_type = 'serial'
+        elif self.page_type == 1:
+            page_type = 'finish'
         i = 0
         is_end = False
-        while i == 0:
+        while True:
             if is_end:
                 print('man hua is empty.')
                 break
             i += 1
-            serial_url = self.domain + '/manhua/serial/' + str(i) + '.html'
-            print(serial_url)
-            serial_response = requests.get(serial_url)
-            serial_response_text = serial_response.text
-            serial_soup = bs4.BeautifulSoup(serial_response_text, 'lxml')
-            for man_han_item in serial_soup.select('div.cy_list_mh'):
+            man_hua_url = self.domain + '/manhua/' + page_type + '/' + str(i) + '.html'
+            print(man_hua_url)
+            man_hua_response = requests.get(man_hua_url)
+            man_hua_response_text = man_hua_response.text
+            man_hua_soup = bs4.BeautifulSoup(man_hua_response_text, 'lxml')
+            for man_han_item in man_hua_soup.select('div.cy_list_mh'):
                 if len(man_han_item.text.strip()) == 0:
                     is_end = True
                     break
@@ -144,6 +150,8 @@ class DongManLaSpider:
                                     if page_count == 0:
                                         path = lazy_box_item.find('img').get('data-src')
                                         print(path)
+                                        if len(path.replace('https://img.dongman.la', '')) == 0:
+                                            continue
                                         file_name = download(path)
                                         if file_name is not None:
                                             path = self.resource_handler.upload('comic', file_name)

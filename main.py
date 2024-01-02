@@ -1,12 +1,11 @@
-from config.system_config import SystemConfig
-from router.app_router import AppRouter
-from spiders.dongmanla_spider import DongManLaSpider
-from spiders.shuhuangwang_spider import ShuHuangWangSpider
-from system.application import Application
-import system.global_vars
 import argparse
+
 import uvicorn
 
+import system.global_vars
+from config.system_config import SystemConfig
+from router.app_router import AppRouter
+from system.application import Application
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -19,6 +18,4 @@ if __name__ == '__main__':
     system.global_vars.application.set_env(env)
     system.global_vars.application.set_name('liaz-spider')
     system.global_vars.systemConfig = SystemConfig()
-    # DongManLaSpider().parse()
-    ShuHuangWangSpider().parse()
-    # uvicorn.run(AppRouter.instance(), host='0.0.0.0', port=8083, workers=1)
+    uvicorn.run(AppRouter.instance(), host='0.0.0.0', port=8083, workers=1)

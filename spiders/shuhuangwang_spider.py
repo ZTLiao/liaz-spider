@@ -10,11 +10,11 @@ from storage.novel_db import NovelDb
 
 
 class ShuHuangWangSpider:
-    def __init__(self):
+    def __init__(self, resource_url, username, password):
         self.domain = 'https://www.fanghuoni.net'
-        self.resource_url = 'http://8.134.215.58'
-        self.username = 'liaozetao'
-        self.password = 'e10adc3949ba59abbe56e057f20f883e'
+        self.resource_url = resource_url
+        self.username = username
+        self.password = password
         self.category_db = CategoryDb()
         self.author_db = AuthorDb()
         self.novel_db = NovelDb()

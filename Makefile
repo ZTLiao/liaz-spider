@@ -1,4 +1,4 @@
 .PHONY: run
 
 run:
-	python3 main.py -e dev
+	python3 main.py -e test

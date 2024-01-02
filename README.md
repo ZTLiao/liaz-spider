@@ -2,7 +2,7 @@ yum install python3-devel
 
 pip3 install fastapi
 
-pip3 install "uvicorn[standard]"
+RUN pip3 install -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com  "uvicorn[standard]"==0.24.0
 
 pip3 install pymysql
 
