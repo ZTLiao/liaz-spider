@@ -10,11 +10,12 @@ from storage.novel_db import NovelDb
 
 
 class ShuHuangWangSpider:
-    def __init__(self, resource_url, username, password):
+    def __init__(self, resource_url, username, password, page_type):
         self.domain = 'https://www.fanghuoni.net'
         self.resource_url = resource_url
         self.username = username
         self.password = password
+        self.page_type = page_type
         self.category_db = CategoryDb()
         self.author_db = AuthorDb()
         self.novel_db = NovelDb()
@@ -85,10 +86,10 @@ class ShuHuangWangSpider:
                 novel_id = self.novel_db.get_novel_id(title)
                 chapter_index = 0
                 for a_chapter_item in a_items:
+                    chapter_index += 1
                     chapter_name = a_chapter_item.text
                     count = self.novel_chapter_db.count(novel_id, chapter_name)
                     if count == 0:
-                        chapter_index += 1
                         self.novel_chapter_db.save(novel_id, chapter_name, chapter_index)
                     novel_chapter_id = self.novel_chapter_db.get_novel_chapter_id(novel_id, chapter_name)
                     count = self.novel_chapter_item_db.count(novel_chapter_id, novel_id, 1)

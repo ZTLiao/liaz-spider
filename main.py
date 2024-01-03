@@ -10,12 +10,16 @@ from system.application import Application
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-e', '--env', help='Setting up the running environment')
+    parser.add_argument('-p', '--port', help='Set port')
     args = parser.parse_args()
     env = args.env
+    port = args.port
     if env is None:
         env = 'dev'
+    if port is None:
+        port = 8083
     system.global_vars.application = Application()
     system.global_vars.application.set_env(env)
     system.global_vars.application.set_name('liaz-spider')
     system.global_vars.systemConfig = SystemConfig()
-    uvicorn.run(AppRouter.instance(), host='0.0.0.0', port=8083, workers=1)
+    uvicorn.run(AppRouter.instance(), host='0.0.0.0', port=port, workers=1)

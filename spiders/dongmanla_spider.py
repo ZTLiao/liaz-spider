@@ -28,9 +28,9 @@ class DongManLaSpider:
     def parse(self):
         page_type = ''
         if self.page_type == 0:
-            page_type = 'serial'
-        elif self.page_type == 1:
             page_type = 'finish'
+        elif self.page_type == 1:
+            page_type = 'serial'
         i = 0
         is_end = False
         while True:
@@ -126,17 +126,21 @@ class DongManLaSpider:
                         if len(li_items) == 0:
                             print('zhang jie is empty.')
                         else:
-                            self.comic_db.save(title, cover, description, category_id_str, category_str, author_id_str,
+                            flag = 0
+                            if self.page_type == 1:
+                                flag = 1
+                            self.comic_db.save(title, cover, description, flag, category_id_str, category_str,
+                                               author_id_str,
                                                author_str, region_id, region)
                             comic_id = self.comic_db.get_comic_id(title)
                             chapter_index = 0
                             for li_item in reversed(li_items):
+                                chapter_index += 1
                                 page_url = li_item.find('a').get('href')
                                 print(page_url)
                                 chapter_name = li_item.find('p').text
                                 count = self.comic_chapter_db.count(comic_id, chapter_name)
                                 if count == 0:
-                                    chapter_index += 1
                                     self.comic_chapter_db.save(comic_id, chapter_name, chapter_index)
                                 comic_chapter_id = self.comic_chapter_db.get_comic_chapter_id(comic_id, chapter_name)
                                 page_response = requests.get(page_url + 'all.html')
