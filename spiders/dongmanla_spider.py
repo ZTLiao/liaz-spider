@@ -51,6 +51,7 @@ class DongManLaSpider:
                     for ul_item in man_han_item.find_all('ul'):
                         a_item = ul_item.select('a.pic')[0]
                         detail_url = self.domain + a_item.get('href')
+                        print(detail_url)
                         detail_response = requests.get(detail_url)
                         detail_response_text = detail_response.text
                         detail_soup = bs4.BeautifulSoup(detail_response_text, 'lxml')
