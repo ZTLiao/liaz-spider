@@ -24,6 +24,11 @@ class ShuHuangWangSpider:
         self.resource_handler = ResourceHandler(self.resource_url, self.username, self.password)
 
     def parse(self):
+        page_name = ''
+        if self.page_type == 0:
+            page_name = 'sort_0_0_0_OK'
+        elif self.page_type == 1:
+            page_name = 'sort_0_0_0_P'
         i = 0
         is_end = False
         while i == 0:
@@ -31,7 +36,7 @@ class ShuHuangWangSpider:
                 print('man hua is empty.')
                 break
             i += 1
-            serial_url = self.domain + '/sort_0_0_0_P.html?page=' + str(i)
+            serial_url = self.domain + '/' + page_name + '.html?page=' + str(i)
             print(serial_url)
             serial_response = requests.get(serial_url)
             serial_response_text = serial_response.text
@@ -81,7 +86,10 @@ class ShuHuangWangSpider:
             if len(a_items) == 0:
                 print('zhang jie is empty.')
             else:
-                self.novel_db.save(title, cover, description, str(category_id), category, str(author_id),
+                flag = 0
+                if self.page_type == 1:
+                    flag = 1
+                self.novel_db.save(title, cover, description, flag, str(category_id), category, str(author_id),
                                    author, 0, '')
                 novel_id = self.novel_db.get_novel_id(title)
                 chapter_index = 0

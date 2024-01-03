@@ -26,11 +26,11 @@ class DongManLaSpider:
         self.resource_handler = ResourceHandler(self.resource_url, self.username, self.password)
 
     def parse(self):
-        page_type = ''
+        page_name = ''
         if self.page_type == 0:
-            page_type = 'finish'
+            page_name = 'finish'
         elif self.page_type == 1:
-            page_type = 'serial'
+            page_name = 'serial'
         i = 0
         is_end = False
         while True:
@@ -38,7 +38,7 @@ class DongManLaSpider:
                 print('man hua is empty.')
                 break
             i += 1
-            man_hua_url = self.domain + '/manhua/' + page_type + '/' + str(i) + '.html'
+            man_hua_url = self.domain + '/manhua/' + page_name + '/' + str(i) + '.html'
             print(man_hua_url)
             man_hua_response = requests.get(man_hua_url)
             man_hua_response_text = man_hua_response.text
