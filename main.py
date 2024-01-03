@@ -15,7 +15,7 @@ if __name__ == '__main__':
     env = args.env
     port = args.port
     if env is None:
-        env = 'dev'
+        env = 'test'
     if port is None:
         port = 8083
     system.global_vars.application = Application()

@@ -13,13 +13,16 @@ class ResourceHandler:
         self.__token = None
 
     def login(self):
-        response = requests.post(url=self.__domain + '/admin/login', data={
-            'username': self.__username,
-            'password': self.__password
-        }, timeout=30)
-        if response.status_code == 200:
-            json_obj = json.loads(response.content)
-            self.__token = json_obj['data']['accessToken']
+        try:
+            response = requests.post(url=self.__domain + '/admin/login', data={
+                'username': self.__username,
+                'password': self.__password
+            }, timeout=30)
+            if response.status_code == 200:
+                json_obj = json.loads(response.content)
+                self.__token = json_obj['data']['accessToken']
+        except Exception as e:
+            print(e)
 
     def upload(self, bucket_name, filename):
         self.login()
