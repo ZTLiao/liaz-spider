@@ -31,3 +31,13 @@ class NovelChapterDb:
         self.conn.commit()
         cursor.close()
         return result
+
+    def get_seq_no(self, novel_id):
+        cursor = self.conn.cursor()
+        cursor.execute('select seq_no from novel_chapter where novel_id = \'' + str(novel_id) + '\' order by seq_no desc limit 1')
+        result = cursor.fetchone()
+        if result is not None:
+            result = result[0]
+        self.conn.commit()
+        cursor.close()
+        return result

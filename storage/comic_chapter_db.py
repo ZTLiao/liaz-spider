@@ -31,3 +31,13 @@ class ComicChapterDb:
         self.conn.commit()
         cursor.close()
         return result
+
+    def get_seq_no(self, comic_id):
+        cursor = self.conn.cursor()
+        cursor.execute('select seq_no from comic_chapter where comic_id = \'' + str(comic_id) + '\' order by seq_no desc limit 1')
+        result = cursor.fetchone()
+        if result is not None:
+            result = result[0]
+        self.conn.commit()
+        cursor.close()
+        return result

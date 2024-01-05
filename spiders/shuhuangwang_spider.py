@@ -96,7 +96,7 @@ class ShuHuangWangSpider:
                     self.novel_db.save(title, cover, description, flag, str(category_id), category, str(author_id),
                                        author, 0, '')
                     novel_id = self.novel_db.get_novel_id(title)
-                    chapter_index = 0
+                    chapter_index = self.novel_chapter_db.get_seq_no(novel_id)
                     for a_chapter_item in a_items:
                         chapter_index += 1
                         chapter_name = a_chapter_item.text

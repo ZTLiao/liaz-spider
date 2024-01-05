@@ -135,7 +135,7 @@ class DongManLaSpider:
                                                    author_id_str,
                                                    author_str, region_id, region)
                                 comic_id = self.comic_db.get_comic_id(title)
-                                chapter_index = 0
+                                chapter_index = self.comic_chapter_db.get_seq_no(comic_id)
                                 for li_item in reversed(li_items):
                                     chapter_index += 1
                                     page_url = li_item.find('a').get('href')
