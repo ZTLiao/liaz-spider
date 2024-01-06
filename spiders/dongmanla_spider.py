@@ -2,6 +2,7 @@ import bs4
 import requests
 
 from handler.resource_handler import download, ResourceHandler
+from storage.asset_db import AssetDb
 from storage.author_db import AuthorDb
 from storage.category_db import CategoryDb
 from storage.comic_chapter_db import ComicChapterDb
@@ -23,6 +24,7 @@ class DongManLaSpider:
         self.comic_db = ComicDb()
         self.comic_chapter_db = ComicChapterDb()
         self.comic_chapter_item_db = ComicChapterItemDb()
+        self.asset_db = AssetDb()
         self.resource_handler = ResourceHandler(self.resource_url, self.username, self.password)
 
     def parse(self):
@@ -135,6 +137,8 @@ class DongManLaSpider:
                                                    author_id_str,
                                                    author_str, region_id, region)
                                 comic_id = self.comic_db.get_comic_id(title)
+                                asset_key = title + '|' + author_str
+                                self.asset_db.save(asset_key, 1, title, cover, comic_id, category_ids, author_ids)
                                 chapter_index = self.comic_chapter_db.get_seq_no(comic_id)
                                 for li_item in reversed(li_items):
                                     chapter_index += 1
@@ -144,7 +148,9 @@ class DongManLaSpider:
                                     count = self.comic_chapter_db.count(comic_id, chapter_name)
                                     if count == 0:
                                         self.comic_chapter_db.save(comic_id, chapter_name, chapter_index)
-                                    comic_chapter_id = self.comic_chapter_db.get_comic_chapter_id(comic_id, chapter_name)
+                                    comic_chapter_id = self.comic_chapter_db.get_comic_chapter_id(comic_id,
+                                                                                                  chapter_name)
+                                    self.asset_db.update(comic_id, 1, chapter_name, comic_chapter_id)
                                     page_response = requests.get(page_url + 'all.html')
                                     page_response_text = page_response.text
                                     page_soup = bs4.BeautifulSoup(page_response_text, 'lxml')
@@ -162,7 +168,7 @@ class DongManLaSpider:
                                             if file_name is not None:
                                                 path = self.resource_handler.upload('comic', file_name)
                                             print(path)
-                                            self.comic_chapter_item_db.save(comic_chapter_id, comic_id, path, page_index)
+                                            self.comic_chapter_item_db.save(comic_chapter_id, comic_id, path,
+                                                                            page_index)
             except Exception as e:
                 print(e)
-

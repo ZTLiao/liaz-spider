@@ -2,6 +2,7 @@ import bs4
 import requests
 
 from handler.resource_handler import ResourceHandler, download, write_note
+from storage.asset_db import AssetDb
 from storage.author_db import AuthorDb
 from storage.category_db import CategoryDb
 from storage.novel_chapter_db import NovelChapterDb
@@ -21,6 +22,7 @@ class ShuHuangWangSpider:
         self.novel_db = NovelDb()
         self.novel_chapter_db = NovelChapterDb()
         self.novel_chapter_item_db = NovelChapterItemDb()
+        self.asset_db = AssetDb()
         self.resource_handler = ResourceHandler(self.resource_url, self.username, self.password)
 
     def parse(self):
@@ -96,6 +98,8 @@ class ShuHuangWangSpider:
                     self.novel_db.save(title, cover, description, flag, str(category_id), category, str(author_id),
                                        author, 0, '')
                     novel_id = self.novel_db.get_novel_id(title)
+                    asset_key = title + '|' + author
+                    self.asset_db.save(asset_key, 2, title, cover, novel_id, category_id, author_id)
                     chapter_index = self.novel_chapter_db.get_seq_no(novel_id)
                     for a_chapter_item in a_items:
                         chapter_index += 1
@@ -104,6 +108,7 @@ class ShuHuangWangSpider:
                         if count == 0:
                             self.novel_chapter_db.save(novel_id, chapter_name, chapter_index)
                         novel_chapter_id = self.novel_chapter_db.get_novel_chapter_id(novel_id, chapter_name)
+                        self.asset_db.update(novel_id, 2, chapter_name, novel_chapter_id)
                         count = self.novel_chapter_item_db.count(novel_chapter_id, novel_id, 1)
                         if count == 0:
                             page_url = self.domain + a_chapter_item.get('href')
@@ -122,4 +127,3 @@ class ShuHuangWangSpider:
                                 self.novel_chapter_item_db.save(novel_chapter_id, novel_id, path, 1)
         except Exception as e:
             print(e)
-
