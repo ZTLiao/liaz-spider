@@ -8,6 +8,7 @@ from storage.category_db import CategoryDb
 from storage.novel_chapter_db import NovelChapterDb
 from storage.novel_chapter_item_db import NovelChapterItemDb
 from storage.novel_db import NovelDb
+from storage.novel_subscribe_db import NovelSubscribeDb
 
 
 class ShuHuangWangSpider:
@@ -23,6 +24,7 @@ class ShuHuangWangSpider:
         self.novel_chapter_db = NovelChapterDb()
         self.novel_chapter_item_db = NovelChapterItemDb()
         self.asset_db = AssetDb()
+        self.novel_subscribe_db = NovelSubscribeDb()
         self.resource_handler = ResourceHandler(self.resource_url, self.username, self.password)
 
     def parse(self):
@@ -99,7 +101,7 @@ class ShuHuangWangSpider:
                                        author, 0, '')
                     novel_id = self.novel_db.get_novel_id(title)
                     asset_key = title + '|' + author
-                    self.asset_db.save(asset_key, 2, title, cover, novel_id, category_id, author_id)
+                    self.asset_db.save(asset_key, 2, title, cover, novel_id, str(category_id), str(author_id))
                     chapter_index = self.novel_chapter_db.get_seq_no(novel_id)
                     for a_chapter_item in a_items:
                         chapter_index += 1
@@ -125,5 +127,6 @@ class ShuHuangWangSpider:
                             print(path)
                             if path is not None:
                                 self.novel_chapter_item_db.save(novel_chapter_id, novel_id, path, 1)
+                                self.novel_subscribe_db.upgrade(novel_id)
         except Exception as e:
             print(e)

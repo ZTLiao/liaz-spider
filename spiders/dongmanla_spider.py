@@ -8,6 +8,7 @@ from storage.category_db import CategoryDb
 from storage.comic_chapter_db import ComicChapterDb
 from storage.comic_chapter_item_db import ComicChapterItemDb
 from storage.comic_db import ComicDb
+from storage.comic_subscribe_db import ComicSubscribeDb
 from storage.region_db import RegionDb
 
 
@@ -25,6 +26,7 @@ class DongManLaSpider:
         self.comic_chapter_db = ComicChapterDb()
         self.comic_chapter_item_db = ComicChapterItemDb()
         self.asset_db = AssetDb()
+        self.comic_subscribe_db = ComicSubscribeDb()
         self.resource_handler = ResourceHandler(self.resource_url, self.username, self.password)
 
     def parse(self):
@@ -138,7 +140,7 @@ class DongManLaSpider:
                                                    author_str, region_id, region)
                                 comic_id = self.comic_db.get_comic_id(title)
                                 asset_key = title + '|' + author_str
-                                self.asset_db.save(asset_key, 1, title, cover, comic_id, category_ids, author_ids)
+                                self.asset_db.save(asset_key, 1, title, cover, comic_id, category_id_str, author_id_str)
                                 chapter_index = self.comic_chapter_db.get_seq_no(comic_id)
                                 for li_item in reversed(li_items):
                                     chapter_index += 1
@@ -170,5 +172,6 @@ class DongManLaSpider:
                                             print(path)
                                             self.comic_chapter_item_db.save(comic_chapter_id, comic_id, path,
                                                                             page_index)
+                                            self.comic_subscribe_db.upgrade(comic_id)
             except Exception as e:
                 print(e)

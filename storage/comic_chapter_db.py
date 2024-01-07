@@ -40,4 +40,6 @@ class ComicChapterDb:
             result = result[0]
         self.conn.commit()
         cursor.close()
+        if result is None:
+            result = 0
         return result
