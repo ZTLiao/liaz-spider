@@ -45,7 +45,7 @@ class RedisUtil:
         try:
             data = res.hgetall(name)
         except Exception as e:
-            print('hget ', name, ' is error.', e)
+            print('hgetall ', name, ' is error.', e)
         finally:
             res.close()
         return data
@@ -74,7 +74,7 @@ class RedisUtil:
         try:
             data = res.hget(name, field)
         except Exception as e:
-            print('hdel ', name, ' is error.', e)
+            print('hget ', name, ' is error.', e)
         finally:
             res.close()
         return data
@@ -85,8 +85,18 @@ class RedisUtil:
         try:
             data = res.zrange(name, start=start, end=end, withscores=withscores)
         except Exception as e:
-            print('hdel ', name, ' is error.', e)
+            print('zrange ', name, ' is error.', e)
         finally:
             res.close()
         return data
+
+    def zincrby(self, name: str, amount: float, value: str):
+        res = redis.StrictRedis(host=self.host, port=self.port, db=self.db, password=self.password)
+        try:
+            res.zincrby(name, amount, value)
+        except Exception as e:
+            print('zincrby ', name, ' is error.', e)
+        finally:
+            res.close()
+
 
