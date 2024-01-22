@@ -1,4 +1,5 @@
 import system.global_vars
+from config.cos_config import CosConfig
 from config.mysql_config import MySqlConfig
 from config.nacos_config import NacosConfig
 from config.redis_config import RedisConfig
@@ -34,6 +35,11 @@ class SystemConfig:
                     system.global_vars.application.set_mysql(self.conn)
                 else:
                     print("No match found.")
+            if 'cos' in config:
+                cos = config['cos']
+                bucket_url = cos['bucketUrl']
+                bucket_url_array = bucket_url.split('.')
+                self.__cos = CosConfig(cos['secretId'], cos['secretKey'], bucket_url_array[0], bucket_url_array[2])
 
     def get_nacos(self):
         return self.__nacos
@@ -43,3 +49,7 @@ class SystemConfig:
 
     def get_mysql(self):
         return self.__mysql
+
+    def get_cos(self):
+        return self.__cos
+
