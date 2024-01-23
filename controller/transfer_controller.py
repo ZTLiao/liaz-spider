@@ -20,19 +20,26 @@ def upload(request: Request):
     util = CosUtil(cos.secret_id, cos.secret_key, cos.bucket_name, cos.region)
     file_item_db = FileItemDb()
     page_num = 1
-    page_size = 20
+    page_size = 200
     while True:
-        data = file_item_db.list(page_num, page_size)
-        if len(data) == 0:
-            break
-        for item in data:
-            try:
-                path = item['path']
-                print('path : ', path)
-                filename = download(resource_url + path)
-                util.put_object(filename, path)
-                os.remove(filename)
-            except Exception as e:
-                print(e)
+        try:
+            data = file_item_db.list(page_num, page_size)
+            if len(data) == 0:
+                break
+            for item in data:
+                try:
+                    path = item['path']
+                    print('path : ', path)
+                    filename = download(resource_url + path)
+                    try:
+                        util.put_object(filename, path)
+                    except Exception as e:
+                        print(e)
+                    finally:
+                        os.remove(filename)
+                except Exception as e:
+                    print(e)
+        except Exception as e:
+            print(e)
         page_num += 1
     return response.ok()

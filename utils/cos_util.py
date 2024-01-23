@@ -18,7 +18,6 @@ class CosUtil:
                 Bucket=self.bucket_name,
                 Body=fp,
                 Key=unique_id,
-                StorageClass='STANDARD',
                 EnableMD5=False
             )
         print(response['ETag'])

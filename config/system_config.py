@@ -37,8 +37,8 @@ class SystemConfig:
                     print("No match found.")
             if 'cos' in config:
                 cos = config['cos']
-                bucket_url = cos['bucketUrl']
-                bucket_url_array = bucket_url.split('.')
+                bucket_url: str = cos['bucketUrl']
+                bucket_url_array = bucket_url.replace('https://', '').split('.')
                 self.__cos = CosConfig(cos['secretId'], cos['secretKey'], bucket_url_array[0], bucket_url_array[2])
 
     def get_nacos(self):
@@ -52,4 +52,3 @@ class SystemConfig:
 
     def get_cos(self):
         return self.__cos
-
