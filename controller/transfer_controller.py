@@ -3,7 +3,7 @@ import os
 from fastapi import APIRouter, Request
 
 from config.cos_config import CosConfig
-from handler.resource_handler import download
+from handler.file_item_handler import FileItemHandler
 from resp import response
 from storage.file_item_db import FileItemDb
 
@@ -16,6 +16,7 @@ router = APIRouter()
 @router.get('/spider/transfer/upload')
 def upload(request: Request):
     resource_url = 'http://' + request.query_params.get('resource_url')
+    file_item_handler = FileItemHandler()
     cos: CosConfig = system.global_vars.systemConfig.get_cos()
     util = CosUtil(cos.secret_id, cos.secret_key, cos.bucket_name, cos.region)
     file_item_db = FileItemDb()
@@ -30,7 +31,7 @@ def upload(request: Request):
                 try:
                     path = item['path']
                     print('path : ', path)
-                    filename = download(resource_url + path)
+                    filename = file_item_handler.download(resource_url + path)
                     try:
                         util.put_object(filename, path)
                     except Exception as e:

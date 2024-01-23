@@ -20,4 +20,6 @@ class CosUtil:
                 Key=unique_id,
                 EnableMD5=False
             )
-        print(response['ETag'])
+        e_tag = response['ETag']
+        print(e_tag)
+        return e_tag

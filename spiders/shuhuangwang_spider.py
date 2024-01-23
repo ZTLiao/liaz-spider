@@ -1,7 +1,8 @@
 import bs4
 import requests
 
-from handler.resource_handler import ResourceHandler, download, write_note
+from constants import file_type, bucket
+from handler.file_item_handler import FileItemHandler
 from storage.asset_db import AssetDb
 from storage.author_db import AuthorDb
 from storage.category_db import CategoryDb
@@ -25,7 +26,7 @@ class ShuHuangWangSpider:
         self.novel_chapter_item_db = NovelChapterItemDb()
         self.asset_db = AssetDb()
         self.novel_subscribe_db = NovelSubscribeDb()
-        self.resource_handler = ResourceHandler(self.resource_url, self.username, self.password)
+        self.file_item_handler = FileItemHandler()
 
     def parse(self):
         page_name = 'sort_0_0_0_OK'
@@ -80,9 +81,9 @@ class ShuHuangWangSpider:
                 cover = self.domain + cover_img_item.get('data-original')
                 novel_id = self.novel_db.get_novel_id(title)
                 if novel_id is None:
-                    file_name = download(cover)
+                    file_name = self.file_item_handler.download(cover)
                     if file_name is not None:
-                        cover = self.resource_handler.upload('cover', file_name)
+                        cover = self.file_item_handler.upload(bucket.COVER, file_name, file_type.IMAGE_JPEG)
                     print(cover)
                     if cover is None:
                         cover = ''
@@ -120,10 +121,10 @@ class ShuHuangWangSpider:
                             page_soup = bs4.BeautifulSoup(page_response_text, 'lxml')
                             content_item = page_soup.select('#content')
                             content = content_item[0].text
-                            file_name = write_note(content)
+                            file_name = self.file_item_handler.write_content(content)
                             path = None
                             if file_name is not None:
-                                path = self.resource_handler.upload('novel', file_name)
+                                path = self.file_item_handler.upload(bucket.NOVEL, file_name, file_type.TEXT_PLAIN)
                             print(path)
                             if path is not None:
                                 self.novel_chapter_item_db.save(novel_chapter_id, novel_id, path, 1)

@@ -1,7 +1,8 @@
 import bs4
 import requests
 
-from handler.resource_handler import download, ResourceHandler
+from constants import file_type, bucket
+from handler.file_item_handler import FileItemHandler
 from storage.asset_db import AssetDb
 from storage.author_db import AuthorDb
 from storage.category_db import CategoryDb
@@ -27,7 +28,7 @@ class DongManLaSpider:
         self.comic_chapter_item_db = ComicChapterItemDb()
         self.asset_db = AssetDb()
         self.comic_subscribe_db = ComicSubscribeDb()
-        self.resource_handler = ResourceHandler(self.resource_url, self.username, self.password)
+        self.file_item_handler = FileItemHandler()
 
     def parse(self):
         page_name = 'finish'
@@ -68,9 +69,10 @@ class DongManLaSpider:
                             cover = cover_img_item.get('src')
                             comic_id = self.comic_db.get_comic_id(title)
                             if comic_id is None:
-                                file_name = download(cover)
+                                file_name = self.file_item_handler.download(cover)
                                 if file_name is not None:
-                                    cover = self.resource_handler.upload('cover', file_name)
+                                    cover = self.file_item_handler.upload(bucket.COVER, file_name,
+                                                                          file_type.IMAGE_JPEG)
                                 print(cover)
                                 if cover is None:
                                     cover = ''
@@ -166,9 +168,10 @@ class DongManLaSpider:
                                             print(path)
                                             if len(path.replace('https://img.dongman.la', '')) == 0:
                                                 continue
-                                            file_name = download(path)
+                                            file_name = self.file_item_handler.download(path)
                                             if file_name is not None:
-                                                path = self.resource_handler.upload('comic', file_name)
+                                                path = self.file_item_handler.upload(bucket.COMIC, file_name,
+                                                                                     file_type.IMAGE_JPEG)
                                             print(path)
                                             self.comic_chapter_item_db.save(comic_chapter_id, comic_id, path,
                                                                             page_index)

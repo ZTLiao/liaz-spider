@@ -1,2 +1,3 @@
 SUCCESS = 'success'
 FAIL = 'fail'
+

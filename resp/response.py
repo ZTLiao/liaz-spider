@@ -1,5 +1,5 @@
 import time
-from constants import constant
+from constants import status
 
 
 class Response:
@@ -11,8 +11,8 @@ class Response:
 
 
 def ok(data=None):
-    return Response(200, constant.SUCCESS, data)
+    return Response(200, status.SUCCESS, data)
 
 
 def fail():
-    return Response(500, constant.FAIL, None)
+    return Response(500, status.FAIL, None)
