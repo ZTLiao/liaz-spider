@@ -20,6 +20,8 @@ pip3 install lxml
 
 pip3 install -U cos-python-sdk-v5
 
+pip3 install schedule
+
 curl -v -X GET http://172.17.0.4:8083/spider/script/execute?script=dongmanla\&page_type=1
 
 curl -v -X GET http://172.17.0.4:8083/spider/transfer/upload?resource_url=8.134.215.58:9000

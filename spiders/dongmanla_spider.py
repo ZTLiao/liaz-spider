@@ -1,3 +1,5 @@
+import time
+
 import bs4
 import requests
 
@@ -14,7 +16,7 @@ from storage.region_db import RegionDb
 
 
 class DongManLaSpider:
-    def __init__(self, page_type):
+    def __init__(self, page_type=0):
         self.domain = 'https://www.dongman.la'
         self.page_type = page_type
         self.category_db = CategoryDb()
@@ -175,3 +177,58 @@ class DongManLaSpider:
                                             self.comic_subscribe_db.upgrade(comic_id)
             except Exception as e:
                 print(e)
+
+    def job(self):
+        try:
+            now = time.strftime("%m-%d")
+            man_hua_url = self.domain
+            print(man_hua_url)
+            man_hua_response = requests.get(man_hua_url)
+            man_hua_response_text = man_hua_response.text
+            man_hua_soup = bs4.BeautifulSoup(man_hua_response_text, 'lxml')
+            new_list_item = man_hua_soup.select('div.cy_content .cy_main .cy_new_list')[0]
+            for man_han_item in new_list_item.select('li'):
+                date = man_han_item.find('dfn').text
+                if now != date:
+                    print('now : ', now, 'date : ', date)
+                    continue
+                title = man_han_item.find('a').text
+                comic_id = self.comic_db.get_comic_id(title)
+                if comic_id is None or comic_id == 0:
+                    print('comic title : ', title, ' is not exist.')
+                    continue
+                a_item = man_han_item.find_all('a')[1]
+                page_url = a_item.get('href')
+                chapter_name = a_item.text
+                print('page_url : ', page_url, 'chapter_name : ', chapter_name)
+                chapter_index = self.comic_chapter_db.get_seq_no(comic_id)
+                chapter_index += 1
+                count = self.comic_chapter_db.count(comic_id, chapter_name)
+                if count == 0:
+                    self.comic_chapter_db.save(comic_id, chapter_name, chapter_index)
+                comic_chapter_id = self.comic_chapter_db.get_comic_chapter_id(comic_id,
+                                                                              chapter_name)
+                self.asset_db.update(comic_id, 1, chapter_name, comic_chapter_id)
+                page_response = requests.get(page_url + 'all.html')
+                page_response_text = page_response.text
+                page_soup = bs4.BeautifulSoup(page_response_text, 'lxml')
+                page_index = 0
+                for lazy_box_item in page_soup.select('div.chapter-images .imgListBox .lazyBox'):
+                    page_index += 1
+                    page_count = self.comic_chapter_item_db.count(comic_chapter_id, comic_id,
+                                                                  page_index)
+                    if page_count == 0:
+                        path = lazy_box_item.find('img').get('data-src')
+                        print(path)
+                        if len(path.replace('https://img.dongman.la', '')) == 0:
+                            continue
+                        file_name = self.file_item_handler.download(path)
+                        if file_name is not None:
+                            path = self.file_item_handler.upload(bucket.COMIC, file_name,
+                                                                 file_type.IMAGE_JPEG)
+                        print(path)
+                        self.comic_chapter_item_db.save(comic_chapter_id, comic_id, path,
+                                                        page_index)
+                        self.comic_subscribe_db.upgrade(comic_id)
+        except Exception as e:
+            print(e)

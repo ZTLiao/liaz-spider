@@ -29,6 +29,8 @@ RUN pip3 install -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors
 
 RUN pip3 install -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com cos-python-sdk-v5
 
+RUN pip3 install -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com schedule
+
 COPY . $WORK_DIR/
 
 WORKDIR $WORK_DIR/
