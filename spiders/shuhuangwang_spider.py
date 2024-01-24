@@ -13,11 +13,8 @@ from storage.novel_subscribe_db import NovelSubscribeDb
 
 
 class ShuHuangWangSpider:
-    def __init__(self, resource_url, username, password, page_type):
+    def __init__(self, page_type):
         self.domain = 'https://www.fanghuoni.net'
-        self.resource_url = resource_url
-        self.username = username
-        self.password = password
         self.page_type = page_type
         self.category_db = CategoryDb()
         self.author_db = AuthorDb()
@@ -120,7 +117,7 @@ class ShuHuangWangSpider:
                             page_response_text = page_response.text
                             page_soup = bs4.BeautifulSoup(page_response_text, 'lxml')
                             content_item = page_soup.select('#content')
-                            content = content_item[0].text
+                            content = str(content_item[0])
                             file_name = self.file_item_handler.write_content(content)
                             path = None
                             if file_name is not None:

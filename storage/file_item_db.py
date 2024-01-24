@@ -24,5 +24,5 @@ class FileItemDb:
         cursor = self.conn.cursor()
         cursor.execute(
             'insert into file_item(bucket_name, object_name, size, path, unique_id, suffix, file_type, created_at, updated_at) values(\'' + bucket_name + '\', \'' + object_name + '\', \'' + str(
-                size) + '\', \'' + path + '\', \'' + unique_id + '\', \'' + suffix + '\', \'' + file_type + '\', now(3), now(3))')
+                size) + '\', \'' + path + '\', \'' + str(unique_id) + '\', \'' + suffix + '\', \'' + file_type + '\', now(3), now(3))')
         self.conn.commit()

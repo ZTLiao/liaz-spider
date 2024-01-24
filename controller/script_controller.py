@@ -10,14 +10,11 @@ router = APIRouter()
 @router.get('/spider/script/execute')
 def execute(request: Request):
     script = request.query_params.get('script')
-    resource_url = 'http://' + request.query_params.get('resource_url')
-    username = request.query_params.get('username')
-    password = request.query_params.get('password')
     page_type = request.query_params.get('page_type')
     if page_type is None:
         page_type = 0
     if script == 'dongmanla':
-        DongManLaSpider(resource_url, username, password, page_type).parse()
+        DongManLaSpider(page_type).parse()
     if script == 'shuhuangwang':
-        ShuHuangWangSpider(resource_url, username, password, page_type).parse()
+        ShuHuangWangSpider(page_type).parse()
     return response.ok()

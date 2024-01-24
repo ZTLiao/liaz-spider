@@ -14,11 +14,8 @@ from storage.region_db import RegionDb
 
 
 class DongManLaSpider:
-    def __init__(self, resource_url, username, password, page_type):
+    def __init__(self, page_type):
         self.domain = 'https://www.dongman.la'
-        self.resource_url = resource_url
-        self.username = username
-        self.password = password
         self.page_type = page_type
         self.category_db = CategoryDb()
         self.author_db = AuthorDb()

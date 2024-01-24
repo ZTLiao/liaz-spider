@@ -15,7 +15,7 @@ profiles = {
     'TEST': {
         'username': 'nacos',
         'password': 'nacos',
-        'serverAddr': '172.17.0.4:8848',
+        'serverAddr': '172.17.0.3:8848',
         'namespace': 'e85ee8e9-472c-4803-bcf0-0b0f7d0ea0b7',
         'sharedDataIds': 'application.yaml,database.yaml',
         'refreshableDataIds': 'application.yaml',

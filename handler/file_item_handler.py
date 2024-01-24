@@ -24,7 +24,7 @@ class FileItemHandler:
         if len(array) > 1:
             suffix = array[1]
         unique_id = int(round(time.time() * 1000))
-        path = '/' + bucket_name + '/' + unique_id
+        path = '/' + bucket_name + '/' + str(unique_id)
         try:
             size = os.path.getsize(filename)
             e_tag = self.__cos_util.put_object(filename, path)
@@ -38,7 +38,7 @@ class FileItemHandler:
         suffix = ''
         array = url.split('.')
         if len(array) > 1:
-            suffix = array[1]
+            suffix = array[len(array) - 1]
         self.filename = str(uuid.uuid4())
         if suffix != '':
             self.filename = self.filename + '.' + suffix
