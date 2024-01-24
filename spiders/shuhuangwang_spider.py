@@ -117,7 +117,7 @@ class ShuHuangWangSpider:
                             page_response_text = page_response.text
                             page_soup = bs4.BeautifulSoup(page_response_text, 'lxml')
                             content_item = page_soup.select('#content')
-                            content = str(content_item[0])
+                            content = content_item[0].text
                             file_name = self.file_item_handler.write_content(content)
                             path = None
                             if file_name is not None:
