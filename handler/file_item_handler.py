@@ -32,6 +32,8 @@ class FileItemHandler:
                 self.__file_item_db.save(bucket_name, filename, size, path, unique_id, suffix, file_type)
         except Exception as e:
             print(e)
+        finally:
+            os.remove(filename)
         return path
 
     def download(self, url):
