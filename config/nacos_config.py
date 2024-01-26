@@ -15,7 +15,7 @@ profiles = {
     'TEST': {
         'username': 'nacos',
         'password': 'nacos',
-        'serverAddr': '172.17.0.3:8848',
+        'serverAddr': '172.17.0.1:8848',
         'namespace': 'e85ee8e9-472c-4803-bcf0-0b0f7d0ea0b7',
         'sharedDataIds': 'application.yaml,database.yaml',
         'refreshableDataIds': 'application.yaml',
@@ -23,7 +23,7 @@ profiles = {
     'PROD': {
         'username': 'nacos',
         'password': 'nacos',
-        'serverAddr': '127.0.0.1:8848',
+        'serverAddr': '172.17.0.1:8848',
         'namespace': '5f49cd28-4eb2-4b0b-a467-bab25f4c9535',
         'sharedDataIds': 'application.yaml,database.yaml',
         'refreshableDataIds': 'application.yaml',
