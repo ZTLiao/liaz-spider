@@ -136,6 +136,10 @@ class DongManLaSpider:
                                 flag = 0
                                 if self.page_type == '1':
                                     flag = 1
+                                count = self.comic_db.count(title)
+                                if count != 0:
+                                    print('comic_id : ', comic_id, ', title : ', title)
+                                    continue
                                 self.comic_db.save(title, cover, description, flag, category_id_str, category_str,
                                                    author_id_str,
                                                    author_str, region_id, region)
