@@ -136,10 +136,6 @@ class DongManLaSpider:
                                 flag = 0
                                 if self.page_type == '1':
                                     flag = 1
-                                count = self.comic_db.count(title)
-                                if count != 0:
-                                    print('comic_id : ', comic_id, ', title : ', title)
-                                    continue
                                 self.comic_db.save(title, cover, description, flag, category_id_str, category_str,
                                                    author_id_str,
                                                    author_str, region_id, region)
@@ -147,6 +143,12 @@ class DongManLaSpider:
                                 asset_key = title + '|' + author_str
                                 self.asset_db.save(asset_key, 1, title, cover, comic_id, category_id_str, author_id_str)
                                 chapter_index = self.comic_chapter_db.get_seq_no(comic_id)
+                                last_item = li_items[0]
+                                chapter_name = last_item.find('p').text
+                                count = self.comic_chapter_db.count(comic_id, chapter_name)
+                                if count != 0:
+                                    print('comic_id : ', comic_id, ', chapter_name : ', chapter_name, ' is exist.')
+                                    continue
                                 for li_item in reversed(li_items):
                                     chapter_index += 1
                                     page_url = li_item.find('a').get('href')

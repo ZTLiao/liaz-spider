@@ -43,11 +43,13 @@ class ShuHuangWangSpider:
                 print(serial_url)
                 serial_response = requests.get(serial_url)
                 serial_response_text = serial_response.text
+                print(serial_response_text)
                 serial_soup = bs4.BeautifulSoup(serial_response_text, 'lxml')
                 for news_content_item in serial_soup.select('div#newscontent'):
                     a_items = news_content_item.select('.l li .s2 a')
                     li_items = news_content_item.select('.r .pagination li')
                     a_href = li_items[len(li_items) - 1].select('a')[0].get('href')
+                    print(a_href)
                     if i == int(a_href.replace('?page=', '')):
                         is_end = True
                         break
@@ -101,6 +103,12 @@ class ShuHuangWangSpider:
                     asset_key = title + '|' + author
                     self.asset_db.save(asset_key, 2, title, cover, novel_id, str(category_id), str(author_id))
                     chapter_index = self.novel_chapter_db.get_seq_no(novel_id)
+                    last_item = a_items[len(a_items) - 1]
+                    chapter_name = last_item.text
+                    count = self.novel_chapter_db.count(novel_id, chapter_name)
+                    if count != 0:
+                        print('novel_id : ', novel_id, ', chapter_name : ', chapter_name, ' is exist.')
+                        continue
                     for a_chapter_item in a_items:
                         chapter_index += 1
                         chapter_name = a_chapter_item.text

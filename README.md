@@ -22,7 +22,8 @@ pip3 install -U cos-python-sdk-v5
 
 pip3 install schedule
 
-curl -v -X GET http://172.17.0.4:8083/spider/script/execute?script=dongmanla\&page_type=1
+curl -v -X GET http://172.17.0.1:8083/spider/script/execute?script=dongmanla\&page_type=1
 
+curl -v -X GET http://172.17.0.1:8084/spider/script/execute?script=shuhuangwang\&page_type=0
 
 docker run -p 8083:8083 --name liaz-spider -v /data/python/liaz-spider/:/data/python/liaz-spider -d liaz-spider
