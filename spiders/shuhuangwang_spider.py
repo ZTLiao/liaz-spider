@@ -1,3 +1,5 @@
+import time
+
 import bs4
 import requests
 
@@ -13,7 +15,7 @@ from storage.novel_subscribe_db import NovelSubscribeDb
 
 
 class ShuHuangWangSpider:
-    def __init__(self, page_type):
+    def __init__(self, page_type=0):
         self.domain = 'https://www.fanghuoni.net'
         self.page_type = page_type
         self.category_db = CategoryDb()
@@ -33,9 +35,9 @@ class ShuHuangWangSpider:
             page_name = 'sort_0_0_0_P'
         i = 0
         is_end = False
-        while i == 0:
+        while True:
             if is_end:
-                print('man hua is empty.')
+                print('xiao shuo is empty.')
                 break
             i += 1
             try:
@@ -60,8 +62,8 @@ class ShuHuangWangSpider:
                         detail_response_text = detail_response.text
                         detail_soup = bs4.BeautifulSoup(detail_response_text, 'lxml')
                         option_items = detail_soup.select('.listpage .middle option')
-                        for i in range(1, len(option_items) - 1):
-                            self.get_detail(self.domain + option_items[i].get('value'))
+                        for j in range(1, len(option_items) - 1):
+                            self.get_detail(self.domain + option_items[j].get('value'))
             except Exception as e:
                 print(e)
 
@@ -125,11 +127,14 @@ class ShuHuangWangSpider:
                             page_response_text = page_response.text
                             page_soup = bs4.BeautifulSoup(page_response_text, 'lxml')
                             content_item = page_soup.select('#content')
-                            content = content_item[0].text
+                            content = str(content_item[0]).replace('<div class="read_txt" id="content">', '').replace(
+                                '</div>', '').replace('<br/>', '\n')
+                            print(content)
                             file_name = self.file_item_handler.write_content(content)
                             path = None
                             if file_name is not None:
                                 path = self.file_item_handler.upload(bucket.NOVEL, file_name, file_type.TEXT_PLAIN)
+                                time.sleep(1)
                             print(path)
                             if path is not None:
                                 self.novel_chapter_item_db.save(novel_chapter_id, novel_id, path, 1)
