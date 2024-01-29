@@ -20,7 +20,7 @@ pip3 install lxml
 
 pip3 install -U cos-python-sdk-v5
 
-pip3 install schedule
+pip3 install apscheduler
 
 curl -v -X GET http://172.17.0.1:8083/spider/script/execute?script=dongmanla\&page_type=1
 
