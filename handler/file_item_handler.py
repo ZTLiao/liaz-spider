@@ -36,7 +36,9 @@ class FileItemHandler:
             os.remove(filename)
         return path
 
-    def download(self, url):
+    def download(self, url, headers=None):
+        if headers is None:
+            headers = {}
         suffix = ''
         array = url.split('.')
         if len(array) > 1:
@@ -45,7 +47,7 @@ class FileItemHandler:
         if suffix != '':
             self.filename = self.filename + '.' + suffix
         try:
-            response = requests.get(url)
+            response = requests.get(url, headers=headers)
             if response.status_code == 200:
                 with open(self.filename, 'wb') as f:
                     f.write(response.content)

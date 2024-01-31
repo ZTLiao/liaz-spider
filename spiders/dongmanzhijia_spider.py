@@ -72,6 +72,13 @@ class DongManZhiJiaSpider:
                     print('comic date : ', date)
                     return
                 comic_id = value.comicId
+                title = value.title
+                last_update_chapter_name = value.lastUpdateChapterName
+                count = self.comic_chapter_db.count(comic_id, last_update_chapter_name)
+                if count != 0:
+                    print('comic title : ', title, ', last_update_chapter_name : ', last_update_chapter_name,
+                          ', count : ', count)
+                    return
                 try:
                     comic_detail_url = self.domain + '/comic/detail/' + str(
                         comic_id) + '?channel=android&timestamp=' + str(
@@ -178,7 +185,9 @@ class DongManZhiJiaSpider:
                                                                               page_index)
                                 if page_count == 0:
                                     print(path)
-                                    file_name = self.file_item_handler.download(path)
+                                    file_name = self.file_item_handler.download(path, headers={
+                                        'Referer': 'http://www.dmzj.com/',
+                                    })
                                     if file_name is not None:
                                         path = self.file_item_handler.upload(bucket.COMIC, file_name,
                                                                              file_type.IMAGE_JPEG)
