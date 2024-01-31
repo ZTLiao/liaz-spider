@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package comic;
+package dongmanzhijia_comic;
 
 message ComicChapterDetailProto {
     int64 chapterId = 1;

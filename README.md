@@ -32,7 +32,7 @@ pip3 install grpcio-tools
 
 pip3 install protobuf
 
-python3 -m grpc_tools.protoc --python_out=. -I=. comic.proto
+python3 -m grpc_tools.protoc --python_out=. -I=. dongmanzhijia_comic.proto
 
 curl -v -X GET http://172.17.0.1:8083/spider/script/execute?script=dongmanla\&page_type=1
 

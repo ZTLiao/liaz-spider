@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from controller import root_controller, script_controller, transfer_controller
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
-from task import dongmanla_task
+from task import dongmanla_task, dongmanzhijia_task
 
 app = FastAPI()
 
@@ -20,4 +20,5 @@ class AppRouter:
 async def start_scheduler():
     scheduler = AsyncIOScheduler(timezone="Asia/Shanghai")
     scheduler.add_job(dongmanla_task.execute, 'cron', hour=20, minute=00)
+    scheduler.add_job(dongmanzhijia_task.execute, 'cron', minute=30)
     scheduler.start()
