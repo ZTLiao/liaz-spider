@@ -31,6 +31,16 @@ RUN pip3 install -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors
 
 RUN pip3 install -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com apscheduler
 
+RUN pip3 install -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com pycryptodome
+
+RUN pip3 install -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com asn1crypto
+
+RUN pip3 install -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com grpcio
+
+RUN pip3 install -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com grpcio-tools
+
+RUN pip3 install -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com protobuf
+
 COPY . $WORK_DIR/
 
 WORKDIR $WORK_DIR/

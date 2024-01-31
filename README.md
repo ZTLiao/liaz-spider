@@ -22,6 +22,18 @@ pip3 install -U cos-python-sdk-v5
 
 pip3 install apscheduler
 
+pip3 install pycryptodome
+
+pip3 install asn1crypto
+
+pip3 install grpcio
+
+pip3 install grpcio-tools
+
+pip3 install protobuf
+
+python3 -m grpc_tools.protoc --python_out=. -I=. comic.proto
+
 curl -v -X GET http://172.17.0.1:8083/spider/script/execute?script=dongmanla\&page_type=1
 
 curl -v -X GET http://172.17.0.1:8084/spider/script/execute?script=shuhuangwang\&page_type=0

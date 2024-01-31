@@ -1,4 +1,5 @@
 import time
+from datetime import datetime, timedelta
 
 import bs4
 import requests
@@ -192,7 +193,8 @@ class DongManLaSpider:
 
     def job(self):
         try:
-            now = time.strftime("%m-%d")
+            now = datetime.now()
+            yesterday = (now - timedelta(days=1)).strftime("%m-%d")
             man_hua_url = self.domain
             print(man_hua_url)
             man_hua_response = requests.get(man_hua_url)
@@ -201,7 +203,7 @@ class DongManLaSpider:
             new_list_item = man_hua_soup.select('div.cy_content .cy_main .cy_new_list')[0]
             for man_han_item in new_list_item.select('li'):
                 date = man_han_item.find('dfn').text
-                if now != date:
+                if yesterday != date:
                     print('now : ', now, 'date : ', date)
                     continue
                 a_item = man_han_item.find_all('a')[0]
