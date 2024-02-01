@@ -61,7 +61,7 @@ class ComicChapterDb:
         return result
 
     def save_by_comic_volume_id(self, comic_id, comic_volume_id, chapter_name, seq_no):
-        count = self.count(comic_id, chapter_name)
+        count = self.count_by_comic_volume_id(comic_id, comic_volume_id, chapter_name)
         if count == 0:
             cursor = self.conn.cursor()
             cursor.execute(

@@ -5,6 +5,7 @@ import uvicorn
 import system.global_vars
 from config.system_config import SystemConfig
 from router.app_router import AppRouter
+from spiders.dongmanzhijia_spider import DongManZhiJiaSpider
 from system.application import Application
 
 if __name__ == '__main__':
@@ -22,4 +23,5 @@ if __name__ == '__main__':
     system.global_vars.application.set_env(env)
     system.global_vars.application.set_name('liaz-spider')
     system.global_vars.systemConfig = SystemConfig()
+    DongManZhiJiaSpider().novel_job()
     uvicorn.run(AppRouter.instance(), host='0.0.0.0', port=port, workers=1)

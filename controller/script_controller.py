@@ -2,6 +2,7 @@ from fastapi import APIRouter, Request
 
 from resp import response
 from spiders.dongmanla_spider import DongManLaSpider
+from spiders.dongmanzhijia_spider import DongManZhiJiaSpider
 from spiders.shuhuangwang_spider import ShuHuangWangSpider
 
 router = APIRouter()
@@ -17,4 +18,10 @@ def execute(request: Request):
         DongManLaSpider(page_type).parse()
     if script == 'shuhuangwang':
         ShuHuangWangSpider(page_type).parse()
+    if script == 'dongmanzhijia':
+        spider = DongManZhiJiaSpider()
+        if page_type == '0':
+            spider.parse()
+        elif page_type == '1':
+            pass
     return response.ok()
