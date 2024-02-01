@@ -164,6 +164,7 @@ class DongManZhiJiaSpider:
                             comic_chapter_id = self.comic_chapter_db.get_comic_chapter_id_by_comic_volume_id(comic_id,
                                                                                                              comic_volume_id,
                                                                                                              chapter_name)
+                            self.asset_db.update(comic_id, 1, chapter_name, comic_chapter_id)
                             comic_chapter_url = self.domain + '/comic/chapter/' + str(comic_detail.id) + '/' + str(
                                 chapter.chapterId) + '?channel=android&timestamp=' + str(
                                 int(time.time())) + '&uid=' + str(self.uid)

@@ -127,8 +127,9 @@ class ShuHuangWangSpider:
                             count = self.novel_chapter_db.count(novel_id, chapter_name)
                             if count == 0:
                                 self.novel_chapter_db.save(novel_id, chapter_name, chapter_index)
+                                novel_chapter_id = self.novel_chapter_db.get_novel_chapter_id(novel_id, chapter_name)
+                                self.asset_db.update(novel_id, 2, chapter_name, novel_chapter_id)
                             novel_chapter_id = self.novel_chapter_db.get_novel_chapter_id(novel_id, chapter_name)
-                            self.asset_db.update(novel_id, 2, chapter_name, novel_chapter_id)
                             count = self.novel_chapter_item_db.count(novel_chapter_id, novel_id, 1)
                             if count == 0:
                                 page_url = self.domain + a_chapter_item.get('href')

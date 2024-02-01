@@ -164,9 +164,11 @@ class DongManLaSpider:
                         count = self.comic_chapter_db.count(comic_id, chapter_name)
                         if count == 0:
                             self.comic_chapter_db.save(comic_id, chapter_name, chapter_index)
+                            comic_chapter_id = self.comic_chapter_db.get_comic_chapter_id(comic_id,
+                                                                                          chapter_name)
+                            self.asset_db.update(comic_id, 1, chapter_name, comic_chapter_id)
                         comic_chapter_id = self.comic_chapter_db.get_comic_chapter_id(comic_id,
                                                                                       chapter_name)
-                        self.asset_db.update(comic_id, 1, chapter_name, comic_chapter_id)
                         page_response = requests.get(page_url + 'all.html')
                         page_response_text = page_response.text
                         page_soup = bs4.BeautifulSoup(page_response_text, 'lxml')
