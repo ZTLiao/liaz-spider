@@ -24,6 +24,8 @@ class AssetDb:
             self.conn.commit()
 
     def update(self, obj_id, asset_type, upgrade_chapter, chapter_id):
+        if chapter_id is None:
+            return
         cursor = self.conn.cursor()
         cursor.execute(
             'update asset set upgrade_chapter = \'' + upgrade_chapter + '\', chapter_id = \'' + str(chapter_id) + '\', updated_at = now(3) where obj_id = \'' + str(obj_id) + '\' and asset_type = \'' + str(asset_type) + '\'')

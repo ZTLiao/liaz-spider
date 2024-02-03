@@ -33,3 +33,8 @@ class ComicDb:
         self.conn.commit()
         cursor.close()
         return result
+
+    def upgrade(self, comic_id):
+        cursor = self.conn.cursor()
+        cursor.execute(
+            'update comic set end_time = now(3) where comic_id = \'' + str(comic_id) + '\'')

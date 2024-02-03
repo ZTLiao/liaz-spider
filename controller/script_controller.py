@@ -19,9 +19,5 @@ def execute(request: Request):
     if script == 'shuhuangwang':
         ShuHuangWangSpider(page_type).parse()
     if script == 'dongmanzhijia':
-        spider = DongManZhiJiaSpider()
-        if page_type == '0':
-            spider.parse()
-        elif page_type == '1':
-            pass
+        DongManZhiJiaSpider(page_type).parse()
     return response.ok()

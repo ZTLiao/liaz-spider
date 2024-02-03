@@ -2,12 +2,13 @@ FROM python:3.11.4
 
 USER root
 
-ENV WORK_DIR /data/python/liaz-spider
-
 ARG PROFILES_ACTIVE
-ENV PROFILES_ACTIVE $PROFILES_ACTIVE
+ARG APPLICATION_NAME
+ARG SERVER_PORT
 
-ENV SERVER_PORT 8083
+ENV WORK_DIR /data/python/$APPLICATION_NAME
+ENV PROFILES_ACTIVE $PROFILES_ACTIVE
+ENV SERVER_PORT $SERVER_PORT
 
 RUN pip3 install -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com fastapi
 
@@ -41,10 +42,10 @@ RUN pip3 install -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors
 
 RUN pip3 install -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com protobuf
 
-COPY . $WORK_DIR/
-
 WORKDIR $WORK_DIR/
 
-ENTRYPOINT ["python3", "main.py", "-e", "test"]
+RUN mkdir -p $WORK_DIR/logs
+
+CMD ["python3", "main.py", "-e", "test", "-p", "8083"]
 
 HEALTHCHECK --interval=20s --timeout=10s --retries=10 CMD wget --quiet --tries=1 --spider http://localhost:$SERVER_PORT || exit 1

@@ -33,3 +33,8 @@ class NovelDb:
         self.conn.commit()
         cursor.close()
         return result
+
+    def upgrade(self, novel_id):
+        cursor = self.conn.cursor()
+        cursor.execute(
+            'update novel set end_time = now(3) where novel_id = \'' + str(novel_id) + '\'')

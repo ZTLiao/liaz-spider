@@ -20,5 +20,6 @@ class AppRouter:
 async def start_scheduler():
     scheduler = AsyncIOScheduler(timezone="Asia/Shanghai")
     scheduler.add_job(dongmanla_task.execute, 'cron', hour=20, minute=00)
-    scheduler.add_job(dongmanzhijia_task.execute, 'cron', minute=59)
+    scheduler.add_job(dongmanzhijia_task.execute_comic(), 'cron', minute=30)
+    scheduler.add_job(dongmanzhijia_task.execute_novel(), 'cron', minute=59)
     scheduler.start()
