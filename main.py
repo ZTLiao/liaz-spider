@@ -18,8 +18,9 @@ if __name__ == '__main__':
         env = 'test'
     if port is None:
         port = 8083
+    print('env : ', env, ', port : ', port)
     system.global_vars.application = Application()
     system.global_vars.application.set_env(env)
     system.global_vars.application.set_name('liaz-spider')
     system.global_vars.systemConfig = SystemConfig()
-    uvicorn.run(AppRouter.instance(), host='0.0.0.0', port=port, workers=1)
+    uvicorn.run(AppRouter.instance(), host='0.0.0.0', port=int(port), workers=1)

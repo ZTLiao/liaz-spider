@@ -588,25 +588,29 @@ class DongManZhiJiaSpider:
                                                                         page_index)
                                         self.novel_subscribe_db.upgrade(novel_id)
                             else:
-                                content = unescape(content)
-                                content = re.sub(r"<div\b[^>]*>(.*?)</div>", "", content,
-                                                 flags=re.IGNORECASE | re.DOTALL)
-                                content = content.replace('\r\n', '\n').replace("<br/>",
-                                                                                "\n").replace(
-                                    '<br />',
-                                    "\n").replace(
-                                    '\n\n\n', "\n").replace('\n\n', "\n").replace('\n', "\n　　").replace(r"　　\s+", "　　")
-                                p = re.compile('<[^>]+>')
-                                content = p.sub('', content)
-                                file_name = self.file_item_handler.write_content(content)
-                                path = None
-                                if file_name is not None:
-                                    path = self.file_item_handler.upload(bucket.NOVEL, file_name, file_type.TEXT_PLAIN)
-                                    time.sleep(1)
-                                print(path)
-                                if path is not None:
-                                    self.novel_chapter_item_db.save(novel_chapter_id, novel_id, path, 1)
-                                    self.novel_subscribe_db.upgrade(novel_id)
+                                page_index += 1
+                                page_count = self.novel_chapter_item_db.count(novel_chapter_id, novel_id,
+                                                                              page_index)
+                                if page_count == 0:
+                                    content = unescape(content)
+                                    content = re.sub(r"<div\b[^>]*>(.*?)</div>", "", content,
+                                                     flags=re.IGNORECASE | re.DOTALL)
+                                    content = content.replace('\r\n', '\n').replace("<br/>",
+                                                                                    "\n").replace(
+                                        '<br />',
+                                        "\n").replace(
+                                        '\n\n\n', "\n").replace('\n\n', "\n").replace('\n', "\n　　").replace(r"　　\s+", "　　")
+                                    p = re.compile('<[^>]+>')
+                                    content = p.sub('', content)
+                                    file_name = self.file_item_handler.write_content(content)
+                                    path = None
+                                    if file_name is not None:
+                                        path = self.file_item_handler.upload(bucket.NOVEL, file_name, file_type.TEXT_PLAIN)
+                                        time.sleep(1)
+                                    print(path)
+                                    if path is not None:
+                                        self.novel_chapter_item_db.save(novel_chapter_id, novel_id, path, page_index)
+                                        self.novel_subscribe_db.upgrade(novel_id)
                 except Exception as e:
                     print(e)
             i += 1
@@ -786,25 +790,29 @@ class DongManZhiJiaSpider:
                                                                         page_index)
                                         self.novel_subscribe_db.upgrade(novel_id)
                             else:
-                                content = unescape(content)
-                                content = re.sub(r"<div\b[^>]*>(.*?)</div>", "", content,
-                                                 flags=re.IGNORECASE | re.DOTALL)
-                                content = content.replace('\r\n', '\n').replace("<br/>",
-                                                                                "\n").replace(
-                                    '<br />',
-                                    "\n").replace(
-                                    '\n\n\n', "\n").replace('\n\n', "\n").replace('\n', "\n　　").replace(r"　　\s+", "　　")
-                                p = re.compile('<[^>]+>')
-                                content = p.sub('', content)
-                                file_name = self.file_item_handler.write_content(content)
-                                path = None
-                                if file_name is not None:
-                                    path = self.file_item_handler.upload(bucket.NOVEL, file_name, file_type.TEXT_PLAIN)
-                                    time.sleep(1)
-                                print(path)
-                                if path is not None:
-                                    self.novel_chapter_item_db.save(novel_chapter_id, novel_id, path, 1)
-                                    self.novel_subscribe_db.upgrade(novel_id)
+                                page_index += 1
+                                page_count = self.novel_chapter_item_db.count(novel_chapter_id, novel_id,
+                                                                              page_index)
+                                if page_count == 0:
+                                    content = unescape(content)
+                                    content = re.sub(r"<div\b[^>]*>(.*?)</div>", "", content,
+                                                     flags=re.IGNORECASE | re.DOTALL)
+                                    content = content.replace('\r\n', '\n').replace("<br/>",
+                                                                                    "\n").replace(
+                                        '<br />',
+                                        "\n").replace(
+                                        '\n\n\n', "\n").replace('\n\n', "\n").replace('\n', "\n　　").replace(r"　　\s+", "　　")
+                                    p = re.compile('<[^>]+>')
+                                    content = p.sub('', content)
+                                    file_name = self.file_item_handler.write_content(content)
+                                    path = None
+                                    if file_name is not None:
+                                        path = self.file_item_handler.upload(bucket.NOVEL, file_name, file_type.TEXT_PLAIN)
+                                        time.sleep(1)
+                                    print(path)
+                                    if path is not None:
+                                        self.novel_chapter_item_db.save(novel_chapter_id, novel_id, path, page_index)
+                                        self.novel_subscribe_db.upgrade(novel_id)
                 except Exception as e:
                     print(e)
             i += 1
