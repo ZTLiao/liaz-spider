@@ -9,9 +9,13 @@ class AssetDb:
         cursor = self.conn.cursor()
         cursor.execute('select count(1) from asset where obj_id = \'' + str(obj_id) + '\' and asset_type = \'' + str(
             asset_type) + '\'')
-        result = cursor.fetchone()[0]
+        result = cursor.fetchone()
+        if result is not None:
+            result = result[0]
         self.conn.commit()
         cursor.close()
+        if result is None:
+            result = 0
         return result
 
     def save(self, asset_key, asset_type, title, cover, obj_id, category_ids, author_ids):

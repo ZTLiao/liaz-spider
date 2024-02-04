@@ -10,9 +10,13 @@ class NovelVolumeDb:
         cursor = self.conn.cursor()
         cursor.execute('select count(1) from novel_volume where novel_id = \'' + str(
             novel_id) + '\' and volume_name = \'' + volume_name + '\'')
-        result = cursor.fetchone()[0]
+        result = cursor.fetchone()
+        if result is not None:
+            result = result[0]
         self.conn.commit()
         cursor.close()
+        if result is None:
+            result = 0
         return result
 
     def save(self, novel_id, volume_name, seq_no):
@@ -33,4 +37,6 @@ class NovelVolumeDb:
             result = result[0]
         self.conn.commit()
         cursor.close()
+        if result is None:
+            result = 0
         return result

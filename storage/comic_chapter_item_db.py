@@ -9,9 +9,13 @@ class ComicChapterItemDb:
         cursor = self.conn.cursor()
         cursor.execute(
             'select count(1) from comic_chapter_item where comic_chapter_id = \'' + str(comic_chapter_id) + '\' and comic_id = \'' + str(comic_id) + '\' and seq_no = \'' + str(seq_no) + '\'')
-        result = cursor.fetchone()[0]
+        result = cursor.fetchone()
+        if result is not None:
+            result = result[0]
         self.conn.commit()
         cursor.close()
+        if result is None:
+            result = 0
         return result
 
     def save(self, comic_chapter_id, comic_id, path, seq_no):

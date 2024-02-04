@@ -8,9 +8,13 @@ class RegionDb:
     def count(self, region_name):
         cursor = self.conn.cursor()
         cursor.execute('select count(1) from region where region_name = \'' + region_name + '\'')
-        result = cursor.fetchone()[0]
+        result = cursor.fetchone()
+        if result is not None:
+            result = result[0]
         self.conn.commit()
         cursor.close()
+        if result is None:
+            result = 0
         return result
 
     def save(self, region_name):
@@ -24,7 +28,11 @@ class RegionDb:
     def get_region_id(self, region_name):
         cursor = self.conn.cursor()
         cursor.execute('select region_id from region where region_name = \'' + region_name + '\' limit 1')
-        result = cursor.fetchone()[0]
+        result = cursor.fetchone()
+        if result is not None:
+            result = result[0]
         self.conn.commit()
         cursor.close()
+        if result is None:
+            result = 0
         return result

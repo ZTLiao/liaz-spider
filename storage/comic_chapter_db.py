@@ -10,9 +10,13 @@ class ComicChapterDb:
         cursor.execute(
             'select count(1) from comic_chapter where comic_id = \'' + str(
                 comic_id) + '\' and chapter_name = \'' + chapter_name + '\'')
-        result = cursor.fetchone()[0]
+        result = cursor.fetchone()
+        if result is not None:
+            result = result[0]
         self.conn.commit()
         cursor.close()
+        if result is None:
+            result = 0
         return result
 
     def save(self, comic_id, chapter_name, seq_no):
@@ -33,6 +37,8 @@ class ComicChapterDb:
             result = result[0]
         self.conn.commit()
         cursor.close()
+        if result is None:
+            result = 0
         return result
 
     def get_comic_chapter_id_by_comic_volume_id(self, comic_id, comic_volume_id, chapter_name):
@@ -45,6 +51,8 @@ class ComicChapterDb:
             result = result[0]
         self.conn.commit()
         cursor.close()
+        if result is None:
+            result = 0
         return result
 
     def get_seq_no(self, comic_id):
@@ -76,9 +84,13 @@ class ComicChapterDb:
             'select count(1) from comic_chapter where comic_id = \'' + str(
                 comic_id) + '\' and comic_volume_id = \'' + str(
                 comic_volume_id) + '\' and chapter_name = \'' + chapter_name + '\'')
-        result = cursor.fetchone()[0]
+        result = cursor.fetchone()
+        if result is not None:
+            result = result[0]
         self.conn.commit()
         cursor.close()
+        if result is None:
+            result = 0
         return result
 
     def get_seq_no_by_comic_volume_id(self, comic_id, comic_volume_id):

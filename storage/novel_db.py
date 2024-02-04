@@ -8,9 +8,13 @@ class NovelDb:
     def count(self, title):
         cursor = self.conn.cursor()
         cursor.execute('select count(1) from novel where title = \'' + title + '\'')
-        result = cursor.fetchone()[0]
+        result = cursor.fetchone()
+        if result is not None:
+            result = result[0]
         self.conn.commit()
         cursor.close()
+        if result is None:
+            result = 0
         return result
 
     def save(self, title, cover, description, flag, category_ids, categories, author_ids,
@@ -32,6 +36,8 @@ class NovelDb:
             result = result[0]
         self.conn.commit()
         cursor.close()
+        if result is None:
+            result = 0
         return result
 
     def upgrade(self, novel_id):

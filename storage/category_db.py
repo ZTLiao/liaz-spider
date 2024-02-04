@@ -8,9 +8,13 @@ class CategoryDb:
     def count(self, category_name):
         cursor = self.conn.cursor()
         cursor.execute('select count(1) from category where category_name = \'' + category_name + '\'')
-        result = cursor.fetchone()[0]
+        result = cursor.fetchone()
+        if result is not None:
+            result = result[0]
         self.conn.commit()
         cursor.close()
+        if result is None:
+            result = 0
         return result
 
     def save(self, category_name):
@@ -29,4 +33,6 @@ class CategoryDb:
             result = result[0]
         self.conn.commit()
         cursor.close()
+        if result is None:
+            result = 0
         return result

@@ -10,9 +10,13 @@ class NovelChapterDb:
         cursor.execute(
             'select count(1) from novel_chapter where novel_id = \'' + str(
                 novel_id) + '\' and chapter_name = \'' + chapter_name + '\'')
-        result = cursor.fetchone()[0]
+        result = cursor.fetchone()
+        if result is not None:
+            result = result[0]
         self.conn.commit()
         cursor.close()
+        if result is None:
+            result = 0
         return result
 
     def save(self, novel_id, chapter_name, seq_no):
@@ -33,6 +37,8 @@ class NovelChapterDb:
             result = result[0]
         self.conn.commit()
         cursor.close()
+        if result is None:
+            result = 0
         return result
 
     def get_seq_no(self, novel_id):
@@ -54,9 +60,13 @@ class NovelChapterDb:
             'select count(1) from novel_chapter where novel_id = \'' + str(
                 novel_id) + '\' and novel_volume_id = \'' + str(
                 novel_volume_id) + '\' and chapter_name = \'' + chapter_name + '\'')
-        result = cursor.fetchone()[0]
+        result = cursor.fetchone()
+        if result is not None:
+            result = result[0]
         self.conn.commit()
         cursor.close()
+        if result is None:
+            result = 0
         return result
 
     def save_by_novel_volume_id(self, novel_id, novel_volume_id, chapter_name, seq_no):
@@ -80,6 +90,8 @@ class NovelChapterDb:
             result = result[0]
         self.conn.commit()
         cursor.close()
+        if result is None:
+            result = 0
         return result
 
     def get_seq_no_by_novel_volume_id(self, novel_id, novel_volume_id):
