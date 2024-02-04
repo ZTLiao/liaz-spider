@@ -111,6 +111,8 @@ class DongManZhiJiaSpider:
                         if comic_detail_response.errno != 0:
                             continue
                         comic_detail = comic_detail_response.data
+                        if comic_detail is None:
+                            return
                         cover = comic_detail.cover
                         title = comic_detail.title
                         comic_id = self.comic_db.get_comic_id(title)
@@ -158,9 +160,9 @@ class DongManZhiJiaSpider:
                             category_id_str = ','.join(category_ids)
                         description = comic_detail.description
                         status = comic_detail.status
-                        flag = 0
-                        if status == '连载中':
-                            flag = 1
+                        flag = 1
+                        if status == '已完结':
+                            flag = 0
                         self.comic_db.save(title, cover, description, flag, category_id_str, category_str,
                                            author_id_str,
                                            author_str, 0, '')
@@ -214,7 +216,7 @@ class DongManZhiJiaSpider:
                                     continue
                                 comic_chapter = comic_chapter_response.data
                                 if comic_chapter is None:
-                                    continue
+                                    return
                                 page_url = comic_chapter.pageUrlHD
                                 if len(page_url) != 0:
                                     page_url = comic_chapter.pageUrl
@@ -291,6 +293,8 @@ class DongManZhiJiaSpider:
                     if comic_detail_response.errno != 0:
                         continue
                     comic_detail = comic_detail_response.data
+                    if comic_detail is None:
+                        return
                     cover = comic_detail.cover
                     title = comic_detail.title
                     comic_id = self.comic_db.get_comic_id(title)
@@ -338,9 +342,9 @@ class DongManZhiJiaSpider:
                         category_id_str = ','.join(category_ids)
                     description = comic_detail.description
                     status = comic_detail.status
-                    flag = 0
-                    if status == '连载中':
-                        flag = 1
+                    flag = 1
+                    if status == '已完结':
+                        flag = 0
                     self.comic_db.save(title, cover, description, flag, category_id_str, category_str,
                                        author_id_str,
                                        author_str, 0, '')
@@ -448,6 +452,8 @@ class DongManZhiJiaSpider:
                     if novel_detail_response.errno != 0:
                         continue
                     novel_detail = novel_detail_response.data
+                    if novel_detail is None:
+                        return
                     print(novel_detail)
                     cover = novel_detail.cover
                     title = novel_detail.name
@@ -521,6 +527,8 @@ class DongManZhiJiaSpider:
                     if novel_chapter_response.errno != 0:
                         continue
                     volumes = novel_chapter_response.data
+                    if len(volumes) == 0:
+                        return
                     volume_index = 0
                     for volume in volumes:
                         volume_index += 1
@@ -599,13 +607,15 @@ class DongManZhiJiaSpider:
                                                                                     "\n").replace(
                                         '<br />',
                                         "\n").replace(
-                                        '\n\n\n', "\n").replace('\n\n', "\n").replace('\n', "\n　　").replace(r"　　\s+", "　　")
+                                        '\n\n\n', "\n").replace('\n\n', "\n").replace('\n', "\n　　").replace(r"　　\s+",
+                                                                                                            "　　")
                                     p = re.compile('<[^>]+>')
                                     content = p.sub('', content)
                                     file_name = self.file_item_handler.write_content(content)
                                     path = None
                                     if file_name is not None:
-                                        path = self.file_item_handler.upload(bucket.NOVEL, file_name, file_type.TEXT_PLAIN)
+                                        path = self.file_item_handler.upload(bucket.NOVEL, file_name,
+                                                                             file_type.TEXT_PLAIN)
                                         time.sleep(1)
                                     print(path)
                                     if path is not None:
@@ -659,6 +669,8 @@ class DongManZhiJiaSpider:
                     if novel_detail_response.errno != 0:
                         continue
                     novel_detail = novel_detail_response.data
+                    if novel_detail is None:
+                        return
                     print(novel_detail)
                     cover = novel_detail.cover
                     title = novel_detail.name
@@ -732,6 +744,8 @@ class DongManZhiJiaSpider:
                     if novel_chapter_response.errno != 0:
                         continue
                     volumes = novel_chapter_response.data
+                    if len(volumes) == 0:
+                        return
                     volume_index = 0
                     for volume in volumes:
                         volume_index += 1
@@ -801,13 +815,15 @@ class DongManZhiJiaSpider:
                                                                                     "\n").replace(
                                         '<br />',
                                         "\n").replace(
-                                        '\n\n\n', "\n").replace('\n\n', "\n").replace('\n', "\n　　").replace(r"　　\s+", "　　")
+                                        '\n\n\n', "\n").replace('\n\n', "\n").replace('\n', "\n　　").replace(r"　　\s+",
+                                                                                                            "　　")
                                     p = re.compile('<[^>]+>')
                                     content = p.sub('', content)
                                     file_name = self.file_item_handler.write_content(content)
                                     path = None
                                     if file_name is not None:
-                                        path = self.file_item_handler.upload(bucket.NOVEL, file_name, file_type.TEXT_PLAIN)
+                                        path = self.file_item_handler.upload(bucket.NOVEL, file_name,
+                                                                             file_type.TEXT_PLAIN)
                                         time.sleep(1)
                                     print(path)
                                     if path is not None:
