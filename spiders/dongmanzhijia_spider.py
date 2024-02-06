@@ -502,6 +502,8 @@ class DongManZhiJiaSpider:
                             if index != len(categories) - 1:
                                 category_str += ','
                             index += 1
+                        if category_str.endswith(','):
+                            category_str = category_str[:-1]
                         category_id_str = ','.join(category_ids)
                     description = novel_detail.introduction
                     status = novel_detail.status
@@ -719,6 +721,8 @@ class DongManZhiJiaSpider:
                             if index != len(categories) - 1:
                                 category_str += ','
                             index += 1
+                        if category_str.endswith(','):
+                            category_str = category_str[:-1]
                         category_id_str = ','.join(category_ids)
                     description = novel_detail.introduction
                     status = novel_detail.status
