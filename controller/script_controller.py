@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Request
 
 from resp import response
+from spiders.cartoonmad_spider import CartoonMadSpider
 from spiders.dongmanla_spider import DongManLaSpider
 from spiders.dongmanzhijia_spider import DongManZhiJiaSpider
 from spiders.shuhuangwang_spider import ShuHuangWangSpider
@@ -20,4 +21,6 @@ def execute(request: Request):
         ShuHuangWangSpider(page_type).parse()
     if script == 'dongmanzhijia':
         DongManZhiJiaSpider(page_type).parse()
+    if script == 'cartoonmad':
+        CartoonMadSpider().parse()
     return response.ok()

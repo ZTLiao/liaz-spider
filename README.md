@@ -32,6 +32,8 @@ pip3 install grpcio-tools
 
 pip3 install protobuf
 
+pip3 install zhconv
+
 python3 -m grpc_tools.protoc --python_out=. -I=. dongmanzhijia_comic.proto
 
 curl -v -X GET http://172.17.0.1:8083/spider/script/execute?script=dongmanla\&page_type=1
