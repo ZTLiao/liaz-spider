@@ -10,6 +10,14 @@ ENV WORK_DIR /data/python/$APPLICATION_NAME
 ENV PROFILES_ACTIVE $PROFILES_ACTIVE
 ENV SERVER_PORT $SERVER_PORT
 
+RUN apt update
+
+RUN apt-get install chromium -y
+
+RUN wget http://mirrors.kernel.org/ubuntu/pool/universe/c/chromium-browser/chromium-chromedriver_85.0.4183.83-0ubuntu2_amd64.deb
+
+RUN apt install ./chromium-chromedriver_85.0.4183.83-0ubuntu2_amd64.deb
+
 RUN pip3 install -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com fastapi
 
 RUN pip3 install -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com "uvicorn[standard]"==0.24.0
@@ -43,6 +51,11 @@ RUN pip3 install -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors
 RUN pip3 install -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com protobuf
 
 RUN pip3 install -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com zhconv
+
+RUN pip3 install -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com selenium
+
+RUN pip3 install -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com Pillow
+
 
 WORKDIR $WORK_DIR/
 

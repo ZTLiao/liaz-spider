@@ -44,7 +44,7 @@ class FileItemHandler:
         if len(array) > 1:
             suffix = array[len(array) - 1]
         self.filename = str(uuid.uuid4())
-        if suffix != '':
+        if suffix == 'jpg' or suffix == 'txt':
             self.filename = self.filename + '.' + suffix
         try:
             response = requests.get(url, headers=headers)

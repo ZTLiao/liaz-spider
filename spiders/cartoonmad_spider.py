@@ -66,7 +66,7 @@ class CartoonMadSpider:
                             cover = ''
                     detail_item = man_hua_detail_soup.select('table td[height="24"]')
                     category_item = detail_item[0].select('td[width="50%"] a')
-                    category = category_item[0].text
+                    category = traditional_to_simplified(category_item[0].text)
                     self.category_db.save(category)
                     category_id = self.category_db.get_category_id(category)
                     author_item = detail_item[1]
@@ -95,7 +95,11 @@ class CartoonMadSpider:
                     chapter_index = self.comic_chapter_db.get_seq_no(comic_id)
                     chapter_items = man_hua_detail_soup.select('table tr[align="center"] td a')
                     for chapter_item in chapter_items:
+                        chapter_index += 1
                         chapter_name = traditional_to_simplified(chapter_item.text.strip())
+                        if len(chapter_name) == 0:
+                            print('chapter_name is empty.')
+                            break
                         count = self.comic_chapter_db.count(comic_id, chapter_name)
                         if count != 0:
                             print('comic_id : ', comic_id, ', chapter_name : ', chapter_name, ' is exist.')
@@ -109,6 +113,9 @@ class CartoonMadSpider:
                         comic_chapter_id = self.comic_chapter_db.get_comic_chapter_id(comic_id,
                                                                                       chapter_name)
                         chapter_uri = chapter_item.get('href')
+                        if chapter_uri.startswith('http'):
+                            print('chapter_uri : ', chapter_uri)
+                            break
                         chapter_url = self.domain + chapter_uri
                         print(chapter_url)
                         chapter_response = requests.get(chapter_url)
@@ -131,7 +138,7 @@ class CartoonMadSpider:
                         a_items = chapter_soup.select('table td[height="36"] a')
                         a_uri = str(a_items[len(a_items) - 1].get('href'))
                         while True:
-                            if a_uri.endswith('.html'):
+                            if (not a_uri.startswith('http')) and a_uri.endswith('.html'):
                                 img_url = self.domain + '/m/comic/' + a_uri
                                 print(img_url)
                                 img_response = requests.get(img_url)
