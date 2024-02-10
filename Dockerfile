@@ -12,11 +12,21 @@ ENV SERVER_PORT $SERVER_PORT
 
 RUN apt update
 
-RUN apt-get install chromium -y
+RUN echo 'Y' | apt-get install xvfb
 
-RUN wget http://mirrors.kernel.org/ubuntu/pool/universe/c/chromium-browser/chromium-chromedriver_85.0.4183.83-0ubuntu2_amd64.deb
+RUN apt-get install unzip
 
-RUN apt install ./chromium-chromedriver_85.0.4183.83-0ubuntu2_amd64.deb
+RUN apt-get update
+
+RUN echo 'Y' | apt-get install libnss3
+
+RUN echo 'Y' | apt-get install libgtk2.0-0 libgconf-2-4 libpango1.0-0 libcairo2 libcups2 libxss1 libxkbfile1 fonts-liberation libasound2 libatk-bridge2.0-0 libatspi2.0-0 libgbm1  libgtk-3-0 libu2f-udev libvulkan1 libxkbcommon0 xdg-utils
+
+RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+
+RUN dpkg -i google-chrome-stable_current_amd64.deb
+
+RUN apt-get install -f
 
 RUN pip3 install -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com fastapi
 

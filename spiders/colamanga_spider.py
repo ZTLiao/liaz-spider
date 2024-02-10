@@ -1,11 +1,11 @@
-import os.path
-import time
 import base64
+import os.path
 import re
+import time
 from io import BytesIO
-from PIL import Image
 
 import bs4
+from PIL import Image
 from selenium import webdriver
 
 from constants import bucket, file_type
@@ -43,7 +43,11 @@ class ColaMangaSpider:
         try:
             index = 0
             options = webdriver.ChromeOptions()
+            options.add_argument('--no-sandbox')
+            options.add_argument('--disable-dev-shm-usage')
+            options.add_argument('--disable-extensions')
             options.add_argument('--headless')
+            options.add_argument('--remote-debugging-port=9222')
             browser = webdriver.Chrome(options=options)
             while True:
                 index += 1
