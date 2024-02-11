@@ -37,6 +37,8 @@ class FileItemHandler:
         return path
 
     def download(self, url, headers=None):
+        if url is None:
+            return None
         if headers is None:
             headers = {}
         suffix = ''

@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Request
 
 from resp import response
+from spiders.baozimh_spider import BaoZiMhSpider
 from spiders.cartoonmad_spider import CartoonMadSpider
 from spiders.colamanga_spider import ColaMangaSpider
 from spiders.dongmanla_spider import DongManLaSpider
@@ -26,4 +27,6 @@ def execute(request: Request):
         CartoonMadSpider().parse()
     if script == 'colamanga':
         ColaMangaSpider(page_type).parse()
+    if script == 'baozimh':
+        BaoZiMhSpider().parse()
     return response.ok()

@@ -88,7 +88,7 @@ class ShuHuangWangSpider:
                     cover_img_item = detail_soup.select('#sidebar #fmimg img')[0]
                     cover = self.domain + cover_img_item.get('data-original')
                     novel_id = self.novel_db.get_novel_id(title)
-                    if novel_id is None:
+                    if novel_id is None or novel_id == 0:
                         file_name = self.file_item_handler.download(cover)
                         if file_name is not None:
                             cover = self.file_item_handler.upload(bucket.COVER, file_name, file_type.IMAGE_JPEG)

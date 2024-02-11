@@ -116,7 +116,7 @@ class DongManZhiJiaSpider:
                         cover = comic_detail.cover
                         title = comic_detail.title
                         comic_id = self.comic_db.get_comic_id(title)
-                        if comic_id is None:
+                        if comic_id is None or comic_id == 0:
                             file_name = self.file_item_handler.download(cover)
                             if file_name is not None:
                                 cover = self.file_item_handler.upload(bucket.COVER, file_name,
@@ -298,7 +298,7 @@ class DongManZhiJiaSpider:
                     cover = comic_detail.cover
                     title = comic_detail.title
                     comic_id = self.comic_db.get_comic_id(title)
-                    if comic_id is None:
+                    if comic_id is None or comic_id == 0:
                         file_name = self.file_item_handler.download(cover)
                         if file_name is not None:
                             cover = self.file_item_handler.upload(bucket.COVER, file_name,
@@ -461,7 +461,7 @@ class DongManZhiJiaSpider:
                     self.region_db.save(region)
                     region_id = self.region_db.get_region_id(region)
                     novel_id = self.novel_db.get_novel_id(title)
-                    if novel_id is None:
+                    if novel_id is None or novel_id == 0:
                         file_name = self.file_item_handler.download(cover)
                         if file_name is not None:
                             cover = self.file_item_handler.upload(bucket.COVER, file_name,
@@ -680,7 +680,7 @@ class DongManZhiJiaSpider:
                     self.region_db.save(region)
                     region_id = self.region_db.get_region_id(region)
                     novel_id = self.novel_db.get_novel_id(title)
-                    if novel_id is None:
+                    if novel_id is None or novel_id == 0:
                         file_name = self.file_item_handler.download(cover)
                         if file_name is not None:
                             cover = self.file_item_handler.upload(bucket.COVER, file_name,

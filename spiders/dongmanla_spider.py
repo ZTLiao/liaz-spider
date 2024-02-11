@@ -74,7 +74,7 @@ class DongManLaSpider:
                 cover_img_item = man_hua_info_item.select('.cy_info_cover img')[0]
                 cover = cover_img_item.get('src')
                 comic_id = self.comic_db.get_comic_id(title)
-                if comic_id is None:
+                if comic_id is None or comic_id == 0:
                     file_name = self.file_item_handler.download(cover)
                     if file_name is not None:
                         cover = self.file_item_handler.upload(bucket.COVER, file_name,

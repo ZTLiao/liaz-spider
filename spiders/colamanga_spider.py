@@ -70,8 +70,40 @@ class ColaMangaSpider:
                     cover = man_hua_detail_soup.select('a.fed-list-pics')[0].get('data-original')
                     print(cover)
                     comic_id = self.comic_db.get_comic_id(title)
-                    if comic_id is None:
-                        file_name = self.file_item_handler.download(cover)
+                    cookies = browser.get_cookies()
+                    cookie = ''
+                    index = 0
+                    for c in cookies:
+                        cookie += c['name'] + '=' + c['value']
+                        if index != len(cookies) - 1:
+                            cookie += ';'
+                        index += 1
+                    print(cookie)
+                    file_name = self.file_item_handler.download(cover, headers={
+                        'authority': 'res.colamanga.com',
+                        'method': 'GET',
+                        'path': cover.replace('https://res.colamanga.com', ''),
+                        'scheme': 'https',
+                        'Referer': self.domain + detail_uri,
+                        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+                        'Cookie': '_va=13;__cf__bkm=fAoEV4kNh8nX20jA5dVeI47wipTm4dJiCkakbKGAjA1Vh/T3ERhPcr9nJUO53MZI',
+                        'Accept': 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
+                        'If-Modified-Since': 'Fri, 26 Aug 2022 16:19:40 GMT',
+                        'Accept-Encoding': 'gzip, deflate, br',
+                        'Accept-Language': 'zh-CN,zh;q=0.9,zh-TW;q=0.8,en;q=0.7',
+                        'Cache-Control': 'no-cache',
+                        'Pragma': 'no-cache',
+                        'Sec-Ch-Ua': '"Not A(Brand";v="99", "Google Chrome";v="121", "Chromium";v="121"',
+                        'Sec-Ch-Ua-Mobile': '?0',
+                        'Sec-Ch-Ua-Platform': '"macOS"',
+                        'Sec-Fetch-Dest': 'image',
+                        'Sec-Fetch-Mode': 'no-cors',
+                        'Sec-Fetch-Site': 'same-site',
+                    })
+                    if comic_id is None or comic_id == 0:
+                        file_name = self.file_item_handler.download(cover, headers={
+                            'Referer': self.domain + detail_uri,
+                        })
                         if file_name is not None:
                             cover = self.file_item_handler.upload(bucket.COVER, file_name,
                                                                   file_type.IMAGE_JPEG)
@@ -181,8 +213,10 @@ class ColaMangaSpider:
                                                                                                               "ctx.drawImage(img, 0, 0,img.naturalWidth, img.naturalHeight);" \
                                                                                                               "let base64String = c.toDataURL(); return base64String;"
                                 base64_str = browser.execute_script(js)
-                                img = base64_to_image(base64_str)
-                                img.save(file_name + '.png')
+                                if len(base64_str) > 0:
+                                    img = base64_to_image(base64_str)
+                                    if img is not None:
+                                        img.save(file_name + '.png')
                         chapter_content = browser.page_source
                         man_hua_chapter_soup = bs4.BeautifulSoup(chapter_content, 'lxml')
                         img_items = man_hua_chapter_soup.select('div.mh_comicpic img')
@@ -191,7 +225,7 @@ class ColaMangaSpider:
                             path = img_item.get('src')
                             page_index = i + 1
                             print(path)
-                            if len(path) != 0:
+                            if path is not None and len(path) != 0:
                                 path = path.split('blob:')[1]
                                 page_count = self.comic_chapter_item_db.count(comic_chapter_id, comic_id,
                                                                               page_index)
@@ -214,6 +248,8 @@ class ColaMangaSpider:
 
 
 def base64_to_image(base64_str):
+    if len(base64_str) == 0:
+        return None
     base64_data = re.sub('^data:image/.+;base64,', '', base64_str)
     byte_data = base64.b64decode(base64_data)
     image_data = BytesIO(byte_data)
