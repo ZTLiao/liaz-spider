@@ -50,7 +50,7 @@ class BaoZiMhSpider:
                     man_hua_detail_response_text = man_hua_detail_response.text
                     man_hua_detail_soup = bs4.BeautifulSoup(man_hua_detail_response_text, 'lxml')
                     title_item = man_hua_detail_soup.select('div.gap-unit-xs h1')[0]
-                    title = title_item.text
+                    title = title_item.text.replace('連載中', '').strip()
                     img_item = man_hua_detail_soup.select('img.object-cover')[0]
                     cover = img_item.get('src')
                     print(cover)
@@ -149,7 +149,7 @@ class BaoZiMhSpider:
                         chapter_response.encoding = chapter_response.apparent_encoding
                         chapter_response_text = chapter_response.text
                         chapter_soup = bs4.BeautifulSoup(chapter_response_text, 'lxml')
-                        img_items = chapter_soup.select('div.w-full img')
+                        img_items = chapter_soup.select('div.h-full img[data-sizes="auto"]')
                         page_index = 0
                         for img_item in img_items:
                             path = img_item.get('src')
