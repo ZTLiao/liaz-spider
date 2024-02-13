@@ -6,6 +6,7 @@ from spiders.cartoonmad_spider import CartoonMadSpider
 from spiders.colamanga_spider import ColaMangaSpider
 from spiders.dongmanla_spider import DongManLaSpider
 from spiders.dongmanzhijia_spider import DongManZhiJiaSpider
+from spiders.fanqie_spider import FanQieSpider
 from spiders.shuhuangwang_spider import ShuHuangWangSpider
 
 router = APIRouter()
@@ -29,4 +30,6 @@ def execute(request: Request):
         ColaMangaSpider(page_type).parse()
     if script == 'baozimh':
         BaoZiMhSpider().parse()
+    if script == 'fanqie':
+        FanQieSpider().parse()
     return response.ok()

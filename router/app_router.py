@@ -2,7 +2,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from fastapi import FastAPI
 
 from controller import root_controller, script_controller, transfer_controller
-from task import dongmanla_task, dongmanzhijia_task
+from task import dongmanla_task, dongmanzhijia_task, fanqie_task
 
 app = FastAPI()
 
@@ -22,5 +22,5 @@ async def start_scheduler():
     scheduler.add_job(id="dongmanla", func=dongmanla_task.execute, trigger='cron', hour=20, minute=00)
     scheduler.add_job(id="dongmanzhijia_comic", func=dongmanzhijia_task.execute_comic, trigger='cron', minute=30)
     scheduler.add_job(id="dongmanzhijia_novel", func=dongmanzhijia_task.execute_novel, trigger='cron', minute=59)
+    scheduler.add_job(id="fanqie", func=fanqie_task.execute, trigger='cron', minute=30)
     scheduler.start()
-
