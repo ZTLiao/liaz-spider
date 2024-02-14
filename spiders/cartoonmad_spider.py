@@ -103,7 +103,7 @@ class CartoonMadSpider:
                         count = self.comic_chapter_db.count(comic_id, chapter_name)
                         if count != 0:
                             print('comic_id : ', comic_id, ', chapter_name : ', chapter_name, ' is exist.')
-                            continue
+                            break
                         count = self.comic_chapter_db.count(comic_id, chapter_name)
                         if count == 0:
                             self.comic_chapter_db.save(comic_id, chapter_name, chapter_index)

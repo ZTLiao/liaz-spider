@@ -120,7 +120,7 @@ class ShuHuangWangSpider:
                         count = self.novel_chapter_db.count(novel_id, chapter_name)
                         if count != 0:
                             print('novel_id : ', novel_id, ', chapter_name : ', chapter_name, ' is exist.')
-                            continue
+                            break
                         for a_chapter_item in a_items:
                             chapter_index += 1
                             chapter_name = a_chapter_item.text

@@ -108,6 +108,9 @@ class FanQieSpider:
                     chapter_name = chapter.find("a").get_text()
                     chapter_name = rename(chapter_name)
                     count = self.novel_chapter_db.count(novel_id, chapter_name)
+                    if count != 0:
+                        print('novel_id : ', novel_id, ', chapter_name : ', chapter_name, ' is exist.')
+                        break
                     if count == 0:
                         self.novel_chapter_db.save(novel_id, chapter_name, chapter_index)
                         novel_chapter_id = self.novel_chapter_db.get_novel_chapter_id(novel_id, chapter_name)
