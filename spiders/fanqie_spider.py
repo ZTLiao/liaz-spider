@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import requests
 import bs4
 import json
@@ -35,6 +37,7 @@ class FanQieSpider:
         self.file_item_handler = FileItemHandler()
 
     def parse(self):
+        now = datetime.now().strftime("%Y-%m-%d")
         index = 0
         headers = {
             "User-Agent": ua
@@ -53,6 +56,11 @@ class FanQieSpider:
             book_list = book_list_response['data']['book_list']
             for book in book_list:
                 book_id = book['book_id']
+                last_chapter_time = book['last_chapter_time']
+                date = datetime.fromtimestamp(last_chapter_time).strftime('%Y-%m-%d')
+                if now != date:
+                    print('novel date : ', date)
+                    return
                 xiao_shuo_detail_url = self.domain + '/page/' + str(book_id)
                 print(xiao_shuo_detail_url)
                 xiao_shuo_detail_response = requests.get(xiao_shuo_detail_url, headers=headers, timeout=20,
