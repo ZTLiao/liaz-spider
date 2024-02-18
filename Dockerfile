@@ -9,6 +9,7 @@ ARG SERVER_PORT
 ENV WORK_DIR /data/python/$APPLICATION_NAME
 ENV PROFILES_ACTIVE $PROFILES_ACTIVE
 ENV SERVER_PORT $SERVER_PORT
+ENV NODE_PATH /usr/local/lib/node_modules
 
 RUN apt update
 
@@ -30,9 +31,11 @@ RUN apt-get install -f
 
 RUN apt-get install -y nodejs
 
+RUN apt-get install -y npm
+
 RUN npm config set registry http://registry.npm.taobao.org
 
-RUN npm install crypto-js
+RUN npm install -g crypto-js
 
 RUN pip3 install -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com fastapi
 
@@ -73,7 +76,6 @@ RUN pip3 install -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors
 RUN pip3 install -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com Pillow
 
 RUN pip3 install -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com PyExecJS
-
 
 WORKDIR $WORK_DIR/
 

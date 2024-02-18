@@ -241,6 +241,7 @@ class CopyMangaSpider:
                             print(contents)
                             page_index = 0
                             for content in contents:
+                                page_index += 1
                                 path = content['url']
                                 page_count = self.comic_chapter_item_db.count(comic_chapter_id, comic_id,
                                                                               page_index)
@@ -272,18 +273,18 @@ class CopyMangaSpider:
 def aes_decrypt(content_key: str):
     ctx = execjs.compile("""
     function AESDecrypt(contentKey) {
-      let CryptoJS = require("crypto-js");
-      let a = contentKey.substring(0x0, 0x10);
-      let b = contentKey.substring(0x10, contentKey.length);
-      let c = CryptoJS.enc.Utf8.parse('xxxmanga.woo.key');
-      let d = CryptoJS.enc.Utf8.parse(a);
-      let e = CryptoJS.enc.Hex.parse(b);
-      let f = CryptoJS.enc.Base64.stringify(e);
-      return CryptoJS.AES.decrypt(f, c, {
-        iv: d,
-        mode: CryptoJS.mode.CBC,
-        padding: CryptoJS.pad.Pkcs7,
-      }).toString(CryptoJS.enc.Utf8).toString();
+        const CryptoJS = require("crypto-js");
+        const a = contentKey.substring(0x0, 0x10);
+        const b = contentKey.substring(0x10, contentKey.length);
+        const c = CryptoJS.enc.Utf8.parse('xxxmanga.woo.key');
+        const d = CryptoJS.enc.Utf8.parse(a);
+        const e = CryptoJS.enc.Hex.parse(b);
+        const f = CryptoJS.enc.Base64.stringify(e);
+        return CryptoJS.AES.decrypt(f, c, {
+            iv: d,
+            mode: CryptoJS.mode.CBC,
+            padding: CryptoJS.pad.Pkcs7,
+        }).toString(CryptoJS.enc.Utf8).toString();
     }
     """)
     return ctx.call('AESDecrypt', content_key)
