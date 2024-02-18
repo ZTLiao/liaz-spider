@@ -4,6 +4,7 @@ from resp import response
 from spiders.baozimh_spider import BaoZiMhSpider
 from spiders.cartoonmad_spider import CartoonMadSpider
 from spiders.colamanga_spider import ColaMangaSpider
+from spiders.copymanga_spider import CopyMangaSpider
 from spiders.dongmanla_spider import DongManLaSpider
 from spiders.dongmanzhijia_spider import DongManZhiJiaSpider
 from spiders.fanqie_spider import FanQieSpider
@@ -32,4 +33,6 @@ def execute(request: Request):
         BaoZiMhSpider().parse()
     if script == 'fanqie':
         FanQieSpider().parse()
+    if script == 'copymanga':
+        CopyMangaSpider().parse()
     return response.ok()

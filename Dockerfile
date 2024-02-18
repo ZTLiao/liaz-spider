@@ -28,6 +28,12 @@ RUN dpkg -i google-chrome-stable_current_amd64.deb
 
 RUN apt-get install -f
 
+RUN apt-get install -y nodejs
+
+RUN npm config set registry http://registry.npm.taobao.org
+
+RUN npm install crypto-js
+
 RUN pip3 install -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com fastapi
 
 RUN pip3 install -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com "uvicorn[standard]"==0.24.0
@@ -65,6 +71,8 @@ RUN pip3 install -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors
 RUN pip3 install -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com selenium
 
 RUN pip3 install -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com Pillow
+
+RUN pip3 install -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com PyExecJS
 
 
 WORKDIR $WORK_DIR/

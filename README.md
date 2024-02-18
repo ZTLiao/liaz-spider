@@ -1,5 +1,9 @@
 yum install python3-devel
 
+apt-get install -y nodejs
+
+npm install -g crypto-js
+
 pip3 install fastapi
 
 RUN pip3 install -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com  "uvicorn[standard]"==0.24.0
@@ -37,6 +41,8 @@ pip3 install zhconv
 pip3 install selenium
 
 pip3 install Pillow
+
+pip3 install PyExecJS
 
 python3 -m grpc_tools.protoc --python_out=. -I=. dongmanzhijia_comic.proto
 

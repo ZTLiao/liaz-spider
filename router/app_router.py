@@ -22,6 +22,7 @@ async def start_scheduler():
     scheduler.add_job(id="dongmanla", func=dongmanla_task.execute, trigger='cron', hour=20, minute=00)
     scheduler.add_job(id="dongmanzhijia_comic", func=dongmanzhijia_task.execute_comic, trigger='cron', minute=59)
     scheduler.add_job(id="dongmanzhijia_novel", func=dongmanzhijia_task.execute_novel, trigger='cron', minute=59)
+    scheduler.add_job(id="copymanga", func=dongmanzhijia_task.execute_novel, trigger='cron', minute=59)
     scheduler.add_job(id="fanqie", func=fanqie_task.execute, trigger='cron', hour=20, minute=00)
     scheduler.add_job(id="cartoonmad", func=cartoonmad_task.execute, trigger='cron', hour=20, minute=00)
     scheduler.add_job(id="baozimh", func=baozimh_task.execute, trigger='cron', hour=20, minute=00)
