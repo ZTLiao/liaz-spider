@@ -183,7 +183,7 @@ class CopyMangaSpider:
                     for volume in volumes:
                         volume_index += 1
                         type_id = volume['id']
-                        volume_name = traditional_to_simplified(volume['name']).replace('话', '连载')
+                        volume_name = traditional_to_simplified(volume['name'])
                         volume_chapters = [chapter for chapter in chapters if chapter['type'] == type_id]
                         if len(volume_chapters) == 0:
                             print('volume name is empty.')
