@@ -183,7 +183,7 @@ class CopyMangaSpider:
                     for volume in volumes:
                         volume_index += 1
                         type_id = volume['id']
-                        volume_name = volume['name']
+                        volume_name = traditional_to_simplified(volume['name']).replace('话', '连载')
                         volume_chapters = [chapter for chapter in chapters if chapter['type'] == type_id]
                         if len(volume_chapters) == 0:
                             print('volume name is empty.')
@@ -194,7 +194,7 @@ class CopyMangaSpider:
                         is_comic_chapter_exists = False
                         for chapter in volume_chapters:
                             chapter_index += 1
-                            chapter_name = chapter['name']
+                            chapter_name = traditional_to_simplified(chapter['name'])
                             count = self.comic_chapter_db.count_by_comic_volume_id(comic_id, comic_volume_id,
                                                                                    chapter_name)
                             if count == 0:
