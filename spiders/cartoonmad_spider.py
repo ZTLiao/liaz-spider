@@ -1,8 +1,12 @@
 import requests
 import bs4
 import zhconv
+import system.global_vars
 
+import system
+from config.redis_config import RedisConfig
 from constants import bucket, file_type
+from constants.redis_key import COMIC_DETAIL
 from handler.file_item_handler import FileItemHandler
 from storage.asset_db import AssetDb
 from storage.author_db import AuthorDb
@@ -12,6 +16,7 @@ from storage.comic_chapter_item_db import ComicChapterItemDb
 from storage.comic_db import ComicDb
 from storage.comic_subscribe_db import ComicSubscribeDb
 from storage.region_db import RegionDb
+from utils.redis_util import RedisUtil
 
 
 class CartoonMadSpider:
@@ -26,6 +31,8 @@ class CartoonMadSpider:
         self.asset_db = AssetDb()
         self.comic_subscribe_db = ComicSubscribeDb()
         self.file_item_handler = FileItemHandler()
+        redis: RedisConfig = system.global_vars.systemConfig.get_redis()
+        self.redis_util = RedisUtil(redis.host, redis.port, redis.db, redis.password)
 
     def parse(self):
         try:
@@ -162,6 +169,7 @@ class CartoonMadSpider:
                                 a_uri = str(a_items[len(a_items) - 1].get('href'))
                             else:
                                 break
+                    self.redis_util.delete(COMIC_DETAIL + comic_id)
         except Exception as e:
             print(e)
 

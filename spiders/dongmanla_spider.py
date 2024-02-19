@@ -1,10 +1,12 @@
-import time
 from datetime import datetime, timedelta
 
 import bs4
 import requests
+import system.global_vars
 
+from config.redis_config import RedisConfig
 from constants import file_type, bucket
+from constants.redis_key import COMIC_DETAIL
 from handler.file_item_handler import FileItemHandler
 from storage.asset_db import AssetDb
 from storage.author_db import AuthorDb
@@ -14,6 +16,7 @@ from storage.comic_chapter_item_db import ComicChapterItemDb
 from storage.comic_db import ComicDb
 from storage.comic_subscribe_db import ComicSubscribeDb
 from storage.region_db import RegionDb
+from utils.redis_util import RedisUtil
 
 
 class DongManLaSpider:
@@ -29,6 +32,8 @@ class DongManLaSpider:
         self.asset_db = AssetDb()
         self.comic_subscribe_db = ComicSubscribeDb()
         self.file_item_handler = FileItemHandler()
+        redis: RedisConfig = system.global_vars.systemConfig.get_redis()
+        self.redis_util = RedisUtil(redis.host, redis.port, redis.db, redis.password)
 
     def parse(self):
         page_name = 'finish'
@@ -190,6 +195,7 @@ class DongManLaSpider:
                                 self.comic_chapter_item_db.save(comic_chapter_id, comic_id, path,
                                                                 page_index)
                                 self.comic_subscribe_db.upgrade(comic_id)
+                self.redis_util.delete(COMIC_DETAIL + comic_id)
         except Exception as e:
             print(e)
 

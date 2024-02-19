@@ -4,9 +4,11 @@ from datetime import datetime
 import execjs
 import requests
 import zhconv
-import bs4
+import system.global_vars
 
+from config.redis_config import RedisConfig
 from constants import bucket, file_type
+from constants.redis_key import COMIC_DETAIL
 from handler.file_item_handler import FileItemHandler
 from storage.asset_db import AssetDb
 from storage.author_db import AuthorDb
@@ -17,6 +19,7 @@ from storage.comic_db import ComicDb
 from storage.comic_subscribe_db import ComicSubscribeDb
 from storage.comic_volume_db import ComicVolumeDb
 from storage.region_db import RegionDb
+from utils.redis_util import RedisUtil
 
 
 class CopyMangaSpider:
@@ -32,6 +35,8 @@ class CopyMangaSpider:
         self.asset_db = AssetDb()
         self.comic_subscribe_db = ComicSubscribeDb()
         self.file_item_handler = FileItemHandler()
+        redis: RedisConfig = system.global_vars.systemConfig.get_redis()
+        self.redis_util = RedisUtil(redis.host, redis.port, redis.db, redis.password)
 
     def parse(self):
         try:
@@ -265,7 +270,7 @@ class CopyMangaSpider:
                         if is_comic_chapter_exists:
                             print('comic_id : ', comic_id, ', comic_volume_id : ', comic_volume_id, ' is exists.')
                         continue
-            pass
+                    self.redis_util.delete(COMIC_DETAIL + comic_id)
         except Exception as e:
             print(e)
 

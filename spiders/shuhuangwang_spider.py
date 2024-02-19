@@ -2,8 +2,11 @@ import time
 
 import bs4
 import requests
+import system.global_vars
 
+from config.redis_config import RedisConfig
 from constants import file_type, bucket
+from constants.redis_key import NOVEL_DETAIL
 from handler.file_item_handler import FileItemHandler
 from storage.asset_db import AssetDb
 from storage.author_db import AuthorDb
@@ -12,6 +15,7 @@ from storage.novel_chapter_db import NovelChapterDb
 from storage.novel_chapter_item_db import NovelChapterItemDb
 from storage.novel_db import NovelDb
 from storage.novel_subscribe_db import NovelSubscribeDb
+from utils.redis_util import RedisUtil
 
 
 class ShuHuangWangSpider:
@@ -26,6 +30,8 @@ class ShuHuangWangSpider:
         self.asset_db = AssetDb()
         self.novel_subscribe_db = NovelSubscribeDb()
         self.file_item_handler = FileItemHandler()
+        redis: RedisConfig = system.global_vars.systemConfig.get_redis()
+        self.redis_util = RedisUtil(redis.host, redis.port, redis.db, redis.password)
 
     def parse(self):
         page_name = 'sort_0_0_0_OK'
@@ -151,6 +157,7 @@ class ShuHuangWangSpider:
                                 if path is not None:
                                     self.novel_chapter_item_db.save(novel_chapter_id, novel_id, path, 1)
                                     self.novel_subscribe_db.upgrade(novel_id)
+                    self.redis_util.delete(NOVEL_DETAIL + novel_id)
             except Exception as e:
                 print(e)
             index += 1

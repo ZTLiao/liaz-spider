@@ -2,6 +2,7 @@ from fastapi import APIRouter, Request
 
 from resp import response
 from spiders.baozimh_spider import BaoZiMhSpider
+from spiders.bilinovel_spider import BiliNovelSpider
 from spiders.cartoonmad_spider import CartoonMadSpider
 from spiders.colamanga_spider import ColaMangaSpider
 from spiders.copymanga_spider import CopyMangaSpider
@@ -35,4 +36,6 @@ def execute(request: Request):
         FanQieSpider().parse()
     if script == 'copymanga':
         CopyMangaSpider().parse()
+    if script == 'bilinovel':
+        BiliNovelSpider().parse()
     return response.ok()

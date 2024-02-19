@@ -1,8 +1,13 @@
 import requests
 import bs4
 import zhconv
+import system.global_vars
 
+from PIL import Image
+
+from config.redis_config import RedisConfig
 from constants import bucket, file_type
+from constants.redis_key import COMIC_DETAIL
 from handler.file_item_handler import FileItemHandler
 from storage.asset_db import AssetDb
 from storage.author_db import AuthorDb
@@ -12,11 +17,12 @@ from storage.comic_chapter_item_db import ComicChapterItemDb
 from storage.comic_db import ComicDb
 from storage.comic_subscribe_db import ComicSubscribeDb
 from storage.region_db import RegionDb
+from utils.redis_util import RedisUtil
 
 
 class BaoZiMhSpider:
     def __init__(self):
-        self.domain = 'https://cn.baozimh.one'
+        self.domain = 'https://baozimh.org'
         self.category_db = CategoryDb()
         self.author_db = AuthorDb()
         self.region_db = RegionDb()
@@ -26,6 +32,8 @@ class BaoZiMhSpider:
         self.asset_db = AssetDb()
         self.comic_subscribe_db = ComicSubscribeDb()
         self.file_item_handler = FileItemHandler()
+        redis: RedisConfig = system.global_vars.systemConfig.get_redis()
+        self.redis_util = RedisUtil(redis.host, redis.port, redis.db, redis.password)
 
     def parse(self):
         try:
@@ -58,6 +66,7 @@ class BaoZiMhSpider:
                     if comic_id is None or comic_id == 0:
                         file_name = self.file_item_handler.download(cover)
                         if file_name is not None:
+                            convert_webp_to_jpg(file_name, file_name)
                             cover = self.file_item_handler.upload(bucket.COVER, file_name,
                                                                   file_type.IMAGE_JPEG)
                         print(cover)
@@ -170,6 +179,7 @@ class BaoZiMhSpider:
                                 self.comic_chapter_item_db.save(comic_chapter_id, comic_id, path,
                                                                 page_index)
                                 self.comic_subscribe_db.upgrade(comic_id)
+                    self.redis_util.delete(COMIC_DETAIL + comic_id)
         except Exception as e:
             print(e)
 
@@ -178,3 +188,8 @@ def traditional_to_simplified(text):
     # 调用convert函数将繁体字转换为简体字
     simplified_text = zhconv.convert(text, 'zh-hans')
     return simplified_text
+
+
+def convert_webp_to_jpg(webp_file, jpg_file):
+    with Image.open(webp_file) as img:
+        img.convert('RGB').save(jpg_file, 'JPEG')

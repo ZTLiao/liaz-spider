@@ -2,6 +2,8 @@ import hashlib
 import json
 import re
 import time
+import system.global_vars
+
 from html import unescape
 
 import bs4
@@ -16,7 +18,9 @@ import base64
 
 import requests
 
+from config.redis_config import RedisConfig
 from constants import bucket, file_type
+from constants.redis_key import COMIC_DETAIL, NOVEL_DETAIL
 from handler.file_item_handler import FileItemHandler
 from interfaces import dongmanzhijia_comic_pb2, dongmanzhijia_novel_pb2
 from storage.asset_db import AssetDb
@@ -33,6 +37,7 @@ from storage.novel_db import NovelDb
 from storage.novel_subscribe_db import NovelSubscribeDb
 from storage.novel_volume_db import NovelVolumeDb
 from storage.region_db import RegionDb
+from utils.redis_util import RedisUtil
 
 random_generator = Random.new().read
 
@@ -60,6 +65,8 @@ class DongManZhiJiaSpider:
         self.novel_chapter_item_db = NovelChapterItemDb()
         self.novel_subscribe_db = NovelSubscribeDb()
         self.file_item_handler = FileItemHandler()
+        redis: RedisConfig = system.global_vars.systemConfig.get_redis()
+        self.redis_util = RedisUtil(redis.host, redis.port, redis.db, redis.password)
         self.uid = 100091600
 
     def parse(self):
@@ -242,6 +249,7 @@ class DongManZhiJiaSpider:
                                 continue
                     except Exception as e:
                         print(e)
+                    self.redis_util.delete(COMIC_DETAIL + comic_id)
             except Exception as e:
                 print(e)
 
@@ -420,6 +428,7 @@ class DongManZhiJiaSpider:
                         if is_comic_chapter_exists:
                             print('comic_id : ', comic_id, ', comic_volume_id : ', comic_volume_id, ' is exists.')
                             continue
+                    self.redis_util.delete(COMIC_DETAIL + comic_id)
                 except Exception as e:
                     print(e)
 
@@ -623,6 +632,7 @@ class DongManZhiJiaSpider:
                                     if path is not None:
                                         self.novel_chapter_item_db.save(novel_chapter_id, novel_id, path, page_index)
                                         self.novel_subscribe_db.upgrade(novel_id)
+                    self.redis_util.delete(NOVEL_DETAIL + novel_id)
                 except Exception as e:
                     print(e)
             i += 1
@@ -833,6 +843,7 @@ class DongManZhiJiaSpider:
                                     if path is not None:
                                         self.novel_chapter_item_db.save(novel_chapter_id, novel_id, path, page_index)
                                         self.novel_subscribe_db.upgrade(novel_id)
+                    self.redis_util.delete(NOVEL_DETAIL + novel_id)
                 except Exception as e:
                     print(e)
             i += 1
