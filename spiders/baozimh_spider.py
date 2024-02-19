@@ -179,7 +179,7 @@ class BaoZiMhSpider:
                                 self.comic_chapter_item_db.save(comic_chapter_id, comic_id, path,
                                                                 page_index)
                                 self.comic_subscribe_db.upgrade(comic_id)
-                    self.redis_util.delete(COMIC_DETAIL + comic_id)
+                    self.redis_util.delete(COMIC_DETAIL + str(comic_id))
         except Exception as e:
             print(e)
 

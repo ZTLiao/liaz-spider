@@ -169,7 +169,7 @@ class CartoonMadSpider:
                                 a_uri = str(a_items[len(a_items) - 1].get('href'))
                             else:
                                 break
-                    self.redis_util.delete(COMIC_DETAIL + comic_id)
+                    self.redis_util.delete(COMIC_DETAIL + str(comic_id))
         except Exception as e:
             print(e)
 

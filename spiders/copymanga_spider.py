@@ -270,7 +270,7 @@ class CopyMangaSpider:
                         if is_comic_chapter_exists:
                             print('comic_id : ', comic_id, ', comic_volume_id : ', comic_volume_id, ' is exists.')
                         continue
-                    self.redis_util.delete(COMIC_DETAIL + comic_id)
+                    self.redis_util.delete(COMIC_DETAIL + str(comic_id))
         except Exception as e:
             print(e)
 

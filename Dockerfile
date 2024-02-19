@@ -11,6 +11,8 @@ ENV PROFILES_ACTIVE $PROFILES_ACTIVE
 ENV SERVER_PORT $SERVER_PORT
 ENV NODE_PATH /usr/local/lib/node_modules
 
+RUN sed -i s/deb.debian.org/mirrors.aliyun.com/g /etc/apt/sources.list.d/debian.sources && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' >/etc/timezone
+
 RUN apt update
 
 RUN echo 'Y' | apt-get install xvfb

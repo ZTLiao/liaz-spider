@@ -63,10 +63,11 @@ class FanQieSpider:
             for book in book_list:
                 book_id = book['book_id']
                 last_chapter_time = book['last_chapter_time']
-                date = datetime.fromtimestamp(last_chapter_time).strftime('%Y-%m-%d')
-                if now != date:
-                    print('novel date : ', date)
-                    return
+                if last_chapter_time is not None:
+                    date = datetime.fromtimestamp(int(last_chapter_time)).strftime('%Y-%m-%d')
+                    if now != date:
+                        print('novel date : ', date)
+                        return
                 xiao_shuo_detail_url = self.domain + '/page/' + str(book_id)
                 print(xiao_shuo_detail_url)
                 xiao_shuo_detail_response = requests.get(xiao_shuo_detail_url, headers=headers, timeout=20,
@@ -181,7 +182,7 @@ class FanQieSpider:
                         if path is not None:
                             self.novel_chapter_item_db.save(novel_chapter_id, novel_id, path, 1)
                             self.novel_subscribe_db.upgrade(novel_id)
-                self.redis_util.delete(NOVEL_DETAIL + novel_id)
+                self.redis_util.delete(NOVEL_DETAIL + str(novel_id))
             index += 1
 
 

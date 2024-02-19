@@ -249,7 +249,7 @@ class DongManZhiJiaSpider:
                                 continue
                     except Exception as e:
                         print(e)
-                    self.redis_util.delete(COMIC_DETAIL + comic_id)
+                    self.redis_util.delete(COMIC_DETAIL + str(comic_id))
             except Exception as e:
                 print(e)
 
@@ -428,7 +428,7 @@ class DongManZhiJiaSpider:
                         if is_comic_chapter_exists:
                             print('comic_id : ', comic_id, ', comic_volume_id : ', comic_volume_id, ' is exists.')
                             continue
-                    self.redis_util.delete(COMIC_DETAIL + comic_id)
+                    self.redis_util.delete(COMIC_DETAIL + str(comic_id))
                 except Exception as e:
                     print(e)
 
@@ -632,7 +632,7 @@ class DongManZhiJiaSpider:
                                     if path is not None:
                                         self.novel_chapter_item_db.save(novel_chapter_id, novel_id, path, page_index)
                                         self.novel_subscribe_db.upgrade(novel_id)
-                    self.redis_util.delete(NOVEL_DETAIL + novel_id)
+                    self.redis_util.delete(NOVEL_DETAIL + str(novel_id))
                 except Exception as e:
                     print(e)
             i += 1
@@ -843,7 +843,7 @@ class DongManZhiJiaSpider:
                                     if path is not None:
                                         self.novel_chapter_item_db.save(novel_chapter_id, novel_id, path, page_index)
                                         self.novel_subscribe_db.upgrade(novel_id)
-                    self.redis_util.delete(NOVEL_DETAIL + novel_id)
+                    self.redis_util.delete(NOVEL_DETAIL + str(novel_id))
                 except Exception as e:
                     print(e)
             i += 1
