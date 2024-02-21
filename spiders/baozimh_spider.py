@@ -2,6 +2,8 @@ import requests
 import bs4
 import zhconv
 import system.global_vars
+import uuid
+import os
 
 from PIL import Image
 
@@ -66,9 +68,9 @@ class BaoZiMhSpider:
                     if comic_id is None or comic_id == 0:
                         file_name = self.file_item_handler.download(cover)
                         if file_name is not None:
-                            convert_webp_to_jpg(file_name, file_name)
-                            cover = self.file_item_handler.upload(bucket.COVER, file_name,
-                                                                  file_type.IMAGE_JPEG)
+                            file_name = convert_webp_to_jpg(file_name)
+                            if file_name is not None:
+                                cover = self.file_item_handler.upload(bucket.COVER, file_name, file_type.IMAGE_JPEG)
                         print(cover)
                         if cover is None:
                             cover = ''
@@ -190,6 +192,13 @@ def traditional_to_simplified(text):
     return simplified_text
 
 
-def convert_webp_to_jpg(webp_file, jpg_file):
-    with Image.open(webp_file) as img:
-        img.convert('RGB').save(jpg_file, 'JPEG')
+def convert_webp_to_jpg(webp_file):
+    jpg_file = str(uuid.uuid4())
+    try:
+        with Image.open(webp_file) as img:
+            img.convert('RGB').save(jpg_file, 'JPEG')
+        os.remove(webp_file)
+        return jpg_file
+    except Exception as e:
+        print(e)
+        return webp_file

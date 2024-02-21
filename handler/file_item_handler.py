@@ -37,18 +37,18 @@ class FileItemHandler:
         return path
 
     def download(self, url, headers=None):
-        if url is None:
-            return None
-        if headers is None:
-            headers = {}
-        suffix = ''
-        array = url.split('.')
-        if len(array) > 1:
-            suffix = array[len(array) - 1]
-        self.filename = str(uuid.uuid4())
-        if suffix == 'jpg' or suffix == 'txt':
-            self.filename = self.filename + '.' + suffix
         try:
+            if url is None:
+                return None
+            if headers is None:
+                headers = {}
+            suffix = ''
+            array = url.split('.')
+            if len(array) > 1:
+                suffix = array[len(array) - 1]
+            self.filename = str(uuid.uuid4())
+            if suffix == 'jpg' or suffix == 'txt':
+                self.filename = self.filename + '.' + suffix
             response = requests.get(url, headers=headers)
             if response.status_code == 200:
                 with open(self.filename, 'wb') as f:

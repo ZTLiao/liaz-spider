@@ -44,6 +44,8 @@ pip3 install Pillow
 
 pip3 install PyExecJS
 
+pip3 install undetected_chromedriver
+
 python3 -m grpc_tools.protoc --python_out=. -I=. dongmanzhijia_comic.proto
 
 curl -v -X GET http://172.17.0.1:8083/spider/script/execute?script=dongmanla\&page_type=1

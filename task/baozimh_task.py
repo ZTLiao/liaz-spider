@@ -2,9 +2,9 @@ from spiders.baozimh_spider import BaoZiMhSpider
 
 
 def execute():
-    print('==== cartoon mad task start ====')
+    print('==== bao zi mh task start ====')
     try:
         BaoZiMhSpider().parse()
     except Exception as e:
         print(e)
-    print('==== cartoon mad task end ====')
+    print('==== bao zi mh task end ====')

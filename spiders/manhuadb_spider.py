@@ -1,8 +1,6 @@
 import time
-
-import requests
 import system.global_vars
-from selenium import webdriver
+import undetected_chromedriver as uc
 
 from config.redis_config import RedisConfig
 from handler.file_item_handler import FileItemHandler
@@ -19,7 +17,7 @@ from utils.redis_util import RedisUtil
 
 class ManHuaDbSpider:
     def __init__(self):
-        self.domain = 'https://www.manhuadb.com'
+        self.domain = 'https://www.manhuadb.net'
         self.category_db = CategoryDb()
         self.author_db = AuthorDb()
         self.region_db = RegionDb()
@@ -34,13 +32,13 @@ class ManHuaDbSpider:
 
     def parse(self):
         index = 0
-        options = webdriver.ChromeOptions()
+        options = uc.ChromeOptions()
         options.add_argument('--no-sandbox')
         options.add_argument('--disable-dev-shm-usage')
         options.add_argument('--disable-extensions')
         options.add_argument('--headless')
         options.add_argument('--remote-debugging-port=9222')
-        browser = webdriver.Chrome(options=options)
+        browser = uc.Chrome(options=options)
         while True:
             index += 1
             man_hua_url = self.domain + '/manhua/list-page-' + str(index) + '.html'

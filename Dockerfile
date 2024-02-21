@@ -87,6 +87,8 @@ RUN pip3 install -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors
 
 RUN pip3 install -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com PyExecJS
 
+RUN pip3 install -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com undetected_chromedriver
+
 WORKDIR $WORK_DIR/
 
 RUN mkdir -p $WORK_DIR/logs
