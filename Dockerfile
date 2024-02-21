@@ -25,9 +25,17 @@ RUN echo 'Y' | apt-get install libnss3
 
 RUN echo 'Y' | apt-get install libgtk2.0-0 libgconf-2-4 libpango1.0-0 libcairo2 libcups2 libxss1 libxkbfile1 fonts-liberation libasound2 libatk-bridge2.0-0 libatspi2.0-0 libgbm1  libgtk-3-0 libu2f-udev libvulkan1 libxkbcommon0 xdg-utils
 
-RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+RUN wget https://repo.debiancn.org/pool/main/g/google-chrome-stable/google-chrome-stable_114.0.5735.90-1_amd64.deb
 
-RUN dpkg -i google-chrome-stable_current_amd64.deb
+RUN dpkg -i google-chrome-stable_114.0.5735.90-1_amd64.deb
+
+RUN wget -O /tmp/chromedriver.zip https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip
+
+RUN unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/
+
+RUN rm /tmp/chromedriver.zip
+
+RUN chmod +x /usr/local/bin/chromedriver
 
 RUN apt-get install -f
 
