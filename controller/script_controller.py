@@ -9,6 +9,7 @@ from spiders.copymanga_spider import CopyMangaSpider
 from spiders.dongmanla_spider import DongManLaSpider
 from spiders.dongmanzhijia_spider import DongManZhiJiaSpider
 from spiders.fanqie_spider import FanQieSpider
+from spiders.manhuadb_spider import ManHuaDbSpider
 from spiders.shuhuangwang_spider import ShuHuangWangSpider
 
 router = APIRouter()
@@ -38,4 +39,6 @@ def execute(request: Request):
         CopyMangaSpider().parse()
     if script == 'bilinovel':
         BiliNovelSpider().parse()
+    if script == 'manhuadb':
+        ManHuaDbSpider().parse()
     return response.ok()

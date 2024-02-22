@@ -143,10 +143,6 @@ class BaoZiMhSpider:
                         chapter_index += 1
                         chapter_name = chapter_item.select('span.chaptertitle')[0].text.strip()
                         count = self.comic_chapter_db.count(comic_id, chapter_name)
-                        if count != 0:
-                            print('comic_id : ', comic_id, ', chapter_name : ', chapter_name, ' is exist.')
-                            break
-                        count = self.comic_chapter_db.count(comic_id, chapter_name)
                         if count == 0:
                             self.comic_chapter_db.save(comic_id, chapter_name, chapter_index)
                             comic_chapter_id = self.comic_chapter_db.get_comic_chapter_id(comic_id,

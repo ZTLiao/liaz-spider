@@ -184,7 +184,6 @@ class DongManZhiJiaSpider:
                             self.comic_volume_db.save(comic_id, volume_name, volume_index)
                             comic_volume_id = self.comic_volume_db.get_comic_volume_id(comic_id, volume_name)
                             chapters = volume.data
-                            is_comic_chapter_exists = False
                             for chapter in reversed(chapters):
                                 chapter_name = chapter.chapterTitle
                                 seq_no = chapter.chapterOrder
@@ -201,9 +200,6 @@ class DongManZhiJiaSpider:
                                     if comic_chapter_id is not None:
                                         self.asset_db.update(comic_id, 1, chapter_name, comic_chapter_id)
                                         self.comic_db.upgrade(comic_id)
-                                else:
-                                    is_comic_chapter_exists = True
-                                    break
                                 comic_chapter_id = self.comic_chapter_db.get_comic_chapter_id_by_comic_volume_id(
                                     comic_id,
                                     comic_volume_id,
@@ -244,9 +240,6 @@ class DongManZhiJiaSpider:
                                         self.comic_chapter_item_db.save(comic_chapter_id, comic_id, path,
                                                                         page_index)
                                         self.comic_subscribe_db.upgrade(comic_id)
-                            if is_comic_chapter_exists:
-                                print('comic_id : ', comic_id, ', comic_volume_id : ', comic_volume_id, ' is exists.')
-                                continue
                     except Exception as e:
                         print(e)
                     self.redis_util.delete(COMIC_DETAIL + str(comic_id))
