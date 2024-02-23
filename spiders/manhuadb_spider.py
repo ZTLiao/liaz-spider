@@ -23,7 +23,7 @@ from utils.redis_util import RedisUtil
 
 class ManHuaDbSpider:
     def __init__(self):
-        self.domain = 'https://www.manhuadb.net'
+        self.domain = 'https://www.manhuadb.com'
         self.category_db = CategoryDb()
         self.author_db = AuthorDb()
         self.region_db = RegionDb()
@@ -158,6 +158,7 @@ class ManHuaDbSpider:
                             encrypt_data = script_content.replace('var img_data =', '').replace('\'', '').replace(';',
                                                                                                                   '')
                             img_data = json.loads(base64.b64decode(encrypt_data))
+                            print(img_data)
                             for img_item in img_data:
                                 page_index = img_item['p']
                                 path = img_domain + img_prefix + img_item['img']

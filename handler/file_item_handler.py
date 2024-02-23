@@ -25,6 +25,9 @@ class FileItemHandler:
             suffix = array[1]
         unique_id = int(round(time.time() * 1000))
         path = '/' + bucket_name + '/' + str(unique_id)
+        while self.__file_item_db.count(path) != 0:
+            unique_id = int(round(time.time() * 1000))
+            path = '/' + bucket_name + '/' + str(unique_id)
         try:
             size = os.path.getsize(filename)
             e_tag = self.__cos_util.put_object(filename, path)

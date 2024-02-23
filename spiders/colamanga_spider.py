@@ -6,7 +6,7 @@ from io import BytesIO
 
 import bs4
 from PIL import Image
-from selenium import webdriver
+import undetected_chromedriver as uc
 
 from constants import bucket, file_type
 from handler.file_item_handler import FileItemHandler
@@ -42,13 +42,13 @@ class ColaMangaSpider:
             page_name = '1'
         try:
             index = 0
-            options = webdriver.ChromeOptions()
+            options = uc.ChromeOptions()
             options.add_argument('--no-sandbox')
             options.add_argument('--disable-dev-shm-usage')
             options.add_argument('--disable-extensions')
             options.add_argument('--headless')
             options.add_argument('--remote-debugging-port=9222')
-            browser = webdriver.Chrome(options=options)
+            browser = uc.Chrome(options=options)
             while True:
                 index += 1
                 man_hua_url = self.domain + '/show?orderBy=update&status=' + page_name + '&page=' + str(index)
