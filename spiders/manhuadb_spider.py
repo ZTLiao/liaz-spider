@@ -52,6 +52,7 @@ class ManHuaDbSpider:
                 print(man_hua_url)
                 browser.get(man_hua_url)
                 man_hua_content = browser.page_source
+                print(man_hua_content)
                 man_hua_soup = bs4.BeautifulSoup(man_hua_content, 'html.parser')
                 man_hua_items = man_hua_soup.select('div.comic-book-unit')
                 for man_hua_item in man_hua_items:

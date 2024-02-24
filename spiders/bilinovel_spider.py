@@ -20,8 +20,9 @@ from utils.redis_util import RedisUtil
 
 
 class BiliNovelSpider:
-    def __init__(self):
+    def __init__(self, page_type=1):
         self.domain = 'https://www.bilinovel.com'
+        self.page_type = page_type
         self.category_db = CategoryDb()
         self.author_db = AuthorDb()
         self.novel_db = NovelDb()
@@ -35,11 +36,13 @@ class BiliNovelSpider:
         self.redis_util = RedisUtil(redis.host, redis.port, redis.db, redis.password)
 
     def parse(self):
+        page_type = '5' if int(self.page_type) == 0 else '0'
         try:
             index = 0
             while True:
                 index += 1
-                xiao_shuo_url = self.domain + '/wenku/lastupdate_0_0_0_0_0_0_0_' + str(index) + '_0.html'
+                xiao_shuo_url = self.domain + '/wenku/lastupdate_0_0_0_0_0_0_' + page_type + '_' + str(
+                    index) + '_0.html'
                 print(xiao_shuo_url)
                 xiao_shuo_response = requests.get(xiao_shuo_url)
                 xiao_shuo_response_text = xiao_shuo_response.text

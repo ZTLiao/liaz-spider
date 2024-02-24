@@ -23,8 +23,9 @@ from utils.redis_util import RedisUtil
 
 
 class CopyMangaSpider:
-    def __init__(self):
+    def __init__(self, page_type=1):
         self.domain = 'https://www.mangacopy.com'
+        self.page_type = page_type
         self.category_db = CategoryDb()
         self.author_db = AuthorDb()
         self.region_db = RegionDb()
@@ -39,6 +40,7 @@ class CopyMangaSpider:
         self.redis_util = RedisUtil(redis.host, redis.port, redis.db, redis.password)
 
     def parse(self):
+        top = 'finish' if int(self.page_type) == 0 else ''
         try:
             index = 0
             while True:
@@ -54,7 +56,8 @@ class CopyMangaSpider:
                     'free_type': 1,
                     'limit': 21,
                     'offset': (index - 1) * 21,
-                    'type': '$$DEFAULT$$',
+                    'type': '',
+                    'top': top,
                     'ordering': '-datetime_updated',
                     '_update': 'true',
                 })

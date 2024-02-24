@@ -36,9 +36,9 @@ def execute(request: Request):
     if script == 'fanqie':
         FanQieSpider().parse()
     if script == 'copymanga':
-        CopyMangaSpider().parse()
+        CopyMangaSpider(page_type).parse()
     if script == 'bilinovel':
-        BiliNovelSpider().parse()
+        BiliNovelSpider(page_type).parse()
     if script == 'manhuadb':
         ManHuaDbSpider().parse()
     return response.ok()
