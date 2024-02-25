@@ -1,3 +1,5 @@
+from urllib.parse import unquote
+
 from fastapi import APIRouter, Request
 
 from resp import response
@@ -41,4 +43,15 @@ def execute(request: Request):
         BiliNovelSpider(page_type).parse()
     if script == 'manhuadb':
         ManHuaDbSpider().parse()
+    return response.ok()
+
+
+@router.get('/spider/script/search')
+def search(request: Request):
+    script = request.query_params.get('script')
+    keyword = request.query_params.get('keyword')
+    print('script : ', script, 'keyword : ', keyword)
+    keyword = unquote(keyword, encoding='utf-8', errors='replace')
+    if script == 'copymanga':
+        CopyMangaSpider().search(keyword)
     return response.ok()
