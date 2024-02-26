@@ -237,11 +237,18 @@ class CopyMangaSpider:
                                 print('man hua chapter response is error.')
                                 return
                             contents = man_hua_chapter_response['results']['chapter']['contents']
+                            words = man_hua_chapter_response['results']['chapter']['words']
+                            seq_nos = self.comic_chapter_item_db.get_chapter_seq_nos(comic_chapter_id, comic_id)
+                            comic_chapter_item_ids = self.comic_chapter_item_db.get_comic_chapter_item_ids(
+                                comic_chapter_id, comic_id)
                             print(contents)
-                            page_index = 0
+                            word_index = 0
                             for content in contents:
-                                page_index += 1
+                                page_index = words[word_index]
                                 path = content['url']
+                                if len(words) == len(seq_nos) and words != seq_nos:
+                                    comic_chapter_item_id = comic_chapter_item_ids[word_index]
+                                    self.comic_chapter_item_db.update_seq_no(comic_chapter_item_id, page_index)
                                 page_count = self.comic_chapter_item_db.count(comic_chapter_id, comic_id,
                                                                               page_index)
                                 if page_count == 0:
@@ -261,6 +268,7 @@ class CopyMangaSpider:
                                     self.comic_chapter_item_db.save(comic_chapter_id, comic_id, path,
                                                                     page_index)
                                     self.comic_subscribe_db.upgrade(comic_id)
+                                word_index += 1
                     self.redis_util.delete(COMIC_DETAIL + str(comic_id))
         except Exception as e:
             print(e)
@@ -470,11 +478,18 @@ class CopyMangaSpider:
                                 print('man hua chapter response is error.')
                                 return
                             contents = man_hua_chapter_response['results']['chapter']['contents']
+                            words = man_hua_chapter_response['results']['chapter']['words']
+                            seq_nos = self.comic_chapter_item_db.get_chapter_seq_nos(comic_chapter_id, comic_id)
+                            comic_chapter_item_ids = self.comic_chapter_item_db.get_comic_chapter_item_ids(
+                                comic_chapter_id, comic_id)
                             print(contents)
-                            page_index = 0
+                            word_index = 0
                             for content in contents:
-                                page_index += 1
+                                page_index = words[word_index]
                                 path = content['url']
+                                if len(words) == len(seq_nos) and words != seq_nos:
+                                    comic_chapter_item_id = comic_chapter_item_ids[word_index]
+                                    self.comic_chapter_item_db.update_seq_no(comic_chapter_item_id, page_index)
                                 page_count = self.comic_chapter_item_db.count(comic_chapter_id, comic_id,
                                                                               page_index)
                                 if page_count == 0:
@@ -494,6 +509,7 @@ class CopyMangaSpider:
                                     self.comic_chapter_item_db.save(comic_chapter_id, comic_id, path,
                                                                     page_index)
                                     self.comic_subscribe_db.upgrade(comic_id)
+                                word_index += 1
                         if is_comic_chapter_exists:
                             print('comic_id : ', comic_id, ', comic_volume_id : ', comic_volume_id, ' is exists.')
                         continue
@@ -700,11 +716,18 @@ class CopyMangaSpider:
                             print('man hua chapter response is error.')
                             return
                         contents = man_hua_chapter_response['results']['chapter']['contents']
+                        words = man_hua_chapter_response['results']['chapter']['words']
+                        seq_nos = self.comic_chapter_item_db.get_chapter_seq_nos(comic_chapter_id, comic_id)
+                        comic_chapter_item_ids = self.comic_chapter_item_db.get_comic_chapter_item_ids(comic_chapter_id,
+                                                                                                       comic_id)
                         print(contents)
-                        page_index = 0
+                        word_index = 0
                         for content in contents:
-                            page_index += 1
+                            page_index = words[word_index]
                             path = content['url']
+                            if len(words) == len(seq_nos) and words != seq_nos:
+                                comic_chapter_item_id = comic_chapter_item_ids[word_index]
+                                self.comic_chapter_item_db.update_seq_no(comic_chapter_item_id, page_index)
                             page_count = self.comic_chapter_item_db.count(comic_chapter_id, comic_id,
                                                                           page_index)
                             if page_count == 0:
@@ -724,6 +747,7 @@ class CopyMangaSpider:
                                 self.comic_chapter_item_db.save(comic_chapter_id, comic_id, path,
                                                                 page_index)
                                 self.comic_subscribe_db.upgrade(comic_id)
+                            word_index += 1
                 self.redis_util.delete(COMIC_DETAIL + str(comic_id))
         except Exception as e:
             print(e)
