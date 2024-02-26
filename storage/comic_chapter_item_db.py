@@ -33,19 +33,28 @@ class ComicChapterItemDb:
             print('comic_chapter_id : ', comic_chapter_id, ', comic_id : ', comic_id, ', seq_no : ', seq_no)
             return
         count = self.count(comic_chapter_id, comic_id, seq_no)
+        conn = pymysql.connect(
+            host=self.__mysql.host,
+            port=int(self.__mysql.port),
+            user=self.__mysql.username,
+            password=self.__mysql.password,
+            db=self.__mysql.db,
+            charset='utf8')
         if count == 0:
-            conn = pymysql.connect(
-                host=self.__mysql.host,
-                port=int(self.__mysql.port),
-                user=self.__mysql.username,
-                password=self.__mysql.password,
-                db=self.__mysql.db,
-                charset='utf8')
             cursor = conn.cursor()
             cursor.execute(
                 'insert into comic_chapter_item(comic_chapter_id, comic_id, path, seq_no, created_at, updated_at) values(\'' + str(
                     comic_chapter_id) + '\', \'' + str(comic_id) + '\', \'' + path + '\', \'' + str(
                     seq_no) + '\', now(3), now(3))')
+            conn.commit()
+            cursor.close()
+            conn.close()
+        else:
+            cursor = conn.cursor()
+            cursor.execute(
+                'update comic_chapter_item set path = \'' + path + '\', updated_at = now(3) where comic_chapter_id = \'' + str(
+                    comic_chapter_id) + '\' and comic_id = \'' + str(comic_id) + '\' and seq_no = \'' + str(
+                    seq_no) + '\'')
             conn.commit()
             cursor.close()
             conn.close()

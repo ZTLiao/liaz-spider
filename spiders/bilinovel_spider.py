@@ -58,7 +58,7 @@ class BiliNovelSpider:
                     xiao_shuo_detail_response_text = xiao_shuo_detail_response.text
                     xiao_shuo_detail_soup = bs4.BeautifulSoup(xiao_shuo_detail_response_text, 'html.parser')
                     xiao_shuo_detail_item = xiao_shuo_detail_soup.select('div.book-detail-info .book-layout')[0]
-                    title = xiao_shuo_detail_item.find('h1').text
+                    title = xiao_shuo_detail_item.find('h1').text.replace('\'', '\\\'')
                     cover = xiao_shuo_detail_item.find('img').get('src')
                     print(cover)
                     novel_id = self.novel_db.get_novel_id(title)
@@ -105,14 +105,14 @@ class BiliNovelSpider:
                     volume_index = 0
                     for volume_item in volume_items:
                         volume_index += 1
-                        volume_name = volume_item.find('h3').text
+                        volume_name = volume_item.find('h3').text.replace('\'', '\\\'')
                         self.novel_volume_db.save(novel_id, volume_name, volume_index)
                         novel_volume_id = self.novel_volume_db.get_novel_volume_id(novel_id, volume_name)
                         chapter_items = volume_item.select('.chapter-li-a')
                         chapter_index = self.novel_chapter_db.get_seq_no_by_novel_volume_id(novel_id, novel_volume_id)
                         for chapter_item in chapter_items:
                             chapter_index += 1
-                            chapter_name = chapter_item.text
+                            chapter_name = chapter_item.text.replace('\'', '\\\'')
                             count = self.novel_chapter_db.count_by_novel_volume_id(novel_id, novel_volume_id,
                                                                                    chapter_name)
                             self.novel_chapter_db.save_by_novel_volume_id(novel_id, novel_volume_id, chapter_name,
@@ -221,7 +221,7 @@ class BiliNovelSpider:
                         print('novel date : ', date)
                         return
                     xiao_shuo_detail_item = xiao_shuo_detail_soup.select('div.book-detail-info .book-layout')[0]
-                    title = xiao_shuo_detail_item.find('h1').text
+                    title = xiao_shuo_detail_item.find('h1').text.replace('\'', '\\\'')
                     cover = xiao_shuo_detail_item.find('img').get('src')
                     print(cover)
                     novel_id = self.novel_db.get_novel_id(title)
@@ -268,14 +268,14 @@ class BiliNovelSpider:
                     volume_index = 0
                     for volume_item in volume_items:
                         volume_index += 1
-                        volume_name = volume_item.find('h3').text
+                        volume_name = volume_item.find('h3').text.replace('\'', '\\\'')
                         self.novel_volume_db.save(novel_id, volume_name, volume_index)
                         novel_volume_id = self.novel_volume_db.get_novel_volume_id(novel_id, volume_name)
                         chapter_items = volume_item.select('.chapter-li-a')
                         chapter_index = self.novel_chapter_db.get_seq_no_by_novel_volume_id(novel_id, novel_volume_id)
                         for chapter_item in chapter_items:
                             chapter_index += 1
-                            chapter_name = chapter_item.text
+                            chapter_name = chapter_item.text.replace('\'', '\\\'')
                             count = self.novel_chapter_db.count_by_novel_volume_id(novel_id, novel_volume_id,
                                                                                    chapter_name)
                             self.novel_chapter_db.save_by_novel_volume_id(novel_id, novel_volume_id, chapter_name,
