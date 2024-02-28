@@ -11,6 +11,7 @@ from spiders.copymanga_spider import CopyMangaSpider
 from spiders.dongmanla_spider import DongManLaSpider
 from spiders.dongmanzhijia_spider import DongManZhiJiaSpider
 from spiders.fanqie_spider import FanQieSpider
+from spiders.hentai321_spider import HenTai321Spider
 from spiders.manhuadb_spider import ManHuaDbSpider
 from spiders.shuhuangwang_spider import ShuHuangWangSpider
 
@@ -43,6 +44,8 @@ def execute(request: Request):
         BiliNovelSpider(page_type).parse()
     if script == 'manhuadb':
         ManHuaDbSpider().parse()
+    if script == 'hentai321':
+        HenTai321Spider().parse()
     return response.ok()
 
 
