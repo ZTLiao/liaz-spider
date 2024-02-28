@@ -60,7 +60,7 @@ class HenTai321Spider:
                     cover = cover_item.get('src')
                     print(cover)
                     title_item = man_hua_detail_soup.select('div#main-info h1')[0]
-                    title = title_item.text
+                    title = title_item.text.replace('\'', '\\\'')
                     print(title)
                     description = title
                     author = '佚名'
