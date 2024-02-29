@@ -28,5 +28,5 @@ async def start_scheduler():
     scheduler.add_job(id="fanqie", func=fanqie_task.execute, trigger='cron', hour=20, minute=00)
     scheduler.add_job(id="cartoonmad", func=cartoonmad_task.execute, trigger='cron', hour=20, minute=00)
     # scheduler.add_job(id="baozimh", func=baozimh_task.execute, trigger='cron', minute=59)
-    scheduler.add_job(id="baozimh", func=hentai321_task.execute, trigger='cron', hour=22, minute=00)
+    scheduler.add_job(id="hentai321", func=hentai321_task.execute, trigger='cron', minute=30)
     scheduler.start()

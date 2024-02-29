@@ -1,3 +1,4 @@
+import time
 from datetime import datetime
 
 import requests
@@ -140,6 +141,7 @@ class BiliNovelSpider:
                                 'Accept-Language': 'zh-CN,zh;q=0.9',
                             })
                             xiao_shuo_chapter_response_text = xiao_shuo_chapter_response.text
+                            time.sleep(2)
                             xiao_shuo_chapter_soup = bs4.BeautifulSoup(xiao_shuo_chapter_response_text, 'html.parser')
                             img_tags = xiao_shuo_chapter_soup.find_all('img')
                             page_index = 0
@@ -164,7 +166,10 @@ class BiliNovelSpider:
                                         self.novel_chapter_item_db.save(novel_chapter_id, novel_id, path,
                                                                         page_index)
                                         self.novel_subscribe_db.upgrade(novel_id)
-                            content_items = xiao_shuo_chapter_soup.select('div.bcontent')[0]
+                            content_items = xiao_shuo_chapter_soup.select('div#acontentz')
+                            if len(content_items) > 0:
+                                content_items = content_items[0]
+                            print(content_items)
                             content = ''
                             for content_item in content_items.select('p, br'):
                                 tag: str = content_item.prettify()
@@ -327,7 +332,9 @@ class BiliNovelSpider:
                                         self.novel_chapter_item_db.save(novel_chapter_id, novel_id, path,
                                                                         page_index)
                                         self.novel_subscribe_db.upgrade(novel_id)
-                            content_items = xiao_shuo_chapter_soup.select('div.bcontent')[0]
+                            content_items = xiao_shuo_chapter_soup.select('div#acontentz')
+                            if len(content_items) > 0:
+                                content_items = content_items[0]
                             content = ''
                             for content_item in content_items.select('p, br'):
                                 tag: str = content_item.prettify()
