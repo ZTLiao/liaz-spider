@@ -308,6 +308,7 @@ class BiliNovelSpider:
                                 'Accept-Language': 'zh-CN,zh;q=0.9',
                             })
                             xiao_shuo_chapter_response_text = xiao_shuo_chapter_response.text
+                            time.sleep(2)
                             xiao_shuo_chapter_soup = bs4.BeautifulSoup(xiao_shuo_chapter_response_text, 'html.parser')
                             img_tags = xiao_shuo_chapter_soup.find_all('img')
                             page_index = 0
