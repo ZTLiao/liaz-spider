@@ -19,7 +19,7 @@ import base64
 import requests
 
 from config.redis_config import RedisConfig
-from constants import bucket, file_type
+from constants import bucket, file_type, status
 from constants.redis_key import COMIC_DETAIL, NOVEL_DETAIL
 from handler.file_item_handler import FileItemHandler
 from interfaces import dongmanzhijia_comic_pb2, dongmanzhijia_novel_pb2
@@ -166,9 +166,9 @@ class DongManZhiJiaSpider:
                                 index += 1
                             category_id_str = ','.join(category_ids)
                         description = comic_detail.description
-                        status = comic_detail.status
+                        comic_status = comic_detail.status
                         flag = 1
-                        if status == '已完结':
+                        if comic_status == '已完结':
                             flag = 0
                         self.comic_db.save(title, cover, description, flag, category_id_str, category_str,
                                            author_id_str,
@@ -342,9 +342,9 @@ class DongManZhiJiaSpider:
                             index += 1
                         category_id_str = ','.join(category_ids)
                     description = comic_detail.description
-                    status = comic_detail.status
+                    comic_status = comic_detail.status
                     flag = 1
-                    if status == '已完结':
+                    if comic_status == '已完结':
                         flag = 0
                     self.comic_db.save(title, cover, description, flag, category_id_str, category_str,
                                        author_id_str,
@@ -504,9 +504,9 @@ class DongManZhiJiaSpider:
                             category_str = category_str[:-1]
                         category_id_str = ','.join(category_ids)
                     description = novel_detail.introduction
-                    status = novel_detail.status
+                    novel_status = novel_detail.status
                     flag = 0
-                    if status == '连载中':
+                    if novel_status == '连载中':
                         flag = 1
                     self.novel_db.save(title, cover, description, flag, category_id_str, category_str,
                                        author_id_str,
@@ -727,9 +727,9 @@ class DongManZhiJiaSpider:
                             category_str = category_str[:-1]
                         category_id_str = ','.join(category_ids)
                     description = novel_detail.introduction
-                    status = novel_detail.status
+                    novel_status = novel_detail.status
                     flag = 0
-                    if status == '连载中':
+                    if novel_status == '连载中':
                         flag = 1
                     self.novel_db.save(title, cover, description, flag, category_id_str, category_str,
                                        author_id_str,
