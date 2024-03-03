@@ -8,7 +8,7 @@ import zhconv
 import system.global_vars
 
 from config.redis_config import RedisConfig
-from constants import bucket, file_type
+from constants import bucket, file_type, status
 from constants.redis_key import COMIC_DETAIL
 from handler.file_item_handler import FileItemHandler
 from storage.asset_db import AssetDb
@@ -149,9 +149,9 @@ class CopyMangaSpider:
                     self.region_db.save(region)
                     region_id = self.region_db.get_region_id(region)
                     description = traditional_to_simplified(man_hua_detail['brief'])
-                    status = man_hua_detail['status']['display']
+                    display = man_hua_detail['status']['display']
                     flag = 0
-                    if status == '連載中':
+                    if display == '連載中':
                         flag = 1
                     self.comic_db.save(title, cover, description, flag, category_id_str, category_str,
                                        author_id_str,
@@ -384,9 +384,9 @@ class CopyMangaSpider:
                     self.region_db.save(region)
                     region_id = self.region_db.get_region_id(region)
                     description = traditional_to_simplified(man_hua_detail['brief'])
-                    status = man_hua_detail['status']['display']
+                    display = man_hua_detail['status']['display']
                     flag = 0
-                    if status == '連載中':
+                    if display == '連載中':
                         flag = 1
                     self.comic_db.save(title, cover, description, flag, category_id_str, category_str,
                                        author_id_str,
@@ -624,9 +624,9 @@ class CopyMangaSpider:
                 self.region_db.save(region)
                 region_id = self.region_db.get_region_id(region)
                 description = traditional_to_simplified(man_hua_detail['brief'])
-                status = man_hua_detail['status']['display']
+                display = man_hua_detail['status']['display']
                 flag = 0
-                if status == '連載中':
+                if display == '連載中':
                     flag = 1
                 self.comic_db.save(title, cover, description, flag, category_id_str, category_str,
                                    author_id_str,

@@ -75,6 +75,9 @@ class DongManLaSpider:
             detail_response_text = detail_response.text
             detail_soup = bs4.BeautifulSoup(detail_response_text, 'lxml')
             for man_hua_info_item in detail_soup.select('div.cy_main .cy_info .cy_intro_l'):
+                if system.global_vars.application.get_close_status() == status.YES:
+                    print('dong man la is close.')
+                    return
                 title = man_hua_info_item.select('.cy_title .detail-info-title')[0].text
                 region = man_hua_info_item.select('.cy_xinxi span')[0].text.split('：')[1]
                 self.region_db.save(region)
