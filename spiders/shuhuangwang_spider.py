@@ -5,7 +5,7 @@ import requests
 import system.global_vars
 
 from config.redis_config import RedisConfig
-from constants import file_type, bucket
+from constants import file_type, bucket, status
 from constants.redis_key import NOVEL_DETAIL
 from handler.file_item_handler import FileItemHandler
 from storage.asset_db import AssetDb
@@ -128,6 +128,9 @@ class ShuHuangWangSpider:
                             print('novel_id : ', novel_id, ', chapter_name : ', chapter_name, ' is exist.')
                             break
                         for a_chapter_item in a_items:
+                            if system.global_vars.application.get_close_status() == status.YES:
+                                print('shu huang wang is close.')
+                                return
                             chapter_index += 1
                             chapter_name = a_chapter_item.text
                             count = self.novel_chapter_db.count(novel_id, chapter_name)

@@ -8,7 +8,7 @@ import os
 from PIL import Image
 
 from config.redis_config import RedisConfig
-from constants import bucket, file_type
+from constants import bucket, file_type, status
 from constants.redis_key import COMIC_DETAIL
 from handler.file_item_handler import FileItemHandler
 from storage.asset_db import AssetDb
@@ -140,6 +140,9 @@ class BaoZiMhSpider:
                     chapter_items = chapter_soup.select('div.chapteritem')
                     chapter_index = self.comic_chapter_db.get_seq_no(comic_id)
                     for chapter_item in chapter_items:
+                        if system.global_vars.application.get_close_status() == status.YES:
+                            print('bao zi man hua is close.')
+                            return
                         chapter_index += 1
                         chapter_name = chapter_item.select('span.chaptertitle')[0].text.strip()
                         count = self.comic_chapter_db.count(comic_id, chapter_name)

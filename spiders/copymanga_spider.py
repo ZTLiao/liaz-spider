@@ -191,6 +191,9 @@ class CopyMangaSpider:
                         comic_volume_id = self.comic_volume_db.get_comic_volume_id(comic_id, volume_name)
                         chapter_index = self.comic_chapter_db.get_seq_no_by_comic_volume_id(comic_id, comic_volume_id)
                         for chapter in volume_chapters:
+                            if system.global_vars.application.get_close_status() == status.YES:
+                                print('copy manga is close.')
+                                return
                             chapter_index += 1
                             chapter_name = traditional_to_simplified(chapter['name'])
                             count = self.comic_chapter_db.count_by_comic_volume_id(comic_id, comic_volume_id,
@@ -234,23 +237,17 @@ class CopyMangaSpider:
                             })
                             man_hua_chapter_response = man_hua_chapter_response.json()
                             print(man_hua_chapter_response)
+                            time.sleep(1)
                             if man_hua_chapter_response['code'] != 200:
                                 print('man hua chapter response is error.')
                                 return
                             contents = man_hua_chapter_response['results']['chapter']['contents']
                             words = man_hua_chapter_response['results']['chapter']['words']
-                            seq_nos = self.comic_chapter_item_db.get_chapter_seq_nos(comic_chapter_id, comic_id)
-                            comic_chapter_item_ids = self.comic_chapter_item_db.get_comic_chapter_item_ids(
-                                comic_chapter_id, comic_id)
                             print(contents)
                             word_index = 0
                             for content in contents:
                                 page_index = words[word_index]
                                 path = content['url']
-                                if len(words) == len(seq_nos) and words != seq_nos:
-                                    comic_chapter_item_id = comic_chapter_item_ids[word_index]
-                                    self.comic_chapter_item_db.update_seq_no(comic_chapter_item_id, page_index)
-                                    time.sleep(5)
                                 page_count = self.comic_chapter_item_db.count(comic_chapter_id, comic_id,
                                                                               page_index)
                                 if page_count == 0:
@@ -430,6 +427,9 @@ class CopyMangaSpider:
                         chapter_index = self.comic_chapter_db.get_seq_no_by_comic_volume_id(comic_id, comic_volume_id)
                         is_comic_chapter_exists = False
                         for chapter in volume_chapters:
+                            if system.global_vars.application.get_close_status() == status.YES:
+                                print('copy manga is close.')
+                                return
                             chapter_index += 1
                             chapter_name = traditional_to_simplified(chapter['name'])
                             count = self.comic_chapter_db.count_by_comic_volume_id(comic_id, comic_volume_id,
@@ -476,23 +476,17 @@ class CopyMangaSpider:
                             })
                             man_hua_chapter_response = man_hua_chapter_response.json()
                             print(man_hua_chapter_response)
+                            time.sleep(1)
                             if man_hua_chapter_response['code'] != 200:
                                 print('man hua chapter response is error.')
                                 return
                             contents = man_hua_chapter_response['results']['chapter']['contents']
                             words = man_hua_chapter_response['results']['chapter']['words']
-                            seq_nos = self.comic_chapter_item_db.get_chapter_seq_nos(comic_chapter_id, comic_id)
-                            comic_chapter_item_ids = self.comic_chapter_item_db.get_comic_chapter_item_ids(
-                                comic_chapter_id, comic_id)
                             print(contents)
                             word_index = 0
                             for content in contents:
                                 page_index = words[word_index]
                                 path = content['url']
-                                if len(words) == len(seq_nos) and words != seq_nos:
-                                    comic_chapter_item_id = comic_chapter_item_ids[word_index]
-                                    self.comic_chapter_item_db.update_seq_no(comic_chapter_item_id, page_index)
-                                    time.sleep(5)
                                 page_count = self.comic_chapter_item_db.count(comic_chapter_id, comic_id,
                                                                               page_index)
                                 if page_count == 0:
@@ -672,6 +666,9 @@ class CopyMangaSpider:
                     comic_volume_id = self.comic_volume_db.get_comic_volume_id(comic_id, volume_name)
                     chapter_index = self.comic_chapter_db.get_seq_no_by_comic_volume_id(comic_id, comic_volume_id)
                     for chapter in volume_chapters:
+                        if system.global_vars.application.get_close_status() == status.YES:
+                            print('copy manga is close.')
+                            return
                         chapter_index += 1
                         chapter_name = traditional_to_simplified(chapter['name'])
                         count = self.comic_chapter_db.count_by_comic_volume_id(comic_id, comic_volume_id,

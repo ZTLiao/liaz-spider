@@ -3,6 +3,7 @@ import os.path
 import re
 import time
 from io import BytesIO
+import system.global_vars
 
 import bs4
 from PIL import Image
@@ -139,6 +140,9 @@ class ColaMangaSpider:
                     chapter_index = self.comic_chapter_db.get_seq_no(comic_id)
                     chapter_items = man_hua_detail_soup.select('a.fed-btns-info')
                     for chapter_item in reversed(chapter_items):
+                        if system.global_vars.application.get_close_status() == status.YES:
+                            print('cola manga is close.')
+                            return
                         detail_uri = str(chapter_item.get('href'))
                         if not detail_uri.endswith('.html'):
                             continue

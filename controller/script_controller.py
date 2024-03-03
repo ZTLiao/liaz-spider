@@ -1,7 +1,10 @@
+import system.global_vars
+
 from urllib.parse import unquote
 
 from fastapi import APIRouter, Request
 
+from constants import status
 from resp import response
 from spiders.baozimh_spider import BaoZiMhSpider
 from spiders.bilinovel_spider import BiliNovelSpider
@@ -49,6 +52,12 @@ def execute(request: Request):
     return response.ok()
 
 
+@router.get('/spider/script/close')
+def close():
+    system.global_vars.application.set_close_status(status.YES)
+    return response.ok()
+
+
 @router.get('/spider/script/search')
 def search(request: Request):
     script = request.query_params.get('script')
@@ -57,4 +66,6 @@ def search(request: Request):
     keyword = unquote(keyword, encoding='utf-8', errors='replace')
     if script == 'copymanga':
         CopyMangaSpider().search(keyword)
+    if script == 'bilinovel':
+        BiliNovelSpider().search(keyword)
     return response.ok()

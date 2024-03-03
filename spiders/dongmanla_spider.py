@@ -5,7 +5,7 @@ import requests
 import system.global_vars
 
 from config.redis_config import RedisConfig
-from constants import file_type, bucket
+from constants import file_type, bucket, status
 from constants.redis_key import COMIC_DETAIL
 from handler.file_item_handler import FileItemHandler
 from storage.asset_db import AssetDb
@@ -62,6 +62,9 @@ class DongManLaSpider:
                         a_item = ul_item.select('a.pic')[0]
                         detail_url = self.domain + a_item.get('href')
                         print(detail_url)
+                        if system.global_vars.application.get_close_status() == status.YES:
+                            print('dong man la is close.')
+                            return
                         self.get_detail(detail_url)
             except Exception as e:
                 print(e)
@@ -162,6 +165,9 @@ class DongManLaSpider:
                         print('comic_id : ', comic_id, ', chapter_name : ', chapter_name, ' is exist.')
                         continue
                     for li_item in reversed(li_items):
+                        if system.global_vars.application.get_close_status() == status.YES:
+                            print('dong man la is close.')
+                            return
                         chapter_index += 1
                         page_url = li_item.find('a').get('href')
                         print(page_url)
@@ -214,6 +220,9 @@ class DongManLaSpider:
                 if yesterday != date:
                     print('now : ', now, 'date : ', date)
                     continue
+                if system.global_vars.application.get_close_status() == status.YES:
+                    print('dong man la is close.')
+                    return
                 a_item = man_han_item.find_all('a')[0]
                 detail_url = a_item.get('href')
                 print(detail_url)

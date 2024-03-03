@@ -6,6 +6,7 @@ import bs4
 import system.global_vars
 
 from config.redis_config import RedisConfig
+from constants import status
 from handler.file_item_handler import FileItemHandler
 from storage.asset_db import AssetDb
 from storage.author_db import AuthorDb
@@ -160,6 +161,9 @@ class HenTai321Spider:
                                                                                   chapter_name)
                     img_items = man_hua_detail_soup.select('div.single-thumb noscript img')
                     page_index = 0
+                    if system.global_vars.application.get_close_status() == status.YES:
+                        print('hen tai 321 is close.')
+                        return
                     for img_item in img_items:
                         page_index += 1
                         path = img_item.get('src')

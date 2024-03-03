@@ -4,7 +4,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from fastapi import FastAPI
 
 from controller import root_controller, script_controller, transfer_controller
-from task import dongmanla_task, dongmanzhijia_task, fanqie_task, cartoonmad_task, baozimh_task, copymanga_task, \
+from task import dongmanla_task, dongmanzhijia_task, fanqie_task, cartoonmad_task, copymanga_task, \
     bilinovel_task, hentai321_task
 
 app = FastAPI()
@@ -22,14 +22,22 @@ class AppRouter:
 @app.on_event("startup")
 async def start_scheduler():
     scheduler = AsyncIOScheduler(timezone="Asia/Shanghai")
-    scheduler.add_job(id="dongmanla", func=dongmanla_task.execute, trigger='cron', minute=59)
-    scheduler.add_job(id="dongmanzhijia_comic", func=dongmanzhijia_task.execute_comic, trigger='cron', minute=59)
-    scheduler.add_job(id="dongmanzhijia_novel", func=dongmanzhijia_task.execute_novel, trigger='cron', minute=59)
-    scheduler.add_job(id="copymanga", func=copymanga_task.execute, trigger='cron', minute=59)
-    random_number = random.randint(0, 59)
+    random_number = random.randint(30, 59)
+    scheduler.add_job(id="dongmanla", func=dongmanla_task.execute, trigger='cron', minute=random_number)
+    random_number = random.randint(30, 59)
+    scheduler.add_job(id="dongmanzhijia_comic", func=dongmanzhijia_task.execute_comic, trigger='cron',
+                      minute=random_number)
+    random_number = random.randint(30, 59)
+    scheduler.add_job(id="dongmanzhijia_novel", func=dongmanzhijia_task.execute_novel, trigger='cron',
+                      minute=random_number)
+    random_number = random.randint(30, 59)
+    scheduler.add_job(id="copymanga", func=copymanga_task.execute, trigger='cron', minute=random_number)
+    random_number = random.randint(30, 59)
     scheduler.add_job(id="bilinovel", func=bilinovel_task.execute, trigger='cron', minute=random_number)
-    scheduler.add_job(id="fanqie", func=fanqie_task.execute, trigger='cron', hour=20, minute=00)
-    scheduler.add_job(id="cartoonmad", func=cartoonmad_task.execute, trigger='cron', hour=20, minute=00)
-    # scheduler.add_job(id="baozimh", func=baozimh_task.execute, trigger='cron', minute=59)
-    scheduler.add_job(id="hentai321", func=hentai321_task.execute, trigger='cron', minute=30)
+    random_number = random.randint(30, 59)
+    scheduler.add_job(id="fanqie", func=fanqie_task.execute, trigger='cron', minute=random_number)
+    random_number = random.randint(30, 59)
+    scheduler.add_job(id="cartoonmad", func=cartoonmad_task.execute, trigger='cron', minute=random_number)
+    random_number = random.randint(30, 59)
+    scheduler.add_job(id="hentai321", func=hentai321_task.execute, trigger='cron', minute=random_number)
     scheduler.start()

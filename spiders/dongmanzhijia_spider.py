@@ -360,8 +360,10 @@ class DongManZhiJiaSpider:
                         self.comic_volume_db.save(comic_id, volume_name, volume_index)
                         comic_volume_id = self.comic_volume_db.get_comic_volume_id(comic_id, volume_name)
                         chapters = volume.data
-                        is_comic_chapter_exists = False
                         for chapter in reversed(chapters):
+                            if system.global_vars.application.get_close_status() == status.YES:
+                                print('dong man zhi jia is close.')
+                                return
                             chapter_name = chapter.chapterTitle
                             seq_no = chapter.chapterOrder
                             count = self.comic_chapter_db.count_by_comic_volume_id(comic_id, comic_volume_id,
@@ -376,9 +378,6 @@ class DongManZhiJiaSpider:
                                 if comic_chapter_id is not None:
                                     self.asset_db.update(comic_id, 1, chapter_name, comic_chapter_id)
                                     self.comic_db.upgrade(comic_id)
-                            else:
-                                is_comic_chapter_exists = True
-                                break
                             comic_chapter_id = self.comic_chapter_db.get_comic_chapter_id_by_comic_volume_id(comic_id,
                                                                                                              comic_volume_id,
                                                                                                              chapter_name)
@@ -418,9 +417,6 @@ class DongManZhiJiaSpider:
                                     self.comic_chapter_item_db.save(comic_chapter_id, comic_id, path,
                                                                     page_index)
                                     self.comic_subscribe_db.upgrade(comic_id)
-                        if is_comic_chapter_exists:
-                            print('comic_id : ', comic_id, ', comic_volume_id : ', comic_volume_id, ' is exists.')
-                            continue
                     self.redis_util.delete(COMIC_DETAIL + str(comic_id))
                 except Exception as e:
                     print(e)
@@ -541,6 +537,9 @@ class DongManZhiJiaSpider:
                         novel_volume_id = self.novel_volume_db.get_novel_volume_id(novel_id, volume_name)
                         chapters = volume.chapters
                         for chapter in chapters:
+                            if system.global_vars.application.get_close_status() == status.YES:
+                                print('dong man zhi jia is close.')
+                                return
                             chapter_name = chapter.chapterName
                             seq_no = chapter.chapterOrder
                             count = self.novel_chapter_db.count_by_novel_volume_id(novel_id, novel_volume_id,
@@ -761,6 +760,9 @@ class DongManZhiJiaSpider:
                         novel_volume_id = self.novel_volume_db.get_novel_volume_id(novel_id, volume_name)
                         chapters = volume.chapters
                         for chapter in chapters:
+                            if system.global_vars.application.get_close_status() == status.YES:
+                                print('dong man zhi jia is close.')
+                                return
                             chapter_name = chapter.chapterName
                             seq_no = chapter.chapterOrder
                             count = self.novel_chapter_db.count_by_novel_volume_id(novel_id, novel_volume_id,

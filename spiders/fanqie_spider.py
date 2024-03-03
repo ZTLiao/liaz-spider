@@ -8,7 +8,7 @@ import time
 import system.global_vars
 
 from config.redis_config import RedisConfig
-from constants import bucket, file_type
+from constants import bucket, file_type, status
 from constants.redis_key import NOVEL_DETAIL
 from handler.file_item_handler import FileItemHandler
 from storage.asset_db import AssetDb
@@ -118,6 +118,9 @@ class FanQieSpider:
                 chapter_index = self.novel_chapter_db.get_seq_no(novel_id)
                 chapters = xiao_shuo_detail_soup.find_all("div", class_="chapter-item")
                 for i, chapter in enumerate(chapters):
+                    if system.global_vars.application.get_close_status() == status.YES:
+                        print('fan qie is close.')
+                        return
                     time.sleep(0.25)
                     chapter_index += 1
                     chapter_name = chapter.find("a").get_text()

@@ -5,7 +5,7 @@ import system.global_vars
 
 import system
 from config.redis_config import RedisConfig
-from constants import bucket, file_type
+from constants import bucket, file_type, status
 from constants.redis_key import COMIC_DETAIL
 from handler.file_item_handler import FileItemHandler
 from storage.asset_db import AssetDb
@@ -102,6 +102,9 @@ class CartoonMadSpider:
                     chapter_index = self.comic_chapter_db.get_seq_no(comic_id)
                     chapter_items = man_hua_detail_soup.select('table tr[align="center"] td a')
                     for chapter_item in chapter_items:
+                        if system.global_vars.application.get_close_status() == status.YES:
+                            print('cartoonmad is close.')
+                            return
                         chapter_index += 1
                         chapter_name = traditional_to_simplified(chapter_item.text.strip())
                         if len(chapter_name) == 0:

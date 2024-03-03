@@ -3,6 +3,7 @@ class Application:
         self.__env = None
         self.__name = None
         self.__mysql = None
+        self.__close_status: int = 0
 
     def set_env(self, env: str):
         self.__env = env
@@ -21,3 +22,9 @@ class Application:
 
     def get_mysql(self):
         return self.__mysql
+
+    def set_close_status(self, close_status: int):
+        self.__close_status = close_status
+
+    def get_close_status(self):
+        return self.__close_status

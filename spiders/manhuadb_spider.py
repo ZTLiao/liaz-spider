@@ -7,7 +7,7 @@ import bs4
 import undetected_chromedriver as uc
 
 from config.redis_config import RedisConfig
-from constants import bucket, file_type
+from constants import bucket, file_type, status
 from constants.redis_key import COMIC_DETAIL
 from handler.file_item_handler import FileItemHandler
 from storage.asset_db import AssetDb
@@ -131,6 +131,9 @@ class ManHuaDbSpider:
                     chapter_items = man_hua_detail_soup.select('div#comic-book-list .sort_div a')
                     print(chapter_items)
                     for chapter_item in chapter_items:
+                        if system.global_vars.application.get_close_status() == status.YES:
+                            print('man hua db is close.')
+                            return
                         chapter_index += 1
                         chapter_name = chapter_item.text
                         count = self.comic_chapter_db.count(comic_id, chapter_name)
