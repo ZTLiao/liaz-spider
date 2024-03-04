@@ -722,22 +722,27 @@ class CopyMangaSpider:
                         for content in contents:
                             page_index = words[word_index]
                             path = content['url']
-                            print(path)
-                            file_name = self.file_item_handler.download(path, headers={
-                                'Referer': self.domain,
-                                'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 ('
-                                              'KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1',
-                                'Accept-Encoding': 'gzip, deflate, br',
-                                'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
-                                'Accept': 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
-                            })
-                            if file_name is not None:
-                                path = self.file_item_handler.upload(bucket.COMIC, file_name,
-                                                                     file_type.IMAGE_JPEG)
-                            print(path)
-                            self.comic_chapter_item_db.save(comic_chapter_id, comic_id, path,
-                                                            page_index)
-                            self.comic_subscribe_db.upgrade(comic_id)
+                            page_count = self.comic_chapter_item_db.count(comic_chapter_id, comic_id,
+                                                                          page_index)
+                            if page_count == 0:
+                                print(path)
+                                file_name = self.file_item_handler.download(path, headers={
+                                    'Referer': self.domain,
+                                    'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 ('
+                                                  'KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1',
+                                    'Accept-Encoding': 'gzip, deflate, br',
+                                    'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
+                                    'Accept': 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
+                                })
+                                if file_name is not None:
+                                    path = self.file_item_handler.upload(bucket.COMIC, file_name,
+                                                                         file_type.IMAGE_JPEG)
+                                print(path)
+                                self.comic_chapter_item_db.save(comic_chapter_id, comic_id, path,
+                                                                page_index)
+                                self.comic_subscribe_db.upgrade(comic_id)
+                            else:
+                                time.sleep(1)
                             word_index += 1
                 self.redis_util.delete(COMIC_DETAIL + str(comic_id))
         except Exception as e:
