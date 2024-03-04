@@ -696,6 +696,7 @@ class BiliNovelSpider:
                                     self.novel_chapter_item_db.save(novel_chapter_id, novel_id, path, page_index)
                                     self.novel_subscribe_db.upgrade(novel_id)
                     self.redis_util.delete(NOVEL_DETAIL + str(novel_id))
+            browser.close()
         except Exception as e:
             print(e)
 
