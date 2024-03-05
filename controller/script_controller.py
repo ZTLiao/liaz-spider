@@ -16,6 +16,7 @@ from spiders.dongmanzhijia_spider import DongManZhiJiaSpider
 from spiders.fanqie_spider import FanQieSpider
 from spiders.hentai321_spider import HenTai321Spider
 from spiders.manhuadb_spider import ManHuaDbSpider
+from spiders.picyy177_spider import PicYY177Spider
 from spiders.shuhuangwang_spider import ShuHuangWangSpider
 
 router = APIRouter()
@@ -49,6 +50,8 @@ def execute(request: Request):
         ManHuaDbSpider().parse()
     if script == 'hentai321':
         HenTai321Spider().parse()
+    if script == 'picyy177':
+        PicYY177Spider().parse()
     return response.ok()
 
 

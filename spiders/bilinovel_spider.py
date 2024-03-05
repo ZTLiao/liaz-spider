@@ -378,16 +378,16 @@ class BiliNovelSpider:
             print(e)
 
     def search(self, keyword=''):
+        options = uc.ChromeOptions()
+        options.add_argument('--no-sandbox')
+        options.add_argument('--disable-dev-shm-usage')
+        options.add_argument('--disable-extensions')
+        options.add_argument('--headless')
+        options.add_argument('--remote-debugging-port=9222')
+        browser = uc.Chrome(options=options)
         try:
             xiao_shuo_url = self.domain + '/search.html'
             print(xiao_shuo_url)
-            options = uc.ChromeOptions()
-            options.add_argument('--no-sandbox')
-            options.add_argument('--disable-dev-shm-usage')
-            options.add_argument('--disable-extensions')
-            options.add_argument('--headless')
-            options.add_argument('--remote-debugging-port=9222')
-            browser = uc.Chrome(options=options)
             time.sleep(1)
             browser.get(xiao_shuo_url)
             time.sleep(5)
@@ -696,9 +696,10 @@ class BiliNovelSpider:
                                     self.novel_chapter_item_db.save(novel_chapter_id, novel_id, path, page_index)
                                     self.novel_subscribe_db.upgrade(novel_id)
                     self.redis_util.delete(NOVEL_DETAIL + str(novel_id))
-            browser.close()
         except Exception as e:
             print(e)
+        finally:
+            browser.close()
 
 
 def replace_secret_text(content):
