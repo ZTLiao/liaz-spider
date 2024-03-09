@@ -5,6 +5,7 @@ import uvicorn
 import system.global_vars
 from config.system_config import SystemConfig
 from router.app_router import AppRouter
+from spiders.bilinovel_spider import BiliNovelSpider
 from system.application import Application
 
 if __name__ == '__main__':
@@ -23,4 +24,5 @@ if __name__ == '__main__':
     system.global_vars.application.set_env(env)
     system.global_vars.application.set_name('liaz-spider')
     system.global_vars.systemConfig = SystemConfig()
+    BiliNovelSpider().search('关于我转生成为史莱姆的那件事')
     uvicorn.run(AppRouter.instance(), host='0.0.0.0', port=int(port), workers=1)
