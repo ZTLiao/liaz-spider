@@ -653,11 +653,8 @@ class BiliNovelSpider:
                                 continue
                             chapter_url = self.domain + chapter_uri
                             print(chapter_url)
-                            xiao_shuo_chapter_response = requests.get(chapter_url, headers={
-                                'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1',
-                                'Accept-Language': 'zh-CN,zh;q=0.9',
-                            })
-                            xiao_shuo_chapter_response_text = xiao_shuo_chapter_response.text
+                            browser.get(chapter_url)
+                            xiao_shuo_chapter_response_text = browser.page_source
                             time.sleep(2)
                             xiao_shuo_chapter_soup = bs4.BeautifulSoup(xiao_shuo_chapter_response_text, 'html.parser')
                             img_tags = xiao_shuo_chapter_soup.find_all('img')

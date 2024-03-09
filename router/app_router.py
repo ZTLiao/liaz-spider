@@ -5,7 +5,7 @@ from fastapi import FastAPI
 
 from controller import root_controller, script_controller, transfer_controller
 from task import dongmanla_task, dongmanzhijia_task, fanqie_task, cartoonmad_task, copymanga_task, \
-    bilinovel_task, hentai321_task
+    bilinovel_task, hentai321_task, picyy177_task
 
 app = FastAPI()
 
@@ -41,4 +41,6 @@ async def start_scheduler():
     scheduler.add_job(id="cartoonmad", func=cartoonmad_task.execute, trigger='cron', minute=random_number)
     random_number = random.randint(30, 59)
     scheduler.add_job(id="hentai321", func=hentai321_task.execute, trigger='cron', minute=random_number)
+    random_number = random.randint(0, 59)
+    scheduler.add_job(id="picyy177", func=picyy177_task.execute, trigger='cron', minute=random_number)
     scheduler.start()

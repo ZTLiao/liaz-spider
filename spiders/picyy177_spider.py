@@ -65,9 +65,6 @@ class PicYY177Spider:
                                 print('177 picyy is close.')
                                 return
                             man_hua_item = man_hua_items[i]
-                            cover_item = cover_items[i]
-                            cover = cover_item.get('src')
-                            print(cover)
                             detail_url = man_hua_item.get('href')
                             browser.get(detail_url)
                             man_hua_detail_content = browser.page_source
@@ -82,6 +79,12 @@ class PicYY177Spider:
                             category = '禁漫'
                             self.category_db.save(category)
                             category_id = self.category_db.get_category_id(category)
+                            img_items = man_hua_detail_soup.select('div.entry-content div.single-content noscript img')
+                            if len(img_items) == 0:
+                                print('img is empty.')
+                                continue
+                            cover = img_items[0].get('src')
+                            print(cover)
                             flag = 16
                             self.comic_db.save(title, cover, description, flag, str(category_id), category,
                                                str(author_id),
@@ -98,7 +101,6 @@ class PicYY177Spider:
                                 self.asset_db.update(comic_id, 1, chapter_name, comic_chapter_id)
                             comic_chapter_id = self.comic_chapter_db.get_comic_chapter_id(comic_id,
                                                                                           chapter_name)
-                            img_items = man_hua_detail_soup.select('div.entry-content div.single-content noscript img')
                             page_index = 0
                             for img_item in img_items:
                                 page_index += 1
@@ -107,7 +109,8 @@ class PicYY177Spider:
                                 self.comic_chapter_item_db.save(comic_chapter_id, comic_id, path, page_index)
                             page_items = man_hua_detail_soup.select('div.entry-content div.page-links a')
                             if len(page_items) > 1:
-                                for page_item in page_items:
+                                for i in range(1, len(page_items)):
+                                    page_item = page_items[i]
                                     page_index += 1
                                     page_url = page_item.get('href')
                                     browser.get(page_url)
