@@ -39,6 +39,7 @@ class BiliNovelSpider:
         self.redis_util = RedisUtil(redis.host, redis.port, redis.db, redis.password)
 
     def parse(self):
+        browser = None
         page_type = '5' if int(self.page_type) == 0 else '0'
         try:
             options = uc.ChromeOptions()
@@ -212,11 +213,14 @@ class BiliNovelSpider:
                         self.redis_util.delete(NOVEL_DETAIL + str(novel_id))
                 except Exception as e:
                     print(e)
-                browser.close()
         except Exception as e:
             print(e)
+        finally:
+            if browser is not None:
+                browser.close()
 
     def job(self):
+        browser = None
         try:
             options = uc.ChromeOptions()
             options.add_argument('--no-sandbox')
@@ -393,19 +397,22 @@ class BiliNovelSpider:
                         self.redis_util.delete(NOVEL_DETAIL + str(novel_id))
                 except Exception as e:
                     print(e)
-                browser.close()
         except Exception as e:
             print(e)
+        finally:
+            if browser is not None:
+                browser.close()
 
     def search(self, keyword=''):
-        options = uc.ChromeOptions()
-        options.add_argument('--no-sandbox')
-        options.add_argument('--disable-dev-shm-usage')
-        options.add_argument('--disable-extensions')
-        options.add_argument('--headless')
-        options.add_argument('--remote-debugging-port=9222')
-        browser = uc.Chrome(options=options)
+        browser = None
         try:
+            options = uc.ChromeOptions()
+            options.add_argument('--no-sandbox')
+            options.add_argument('--disable-dev-shm-usage')
+            options.add_argument('--disable-extensions')
+            options.add_argument('--headless')
+            options.add_argument('--remote-debugging-port=9222')
+            browser = uc.Chrome(options=options)
             xiao_shuo_url = self.domain + '/search.html'
             print(xiao_shuo_url)
             time.sleep(1)
@@ -713,7 +720,8 @@ class BiliNovelSpider:
         except Exception as e:
             print(e)
         finally:
-            browser.close()
+            if browser is not None:
+                browser.close()
 
 
 def replace_secret_text(content):
