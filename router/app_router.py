@@ -26,13 +26,12 @@ async def start_scheduler():
     scheduler.add_job(id="dongmanla", func=dongmanla_task.execute, trigger='cron', minute=random_number)
     random_number = random.randint(30, 59)
     scheduler.add_job(id="dongmanzhijia_comic", func=dongmanzhijia_task.execute_comic, trigger='cron',
-                      minute=random_number, max_instances=4)
+                      minute=random_number)
     random_number = random.randint(30, 59)
     scheduler.add_job(id="dongmanzhijia_novel", func=dongmanzhijia_task.execute_novel, trigger='cron',
                       minute=random_number)
     random_number = random.randint(30, 59)
-    scheduler.add_job(id="copymanga", func=copymanga_task.execute, trigger='cron', minute=random_number,
-                      max_instances=4)
+    scheduler.add_job(id="copymanga", func=copymanga_task.execute, trigger='cron', minute=random_number)
     random_number = random.randint(30, 59)
     scheduler.add_job(id="bilinovel", func=bilinovel_task.execute, trigger='cron', minute=random_number)
     random_number = random.randint(30, 59)
