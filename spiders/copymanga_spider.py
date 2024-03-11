@@ -748,6 +748,22 @@ class CopyMangaSpider:
         except Exception as e:
             print(e)
 
+    def upgrade_job(self):
+        try:
+            page_num = 1
+            page_size = 200
+            while True:
+                titles = self.comic_subscribe_db.get_subscribe_page(page_num, page_size)
+                if titles is None or len(titles) == 0:
+                    print('comic upgrade job is end.')
+                    break
+                for title in titles:
+                    print('comic title : ', title)
+                    self.search(title)
+                page_num += 1
+        except Exception as e:
+            print(e)
+
 
 def aes_decrypt(content_key: str):
     ctx = execjs.compile("""

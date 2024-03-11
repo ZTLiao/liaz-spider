@@ -52,6 +52,8 @@ def execute(request: Request):
         HenTai321Spider().parse()
     if script == 'picyy177':
         PicYY177Spider().parse()
+    if script == 'comic_upgrade_job':
+        CopyMangaSpider().upgrade_job()
     return response.ok()
 
 

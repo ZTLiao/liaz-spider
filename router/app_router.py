@@ -44,4 +44,6 @@ async def start_scheduler():
     scheduler.add_job(id="picyy177", func=picyy177_task.execute, trigger='cron', minute=random_number)
     random_number = random.randint(0, 30)
     scheduler.add_job(id="manhuadb", func=manhuadb_task.execute, trigger='cron', minute=random_number)
+    scheduler.add_job(id="copymanga_task_upgrade_job", func=copymanga_task.upgrade_job, trigger='cron', hour=12,
+                      minute=00)
     scheduler.start()
