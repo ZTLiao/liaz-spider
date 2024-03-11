@@ -217,7 +217,7 @@ class BiliNovelSpider:
             print(e)
         finally:
             if browser is not None:
-                browser.close()
+                browser.quit()
 
     def job(self):
         browser = None
@@ -401,7 +401,7 @@ class BiliNovelSpider:
             print(e)
         finally:
             if browser is not None:
-                browser.close()
+                browser.quit()
 
     def search(self, keyword=''):
         browser = None
@@ -721,7 +721,7 @@ class BiliNovelSpider:
             print(e)
         finally:
             if browser is not None:
-                browser.close()
+                browser.quit()
 
 
 def replace_secret_text(content):

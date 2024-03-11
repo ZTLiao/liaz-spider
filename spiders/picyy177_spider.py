@@ -39,14 +39,15 @@ class PicYY177Spider:
 
     def parse(self):
         try:
-            options = uc.ChromeOptions()
-            options.add_argument('--no-sandbox')
-            options.add_argument('--disable-dev-shm-usage')
-            options.add_argument('--disable-extensions')
-            options.add_argument('--headless')
-            options.add_argument('--remote-debugging-port=9222')
-            browser = uc.Chrome(options=options)
+            browser = None
             try:
+                options = uc.ChromeOptions()
+                options.add_argument('--no-sandbox')
+                options.add_argument('--disable-dev-shm-usage')
+                options.add_argument('--disable-extensions')
+                options.add_argument('--headless')
+                options.add_argument('--remote-debugging-port=9222')
+                browser = uc.Chrome(options=options)
                 index = 0
                 while True:
                     index += 1
@@ -55,7 +56,6 @@ class PicYY177Spider:
                     man_hua_content = browser.page_source
                     man_hua_soup = bs4.BeautifulSoup(man_hua_content, 'html.parser')
                     man_hua_items = man_hua_soup.select('div.picture-box h2.grid-title a')
-                    cover_items = man_hua_soup.select('div.picture-box figure.picture-img img')
                     if len(man_hua_items) == 0:
                         print('man hua is empty.')
                         break
@@ -130,6 +130,7 @@ class PicYY177Spider:
             except Exception as e:
                 print(e)
             finally:
-                browser.close()
+                if browser is not None:
+                    browser.quit()
         except Exception as e:
             print(e)
