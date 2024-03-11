@@ -41,6 +41,7 @@ class ColaMangaSpider:
             page_name = '2'
         elif self.page_type == '1':
             page_name = '1'
+        browser = None
         try:
             index = 0
             options = uc.ChromeOptions()
@@ -225,9 +226,11 @@ class ColaMangaSpider:
                                     self.comic_chapter_item_db.save(comic_chapter_id, comic_id, path,
                                                                     page_index)
                                     self.comic_subscribe_db.upgrade(comic_id)
-            browser.quit()
         except Exception as e:
             print(e)
+        finally:
+            if browser is not None:
+                browser.quit()
 
 
 def base64_to_image(base64_str):
