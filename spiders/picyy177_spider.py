@@ -1,4 +1,5 @@
 import time
+from datetime import datetime
 
 import requests
 import bs4
@@ -39,6 +40,7 @@ class PicYY177Spider:
 
     def parse(self):
         try:
+            now = datetime.now().strftime("%m/%d")
             browser = None
             try:
                 options = uc.ChromeOptions()
@@ -56,11 +58,18 @@ class PicYY177Spider:
                     man_hua_content = browser.page_source
                     man_hua_soup = bs4.BeautifulSoup(man_hua_content, 'html.parser')
                     man_hua_items = man_hua_soup.select('div.picture-box h2.grid-title a')
+                    date_items = man_hua_soup.select('div.picture-box span.grid-inf span.date')
                     if len(man_hua_items) == 0:
                         print('man hua is empty.')
                         break
                     for i in range(0, len(man_hua_items)):
                         try:
+                            if len(date_items) >= i:
+                                date_item = date_items[i]
+                                date = date_item.text.strip()
+                                if now != date:
+                                    print('now : ', now, ', date : ', date)
+                                    return
                             if system.global_vars.application.get_close_status() == status.YES:
                                 print('177 picyy is close.')
                                 return
