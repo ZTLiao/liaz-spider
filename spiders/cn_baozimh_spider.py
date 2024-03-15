@@ -154,6 +154,57 @@ class CnBaoZiMhSpider:
                                 page_index += 1
                         chapter_index += 1
                         time.sleep(2)
+                    chapter_items = man_hua_detail_soup.select(
+                        'div#chapters_other_list div.comics-chapters a.comics-chapters__item')
+                    chapter_index = self.comic_chapter_db.get_seq_no(comic_id)
+                    for chapter_item in chapter_items:
+                        chapter_name = chapter_item.find_all('span')[0].text
+                        print(chapter_name)
+                        count = self.comic_chapter_db.count(comic_id, chapter_name)
+                        if count == 0:
+                            self.comic_chapter_db.save(comic_id, chapter_name, chapter_index)
+                            comic_chapter_id = self.comic_chapter_db.get_comic_chapter_id(comic_id,
+                                                                                          chapter_name)
+                            self.asset_db.update(comic_id, 1, chapter_name, comic_chapter_id)
+                        comic_chapter_id = self.comic_chapter_db.get_comic_chapter_id(comic_id,
+                                                                                      chapter_name)
+                        chapter_uri = chapter_item.get('href')
+                        chapter_url = self.domain + chapter_uri
+                        print(chapter_url)
+                        man_hua_chapter_response = requests.get(chapter_url, headers={
+                            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+                            'Amp-Same-Origin': 'true',
+                            'Referer': self.domain + '/classify',
+                            'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1',
+                        })
+                        man_hua_chapter_response_text = man_hua_chapter_response.text
+                        man_hua_chapter_soup = bs4.BeautifulSoup(man_hua_chapter_response_text, 'html.parser')
+                        img_items = man_hua_chapter_soup.select('ul.comic-contain img')
+                        page_index = 0
+                        for img_item in img_items:
+                            path = img_item.get('src')
+                            page_count = self.comic_chapter_item_db.count(comic_chapter_id, comic_id,
+                                                                          page_index)
+                            if page_count == 0:
+                                print(path)
+                                file_name = self.file_item_handler.download(path, headers={
+                                    'Referer': self.domain,
+                                    'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 ('
+                                                  'KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1',
+                                    'Accept-Encoding': 'gzip, deflate, br',
+                                    'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
+                                    'Accept': 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
+                                })
+                                if file_name is not None:
+                                    path = self.file_item_handler.upload(bucket.COMIC, file_name,
+                                                                         file_type.IMAGE_JPEG)
+                                print(path)
+                                self.comic_chapter_item_db.save(comic_chapter_id, comic_id, path,
+                                                                page_index)
+                                self.comic_subscribe_db.upgrade(comic_id)
+                                page_index += 1
+                        chapter_index += 1
+                        time.sleep(2)
                 man_hua_url = man_hua_response_json['next']
         except Exception as e:
             print(e)
