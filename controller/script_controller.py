@@ -9,6 +9,7 @@ from resp import response
 from spiders.baozimh_spider import BaoZiMhSpider
 from spiders.bilinovel_spider import BiliNovelSpider
 from spiders.cartoonmad_spider import CartoonMadSpider
+from spiders.cn_baozimh_spider import CnBaoZiMhSpider
 from spiders.colamanga_spider import ColaMangaSpider
 from spiders.copymanga_spider import CopyMangaSpider
 from spiders.dongmanla_spider import DongManLaSpider
@@ -54,6 +55,8 @@ def execute(request: Request):
         PicYY177Spider().parse()
     if script == 'comic_upgrade_job':
         CopyMangaSpider().upgrade_job()
+    if script == 'cn_baozimh':
+        CnBaoZiMhSpider().parse()
     return response.ok()
 
 

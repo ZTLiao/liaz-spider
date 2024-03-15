@@ -5,7 +5,7 @@ import bs4
 import system.global_vars
 
 from config.redis_config import RedisConfig
-from constants import bucket, file_type
+from constants import bucket, file_type, status
 from handler.file_item_handler import FileItemHandler
 from storage.asset_db import AssetDb
 from storage.author_db import AuthorDb
@@ -107,6 +107,9 @@ class CnBaoZiMhSpider:
                         'div#chapter-items div.comics-chapters a.comics-chapters__item')
                     chapter_index = self.comic_chapter_db.get_seq_no(comic_id)
                     for chapter_item in chapter_items:
+                        if system.global_vars.application.get_close_status() == status.YES:
+                            print('ch bao zi mh is close.')
+                            return
                         chapter_name = chapter_item.find_all('span')[0].text
                         print(chapter_name)
                         count = self.comic_chapter_db.count(comic_id, chapter_name)
@@ -158,6 +161,9 @@ class CnBaoZiMhSpider:
                         'div#chapters_other_list div.comics-chapters a.comics-chapters__item')
                     chapter_index = self.comic_chapter_db.get_seq_no(comic_id)
                     for chapter_item in chapter_items:
+                        if system.global_vars.application.get_close_status() == status.YES:
+                            print('ch bao zi mh is close.')
+                            return
                         chapter_name = chapter_item.find_all('span')[0].text
                         print(chapter_name)
                         count = self.comic_chapter_db.count(comic_id, chapter_name)
