@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import requests
 import bs4
@@ -43,7 +43,6 @@ class FanQieSpider:
         self.redis_util = RedisUtil(redis.host, redis.port, redis.db, redis.password)
 
     def parse(self):
-        now = datetime.now().strftime("%Y-%m-%d")
         index = 0
         headers = {
             "User-Agent": ua
@@ -183,7 +182,8 @@ class FanQieSpider:
             index += 1
 
     def job(self):
-        now = datetime.now().strftime("%Y-%m-%d")
+        now = datetime.now()
+        yesterday = (now - timedelta(days=1)).strftime("%Y-%m-%d")
         index = 0
         headers = {
             "User-Agent": ua
@@ -205,7 +205,7 @@ class FanQieSpider:
                 last_chapter_time = book['last_chapter_time']
                 if last_chapter_time is not None:
                     date = datetime.fromtimestamp(int(last_chapter_time)).strftime('%Y-%m-%d')
-                    if now != date:
+                    if yesterday != date:
                         print('novel date : ', date)
                         return
                 xiao_shuo_detail_url = self.domain + '/page/' + str(book_id)
