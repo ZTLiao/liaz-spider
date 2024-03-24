@@ -181,6 +181,7 @@ class DongManLaSpider:
                             comic_chapter_id = self.comic_chapter_db.get_comic_chapter_id(comic_id,
                                                                                           chapter_name)
                             self.asset_db.update(comic_id, 1, chapter_name, comic_chapter_id)
+                            self.comic_db.upgrade(comic_id)
                         comic_chapter_id = self.comic_chapter_db.get_comic_chapter_id(comic_id,
                                                                                       chapter_name)
                         page_response = requests.get(page_url + 'all.html')
