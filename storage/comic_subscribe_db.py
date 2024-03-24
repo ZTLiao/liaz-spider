@@ -31,10 +31,13 @@ class ComicSubscribeDb:
             charset='utf8')
         cursor = conn.cursor()
         cursor.execute(
-            'select distinct c.title from comic_subscribe as cs left join comic as c on c.comic_id = cs.comic_id '
-            'where (flag & 1) != 0 order by cs.comic_subscribe_id limit ' + str(
+            'select distinct c.title as title from comic_subscribe as cs left join comic as c on c.comic_id = '
+            ' cs.comic_id '
+            ' where (flag & 1) != 0 order by cs.comic_subscribe_id limit ' + str(
                 (page_num - 1) * page_size) + ', ' + str(page_size))
-        result = cursor.fetchone()
+        results = cursor.fetchall()
+        fields = [field[0] for field in cursor.description]
+        result = [dict(zip(fields, result)) for result in results]
         conn.commit()
         cursor.close()
         conn.close()

@@ -751,11 +751,13 @@ class CopyMangaSpider:
             page_num = 1
             page_size = 200
             while True:
-                titles = self.comic_subscribe_db.get_subscribe_page(page_num, page_size)
-                if titles is None or len(titles) == 0:
+                results = self.comic_subscribe_db.get_subscribe_page(page_num, page_size)
+                print('results : ', results)
+                if results is None or len(results) == 0:
                     print('comic upgrade job is end.')
                     break
-                for title in titles:
+                for result in results:
+                    title = result['title']
                     print('comic title : ', title)
                     keyword = title
                     try:
@@ -785,7 +787,7 @@ class CopyMangaSpider:
                         man_hua_response = json.loads(man_hua_response_text)
                         if man_hua_response['code'] != 200:
                             print('man hua response is error.')
-                            return
+                            continue
                         results = man_hua_response['results']
                         man_hua_list = results['list']
                         for man_hua_item in man_hua_list:
@@ -810,7 +812,7 @@ class CopyMangaSpider:
                             man_hua_detail_response = json.loads(man_hua_detail_response_text)
                             if man_hua_detail_response['code'] != 200:
                                 print('man hua detail response is error.')
-                                return
+                                continue
                             man_hua_detail = man_hua_detail_response['results']['comic']
                             title = traditional_to_simplified(man_hua_detail['name'])
                             comic_id = self.comic_db.get_comic_id(title)
@@ -823,7 +825,7 @@ class CopyMangaSpider:
                             man_hua_volume_chapter_response = json.loads(man_hua_volume_chapter_response_text)
                             if man_hua_volume_chapter_response['code'] != 200:
                                 print('man hua volume chapter response is error.')
-                                return
+                                continue
                             time.sleep(2)
                             encrypt_chapters = man_hua_volume_chapter_response['results']
                             build_groups = aes_decrypt(encrypt_chapters)
@@ -900,7 +902,7 @@ class CopyMangaSpider:
                                     print(man_hua_chapter_response)
                                     if man_hua_chapter_response['code'] != 200:
                                         print('man hua chapter response is error.')
-                                        return
+                                        continue
                                     contents = man_hua_chapter_response['results']['chapter']['contents']
                                     words = man_hua_chapter_response['results']['chapter']['words']
                                     print(contents)
