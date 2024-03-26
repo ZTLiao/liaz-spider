@@ -813,6 +813,7 @@ class CopyMangaSpider:
                             if man_hua_detail_response['code'] != 200:
                                 print('man hua detail response is error.')
                                 continue
+                            time.sleep(2)
                             man_hua_detail = man_hua_detail_response['results']['comic']
                             title = traditional_to_simplified(man_hua_detail['name'])
                             comic_id = self.comic_db.get_comic_id(title)
@@ -903,6 +904,7 @@ class CopyMangaSpider:
                                     if man_hua_chapter_response['code'] != 200:
                                         print('man hua chapter response is error.')
                                         continue
+                                    time.sleep(2)
                                     contents = man_hua_chapter_response['results']['chapter']['contents']
                                     words = man_hua_chapter_response['results']['chapter']['words']
                                     print(contents)
