@@ -816,7 +816,70 @@ class CopyMangaSpider:
                             time.sleep(2)
                             man_hua_detail = man_hua_detail_response['results']['comic']
                             title = traditional_to_simplified(man_hua_detail['name'])
+                            cover = man_hua_detail['cover']
+                            print(cover)
                             comic_id = self.comic_db.get_comic_id(title)
+                            if comic_id is None or comic_id == 0:
+                                file_name = self.file_item_handler.download(cover, headers={
+                                    'Referer': self.domain,
+                                    'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 ('
+                                                  'KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1',
+                                    'Accept-Encoding': 'gzip, deflate, br',
+                                    'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
+                                    'Accept': 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
+                                })
+                                if file_name is not None:
+                                    cover = self.file_item_handler.upload(bucket.COVER, file_name,
+                                                                          file_type.IMAGE_JPEG)
+                                print(cover)
+                                if cover is None:
+                                    cover = ''
+                            authors = man_hua_detail['author']
+                            author_ids = []
+                            author_str = ''
+                            author_index = 0
+                            for author_item in authors:
+                                author = traditional_to_simplified(author_item['name'])
+                                author = author.replace('\'', '\\\'')
+                                self.author_db.save(author)
+                                author_id = self.author_db.get_author_id(author)
+                                author_ids.append(str(author_id))
+                                author_str += author
+                                if author_index != len(authors) - 1:
+                                    author_str += ','
+                                author_index += 1
+                            author_id_str = ','.join(author_ids)
+                            categories = man_hua_detail['theme']
+                            category_str = ''
+                            category_id_str = ''
+                            if len(categories) != 0:
+                                category_ids = []
+                                index = 0
+                                for category_item in categories:
+                                    category = traditional_to_simplified(category_item['name'])
+                                    category = category.replace('\'', '\\\'')
+                                    self.category_db.save(category)
+                                    category_id = self.category_db.get_category_id(category)
+                                    category_ids.append(str(category_id))
+                                    category_str += category
+                                    if index != len(categories) - 1:
+                                        category_str += ','
+                                    index += 1
+                                category_id_str = ','.join(category_ids)
+                            region = traditional_to_simplified(man_hua_detail['region']['display'])
+                            self.region_db.save(region)
+                            region_id = self.region_db.get_region_id(region)
+                            description = traditional_to_simplified(man_hua_detail['brief'])
+                            display = man_hua_detail['status']['display']
+                            flag = 0
+                            if display == '連載中':
+                                flag = 1
+                            self.comic_db.save(title, cover, description, flag, category_id_str, category_str,
+                                               author_id_str,
+                                               author_str, region_id, region)
+                            comic_id = self.comic_db.get_comic_id(title)
+                            asset_key = title + '|' + author_str
+                            self.asset_db.save(asset_key, 1, title, cover, comic_id, category_id_str, author_id_str)
                             volume_chapter_url = self.domain + '/comicdetail/' + path_word + '/chapters'
                             print(volume_chapter_url)
                             man_hua_volume_chapter_response = requests.get(volume_chapter_url, headers={
