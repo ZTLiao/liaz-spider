@@ -50,7 +50,7 @@ class ColaMangaSpider:
             options.add_argument('--disable-extensions')
             options.add_argument('--headless')
             options.add_argument('--remote-debugging-port=9222')
-            browser = uc.Chrome(options=options)
+            browser = uc.Chrome(options=options, version_main=122)
             while True:
                 index += 1
                 man_hua_url = self.domain + '/show?orderBy=update&status=' + page_name + '&page=' + str(index)

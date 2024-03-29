@@ -47,7 +47,7 @@ class ManHuaDbSpider:
                 options.add_argument('--disable-extensions')
                 options.add_argument('--headless')
                 options.add_argument('--remote-debugging-port=9222')
-                browser = uc.Chrome(options=options)
+                browser = uc.Chrome(options=options, version_main=122)
                 while index <= 500:
                     index += 1
                     man_hua_url = self.domain + '/manhua/list-page-' + str(index) + '.html'

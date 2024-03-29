@@ -49,7 +49,7 @@ class PicYY177Spider:
                 options.add_argument('--disable-extensions')
                 options.add_argument('--headless')
                 options.add_argument('--remote-debugging-port=9222')
-                browser = uc.Chrome(options=options)
+                browser = uc.Chrome(options=options, version_main=122)
                 index = 0
                 while True:
                     index += 1

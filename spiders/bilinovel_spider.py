@@ -48,7 +48,7 @@ class BiliNovelSpider:
             options.add_argument('--disable-extensions')
             options.add_argument('--headless')
             options.add_argument('--remote-debugging-port=9222')
-            browser = uc.Chrome(options=options)
+            browser = uc.Chrome(options=options, version_main=122)
             index = 0
             while True:
                 try:
@@ -228,7 +228,7 @@ class BiliNovelSpider:
             options.add_argument('--disable-extensions')
             options.add_argument('--headless')
             options.add_argument('--remote-debugging-port=9222')
-            browser = uc.Chrome(options=options)
+            browser = uc.Chrome(options=options, version_main=122)
             now = datetime.now().strftime("%Y-%m-%d")
             index = 0
             while True:
@@ -412,7 +412,7 @@ class BiliNovelSpider:
             options.add_argument('--disable-extensions')
             options.add_argument('--headless')
             options.add_argument('--remote-debugging-port=9222')
-            browser = uc.Chrome(options=options)
+            browser = uc.Chrome(options=options, version_main=122)
             xiao_shuo_url = self.domain + '/search.html'
             print(xiao_shuo_url)
             time.sleep(1)
