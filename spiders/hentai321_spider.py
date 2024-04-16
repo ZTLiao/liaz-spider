@@ -40,22 +40,17 @@ class HenTai321Spider:
 
     def parse(self):
         try:
-            browser = None
             try:
-                options = uc.ChromeOptions()
-                options.add_argument('--no-sandbox')
-                options.add_argument('--disable-dev-shm-usage')
-                options.add_argument('--disable-extensions')
-                options.add_argument('--headless')
-                options.add_argument('--remote-debugging-port=9222')
-                browser = uc.Chrome(options=options, version_main=122)
                 index = 0
                 while True:
                     index += 1
                     man_hua_url = self.domain + '?language/chinese/' + str(index)
                     print(man_hua_url)
-                    browser.get(man_hua_url)
-                    man_hua_response_text = browser.page_source
+                    man_hua_response = requests.get(man_hua_url, headers={
+                        'Referer': self.domain,
+                        'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1',
+                    })
+                    man_hua_response_text = man_hua_response.text
                     man_hua_soup = bs4.BeautifulSoup(man_hua_response_text, 'html.parser')
                     man_hua_items = man_hua_soup.select('div.doujin a')
                     if len(man_hua_items) == 0:
@@ -65,8 +60,11 @@ class HenTai321Spider:
                         detail_uri = man_hua_item.get('href')
                         detail_url = self.domain + detail_uri
                         print(detail_url)
-                        browser.get(detail_url)
-                        man_hua_detail_response_text = browser.page_source
+                        man_hua_detail_response = requests.get(detail_url, headers={
+                            'Referer': self.domain,
+                            'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1',
+                        })
+                        man_hua_detail_response_text = man_hua_detail_response.text
                         man_hua_detail_soup = bs4.BeautifulSoup(man_hua_detail_response_text, 'html.parser')
                         cover_item = man_hua_detail_soup.select('div#main-cover img')[0]
                         cover = cover_item.get('src')
@@ -108,31 +106,23 @@ class HenTai321Spider:
                         time.sleep(3)
             except Exception as e:
                 print(e)
-            finally:
-                if browser is not None:
-                    browser.quit()
         except Exception as e:
             print(e)
 
     def job(self):
         now = datetime.now().strftime("%Y-%m-%d")
         try:
-            browser = None
             try:
-                options = uc.ChromeOptions()
-                options.add_argument('--no-sandbox')
-                options.add_argument('--disable-dev-shm-usage')
-                options.add_argument('--disable-extensions')
-                options.add_argument('--headless')
-                options.add_argument('--remote-debugging-port=9222')
-                browser = uc.Chrome(options=options, version_main=122)
                 index = 0
                 while True:
                     index += 1
                     man_hua_url = self.domain + '?language/chinese/' + str(index)
                     print(man_hua_url)
-                    browser.get(man_hua_url)
-                    man_hua_response_text = browser.page_source
+                    man_hua_response = requests.get(man_hua_url, headers={
+                        'Referer': self.domain,
+                        'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1',
+                    })
+                    man_hua_response_text = man_hua_response.text
                     man_hua_soup = bs4.BeautifulSoup(man_hua_response_text, 'html.parser')
                     man_hua_items = man_hua_soup.select('div.doujin a')
                     if len(man_hua_items) == 0:
@@ -142,8 +132,11 @@ class HenTai321Spider:
                         detail_uri = man_hua_item.get('href')
                         detail_url = self.domain + detail_uri
                         print(detail_url)
-                        browser.get(detail_url)
-                        man_hua_detail_response_text = browser.page_source
+                        man_hua_detail_response = requests.get(detail_url, headers={
+                            'Referer': self.domain,
+                            'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1',
+                        })
+                        man_hua_detail_response_text = man_hua_detail_response.text
                         man_hua_detail_soup = bs4.BeautifulSoup(man_hua_detail_response_text, 'html.parser')
                         time_item = man_hua_detail_soup.select('div#main-info time')[0]
                         time_str = time_item.get('datetime')
@@ -170,7 +163,6 @@ class HenTai321Spider:
                                            author, 0, '')
                         comic_id = self.comic_db.get_comic_id(title)
                         asset_key = title + '|' + author
-
                         self.asset_db.save(asset_key, 1, title, cover, comic_id, str(category_id), str(author_id))
                         chapter_name = '全卷'
                         count = self.comic_chapter_db.count(comic_id, chapter_name)
@@ -195,8 +187,5 @@ class HenTai321Spider:
                         time.sleep(3)
             except Exception as e:
                 print(e)
-            finally:
-                if browser is not None:
-                    browser.quit()
         except Exception as e:
             print(e)
