@@ -6,6 +6,7 @@ from fastapi import APIRouter, Request
 
 from constants import status
 from resp import response
+from spiders.acgnbus_spider import AcgNBusSpider
 from spiders.baozimh_spider import BaoZiMhSpider
 from spiders.bilinovel_spider import BiliNovelSpider
 from spiders.cartoonmad_spider import CartoonMadSpider
@@ -57,6 +58,8 @@ def execute(request: Request):
         CopyMangaSpider().upgrade_job()
     if script == 'cn_baozimh':
         CnBaoZiMhSpider().parse()
+    if script == 'acgnbus':
+        AcgNBusSpider().parse()
     return response.ok()
 
 

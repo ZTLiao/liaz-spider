@@ -4,6 +4,7 @@ import system.global_vars
 
 import requests
 import bs4
+import time
 
 from config.redis_config import RedisConfig
 from constants import status
@@ -71,6 +72,7 @@ class AcgNBusSpider:
                     })
                     man_hua_detail_response_text = man_hua_detail_response.text
                     # print(man_hua_detail_response_text)
+                    time.sleep(2)
                     man_hua_detail_soup = bs4.BeautifulSoup(man_hua_detail_response_text, 'html.parser')
                     title_item = man_hua_detail_soup.select('div.content-area h1')[0]
                     title = title_item.text.replace('\'', '\\\'')
@@ -107,12 +109,10 @@ class AcgNBusSpider:
                     if system.global_vars.application.get_close_status() == status.YES:
                         print('acgnbus is close.')
                         return
-                    page_items = man_hua_detail_soup.select('div#pages a')
-                    for i in range(1, len(page_items)):
+                    detail_uri = detail_uri.replace('.html', '')
+                    while True:
                         page_index += 1
-                        page_item = page_items[i]
-                        page_uri = page_item.get('href')
-                        page_url = self.domain + page_uri
+                        page_url = self.domain + detail_uri + '-' + str(page_index + 1) + '.html'
                         print(page_url)
                         man_hua_page_response = requests.get(page_url, headers={
                             'Referer': self.domain,
@@ -120,11 +120,15 @@ class AcgNBusSpider:
                         })
                         man_hua_page_response_text = man_hua_page_response.text
                         man_hua_page_soup = bs4.BeautifulSoup(man_hua_page_response_text, 'html.parser')
-                        img_item = man_hua_page_soup.select('div.entry-content .main-picture img')[0]
+                        img_items = man_hua_page_soup.select('div.entry-content .main-picture img')
+                        if len(img_items) <= 0:
+                            break
+                        img_item = img_items[0]
                         path = img_item.get('src')
                         print(path)
                         self.comic_chapter_item_db.save(comic_chapter_id, comic_id, path, page_index)
                         self.comic_subscribe_db.upgrade(comic_id)
+                        time.sleep(2)
         except Exception as e:
             print(e)
 
@@ -166,6 +170,7 @@ class AcgNBusSpider:
                         'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1',
                     })
                     man_hua_detail_response_text = man_hua_detail_response.text
+                    time.sleep(2)
                     # print(man_hua_detail_response_text)
                     man_hua_detail_soup = bs4.BeautifulSoup(man_hua_detail_response_text, 'html.parser')
                     title_item = man_hua_detail_soup.select('div.content-area h1')[0]
@@ -203,12 +208,10 @@ class AcgNBusSpider:
                     if system.global_vars.application.get_close_status() == status.YES:
                         print('acgnbus is close.')
                         return
-                    page_items = man_hua_detail_soup.select('div#pages a')
-                    for i in range(1, len(page_items)):
+                    detail_uri = detail_uri.replace('.html', '')
+                    while True:
                         page_index += 1
-                        page_item = page_items[i]
-                        page_uri = page_item.get('href')
-                        page_url = self.domain + page_uri
+                        page_url = self.domain + detail_uri + '-' + str(page_index + 1) + '.html'
                         print(page_url)
                         man_hua_page_response = requests.get(page_url, headers={
                             'Referer': self.domain,
@@ -216,10 +219,14 @@ class AcgNBusSpider:
                         })
                         man_hua_page_response_text = man_hua_page_response.text
                         man_hua_page_soup = bs4.BeautifulSoup(man_hua_page_response_text, 'html.parser')
-                        img_item = man_hua_page_soup.select('div.entry-content .main-picture img')[0]
+                        img_items = man_hua_page_soup.select('div.entry-content .main-picture img')
+                        if len(img_items) <= 0:
+                            break
+                        img_item = img_items[0]
                         path = img_item.get('src')
                         print(path)
                         self.comic_chapter_item_db.save(comic_chapter_id, comic_id, path, page_index)
                         self.comic_subscribe_db.upgrade(comic_id)
+                        time.sleep(2)
         except Exception as e:
             print(e)
