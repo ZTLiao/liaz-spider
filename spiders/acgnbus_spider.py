@@ -62,6 +62,8 @@ class AcgNBusSpider:
                     print(time_str)
                     img_item = man_hua_item.find('img')
                     cover = img_item.get('data-src')
+                    if cover is None:
+                        cover = img_item.get('src')
                     print(cover)
                     detail_uri = man_hua_item.get('href')
                     detail_url = self.domain + detail_uri
