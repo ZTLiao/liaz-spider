@@ -44,7 +44,7 @@ class AcgNBusSpider:
             while True:
                 index += 1
                 # https://acgnbus.com/h/index-1.html
-                man_hua_url = self.domain + '/h/index-' + str(index) + '.html'
+                man_hua_url = self.domain + '/language/chinese-' + str(index) + '.html'
                 print(man_hua_url)
                 man_hua_response = requests.get(man_hua_url, headers={
                     'Referer': self.domain,
@@ -76,10 +76,19 @@ class AcgNBusSpider:
                     # print(man_hua_detail_response_text)
                     time.sleep(2)
                     man_hua_detail_soup = bs4.BeautifulSoup(man_hua_detail_response_text, 'html.parser')
+                    title_items = man_hua_detail_soup.select('div.content-area h1')
+                    if len(title_items) == 0:
+                        print('skip...')
+                        continue
                     title_item = man_hua_detail_soup.select('div.content-area h1')[0]
                     title = title_item.text.replace('\'', '\\\'')
                     print(title)
                     description = title
+                    img_item = man_hua_detail_soup.select('div.entry-content .main-picture img')[0]
+                    path = img_item.get('src')
+                    if cover is not None and not ('http' in cover):
+                        cover = path
+                    print(path)
                     author = '佚名'
                     self.author_db.save(author)
                     author_id = self.author_db.get_author_id(author)
@@ -102,9 +111,6 @@ class AcgNBusSpider:
                         self.asset_db.update(comic_id, 1, chapter_name, comic_chapter_id)
                     comic_chapter_id = self.comic_chapter_db.get_comic_chapter_id(comic_id,
                                                                                   chapter_name)
-                    img_item = man_hua_detail_soup.select('div.entry-content .main-picture img')[0]
-                    path = img_item.get('src')
-                    print(path)
                     self.comic_chapter_item_db.save(comic_chapter_id, comic_id, path, 0)
                     self.comic_subscribe_db.upgrade(comic_id)
                     page_index = 0
@@ -141,7 +147,7 @@ class AcgNBusSpider:
             while True:
                 index += 1
                 # https://acgnbus.com/h/index-1.html
-                man_hua_url = self.domain + '/h/index-' + str(index) + '.html'
+                man_hua_url = self.domain + '/language/chinese-' + str(index) + '.html'
                 print(man_hua_url)
                 man_hua_response = requests.get(man_hua_url, headers={
                     'Referer': self.domain,
@@ -160,9 +166,10 @@ class AcgNBusSpider:
                     if now != date:
                         print('comic date : ', date)
                         return
-                    print(time_str)
                     img_item = man_hua_item.find('img')
                     cover = img_item.get('data-src')
+                    if cover is None:
+                        cover = img_item.get('src')
                     print(cover)
                     detail_uri = man_hua_item.get('href')
                     detail_url = self.domain + detail_uri
@@ -172,13 +179,22 @@ class AcgNBusSpider:
                         'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1',
                     })
                     man_hua_detail_response_text = man_hua_detail_response.text
-                    time.sleep(2)
                     # print(man_hua_detail_response_text)
+                    time.sleep(2)
                     man_hua_detail_soup = bs4.BeautifulSoup(man_hua_detail_response_text, 'html.parser')
+                    title_items = man_hua_detail_soup.select('div.content-area h1')
+                    if len(title_items) == 0:
+                        print('skip...')
+                        continue
                     title_item = man_hua_detail_soup.select('div.content-area h1')[0]
                     title = title_item.text.replace('\'', '\\\'')
                     print(title)
                     description = title
+                    img_item = man_hua_detail_soup.select('div.entry-content .main-picture img')[0]
+                    path = img_item.get('src')
+                    if cover is not None and not ('http' in cover):
+                        cover = path
+                    print(path)
                     author = '佚名'
                     self.author_db.save(author)
                     author_id = self.author_db.get_author_id(author)
@@ -201,9 +217,6 @@ class AcgNBusSpider:
                         self.asset_db.update(comic_id, 1, chapter_name, comic_chapter_id)
                     comic_chapter_id = self.comic_chapter_db.get_comic_chapter_id(comic_id,
                                                                                   chapter_name)
-                    img_item = man_hua_detail_soup.select('div.entry-content .main-picture img')[0]
-                    path = img_item.get('src')
-                    print(path)
                     self.comic_chapter_item_db.save(comic_chapter_id, comic_id, path, 0)
                     self.comic_subscribe_db.upgrade(comic_id)
                     page_index = 0
