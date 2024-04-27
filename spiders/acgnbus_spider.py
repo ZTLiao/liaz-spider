@@ -49,6 +49,7 @@ class AcgNBusSpider:
                 man_hua_response = requests.get(man_hua_url, headers={
                     'Referer': self.domain,
                     'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1',
+                    'Cookie': 'xHhoN_show_stat_count=9323e-1Xf3mRi7becsDUTz3qAV-ZzsFQwqMOZJl6',
                 })
                 man_hua_response_text = man_hua_response.text
                 # print(man_hua_response_text)
@@ -71,6 +72,7 @@ class AcgNBusSpider:
                     man_hua_detail_response = requests.get(detail_url, headers={
                         'Referer': self.domain,
                         'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1',
+                        'Cookie': 'xHhoN_show_stat_count=9323e-1Xf3mRi7becsDUTz3qAV-ZzsFQwqMOZJl6',
                     })
                     man_hua_detail_response_text = man_hua_detail_response.text
                     # print(man_hua_detail_response_text)
@@ -125,6 +127,7 @@ class AcgNBusSpider:
                         man_hua_page_response = requests.get(page_url, headers={
                             'Referer': self.domain,
                             'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1',
+                            'Cookie': 'xHhoN_show_stat_count=9323e-1Xf3mRi7becsDUTz3qAV-ZzsFQwqMOZJl6',
                         })
                         man_hua_page_response_text = man_hua_page_response.text
                         man_hua_page_soup = bs4.BeautifulSoup(man_hua_page_response_text, 'html.parser')
@@ -143,6 +146,7 @@ class AcgNBusSpider:
     def job(self):
         now = datetime.now().strftime("%Y-%m-%d")
         try:
+            requests.DEFAULT_RETRIES = 5
             index = 0
             while True:
                 index += 1
@@ -152,6 +156,7 @@ class AcgNBusSpider:
                 man_hua_response = requests.get(man_hua_url, headers={
                     'Referer': self.domain,
                     'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1',
+                    'Cookie': 'xHhoN_show_stat_count=9323e-1Xf3mRi7becsDUTz3qAV-ZzsFQwqMOZJl6',
                 })
                 man_hua_response_text = man_hua_response.text
                 # print(man_hua_response_text)
@@ -177,6 +182,7 @@ class AcgNBusSpider:
                     man_hua_detail_response = requests.get(detail_url, headers={
                         'Referer': self.domain,
                         'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1',
+                        'Cookie': 'xHhoN_show_stat_count=9323e-1Xf3mRi7becsDUTz3qAV-ZzsFQwqMOZJl6',
                     })
                     man_hua_detail_response_text = man_hua_detail_response.text
                     # print(man_hua_detail_response_text)
@@ -231,6 +237,7 @@ class AcgNBusSpider:
                         man_hua_page_response = requests.get(page_url, headers={
                             'Referer': self.domain,
                             'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1',
+                            'Cookie': 'xHhoN_show_stat_count=9323e-1Xf3mRi7becsDUTz3qAV-ZzsFQwqMOZJl6',
                         })
                         man_hua_page_response_text = man_hua_page_response.text
                         man_hua_page_soup = bs4.BeautifulSoup(man_hua_page_response_text, 'html.parser')
